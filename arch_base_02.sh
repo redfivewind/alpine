@@ -1,5 +1,15 @@
-# Variable declarations
-HOSTNAME="MacBookAirM1"
+# Global variables
+echo "Initializing global variables..."
+DEV="/dev/sda" # Harddisk
+EFI="/dev/sda1" # EFI partition
+LUKS="/dev/sda2" # LUKS partition
+LUKS_LVM="lukslvm"
+LUKS_VG="luksvg"
+ROOT_LABEL="root"
+ROOT_NAME="root"
+SWAP_LABEL="swap"
+SWAP_NAME="swap"
+USER="user" # Username
 
 # System update
 echo "Updating the system..."
@@ -67,8 +77,8 @@ echo "Installing GRUB with CRYPTODISK flag..."
 pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub # Install packages required for UEFI boot
 echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub # Enable booting from encrypted /boot
 sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /etc/default/grub # Disable default value
-#echo GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID /dev/sda2):lukslvm root=/dev/luksvg/root cryptkey=rootfs:/root/keyfiles/boot.keyfile\" >> /etc/default/grub # Add encryption hook to GRUB
-echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID /dev/sda2):lukslvm root=/dev/luksvg/root\"" >> /etc/default/grub # Add encryption hook to GRUB
+#echo GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $LUKS):lukslvm root=/dev/$LUKS_VG/$ROOT_NAME cryptkey=rootfs:/root/keyfiles/boot.keyfile\" >> /etc/default/grub # Add encryption hook to GRUB
+echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $LUKS):lukslvm root=/dev/$LUKS_VG/$ROOT_NAME\"" >> /etc/default/grub # Add encryption hook to GRUB
 grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
 chmod 700 /boot # Protect /boot

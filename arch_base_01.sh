@@ -8,6 +8,12 @@ echo "Initializing global variables..."
 DEV="/dev/sda" # Harddisk
 EFI="/dev/sda1" # EFI partition
 LUKS="/dev/sda2" # LUKS partition
+LUKS_LVM="lukslvm"
+LUKS_VG="luksvg"
+ROOT_LABEL="root"
+ROOT_NAME="root"
+SWAP_LABEL="swap"
+SWAP_NAME="swap"
 USER="user" # Username
 
 # Connect to network
@@ -30,27 +36,27 @@ sgdisk --print $DEV # Print partition table
 # LUKS 
 echo "Formatting the second partition as LUKS crypto partition..."
 cryptsetup luksFormat $LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 # Format LUKS partition
-cryptsetup luksOpen $LUKS lukslvm # Open LUKS partition
+cryptsetup luksOpen $LUKS $LUKS_LVM # Open LUKS partition
 
 # LVM 
 echo "Setting up LVM..."
-pvcreate /dev/mapper/lukslvm # Create physical volume
-vgcreate luksvg /dev/mapper/lukslvm # Create volume group
-lvcreate -L 6144M luksvg -n swap # Create logical swap volume
-lvcreate -l 100%FREE luksvg -n root # Create logical root volume
+pvcreate /dev/mapper/$LUKS_LVM # Create physical volume
+vgcreate $LUKS_VG /dev/mapper/$LUKS_LVM # Create volume group
+lvcreate -L 6144M $LUKS_VG -n $SWAP_NAME # Create logical swap volume
+lvcreate -l 100%FREE $LUKS_VG -n $ROOT_NAME # Create logical root volume
 
 # Format partitions
 echo "Formatting the partitions..."
 mkfs.fat -F32 $EFI # EFI partition (FAT32)
-mkfs.ext4 /dev/mapper/luksvg-root -L root # Root partition (EXT4)
-mkswap /dev/mapper/luksvg-swap -L swap # Swap partition
+mkfs.ext4 /dev/mapper/$LUKS_VG/$ROOT_NAME -L $ROOT_LABEL # Root partition (ext4)
+mkswap /dev/mapper/$LUKS_VG/$SWAP_NAME -L $SWAP_LABEL # Swap partition
 
 # Mount root, boot and swap
 echo "Mounting filesystems..."
-mount /dev/luksvg/root /mnt # Mount root partition
+mount /dev/$LUKS_VG/$ROOT_NAME /mnt # Mount root partition
 mkdir -p /mnt/boot/efi # Create folder to hold /boot/efi files
 mount $EFI /mnt/boot/efi # Mount EFI partition
-swapon /dev/luksvg/swap # Activate swap partition
+swapon /dev/$LUKS_VG/$SWAP_NAME # Activate swap partition
 
 # Install base packages
 echo "Bootstrapping Arch Linux into /mnt with base packages..."

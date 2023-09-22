@@ -55,7 +55,7 @@ swapon /dev/luksvg/swap # Activate swap partition
 # Install base packages
 echo "Bootstrapping Arch Linux into /mnt with base packages..."
 pacman --noconfirm --disable-download-timeout -Syy
-pacstrap --noconfirm --disable-download-timeout /mnt amd-ucode base base-devel dhcpcd gptfdisk grub intel-ucode linux-hardened linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
+pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub intel-ucode linux-hardened linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
 
 # Mount or create necessary entry points
 mount -t proc proc /mnt/proc

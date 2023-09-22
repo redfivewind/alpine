@@ -1,5 +1,9 @@
-echo "Synchronizing pacman..."
-pacman --disable-download-timeout -Syy # Synchronize Pacman repository again
+# Variable declarations
+HOSTNAME="MacBookAirM1"
+
+# System update
+echo "Updating the system..."
+pacman --disable-download-timeout -Syyu # Synchronize Pacman repository again
 
 # Time
 echo "Setting timezone and hardware clock..."
@@ -19,10 +23,10 @@ echo "FONT=lat9w-16" >> /etc/vconsole.conf # Set console font
 
 # Network
 echo "Setting hostname and /etc/hosts..."
-echo "MacBookAirM1" > /etc/hostname # Set hostname
+echo $HOSTNAME > /etc/hostname # Set hostname
 echo "127.0.0.1 localhost" > /etc/hosts # Hosts file: Localhost (IP4)
 echo "::1 localhost" >> /etc/hosts # Hosts file: Localhost (IP6)
-#echo "127.0.1.1 MacBookAirM1" >> /etc/hosts # Hosts file: This host (IP4) #FIXME
+#echo "127.0.1.1 $HOSTNAME >> /etc/hosts # Hosts file: This host (IP4) #FIXME
 
 systemctl enable dhcpcd
 
@@ -42,10 +46,10 @@ passwd # Set root password
 useradd -m -G wheel,users $USER # Add new user
 echo "SET HOME USER PASSWORD!"
 passwd $USER # Set user password
-#echo "EDITOR=nano visudo" > /etc/sudoers # ???
+#echo "EDITOR=nano visudo" > /etc/sudoers #FIXME
 echo "root ALL=(ALL) ALL" > /etc/sudoers # Root account may execute any command
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
-echo "@includedir /etc/sudoers.d" >> /etc/sudoers # ???
+echo "@includedir /etc/sudoers.d" >> /etc/sudoers
 
 # Generate & integrate LUKS keyfile 
 #echo "Adding keyfile for LUKS partition..."

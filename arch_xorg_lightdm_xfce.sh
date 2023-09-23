@@ -6,13 +6,13 @@ sudo localectl set-keymap de
 sudo pacman --disable-download-timeout --noconfirm -Syu
 
 # Install Xorg
-sudo pacman --disable-download-timeout --noconfirm xorg xorg-drivers
+sudo pacman --disable-download-timeout --noconfirm -S xorg xorg-drivers
 
 # Install LightDM and Xfce
-sudo pacman --disable-download-timeout --noconfirm lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xfce4
+sudo pacman --disable-download-timeout --noconfirm -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xfce4
 
 # Install additional applications
-sudo pacman --disable-download-timeout --noconfirm mousepad ristretto thunar-archive-plugin thunar-media-tags-plugin xfce4-artwork xfce4-cpugraph-plugin xfce4-mount-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager
+sudo pacman --disable-download-timeout --noconfirm -S mousepad ristretto thunar-archive-plugin thunar-media-tags-plugin xfce4-artwork xfce4-cpugraph-plugin xfce4-mount-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager
 
 # Remove unnecessary applications
 #

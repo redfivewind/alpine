@@ -10,8 +10,8 @@ yay --version
 sudo yay --disable-download-timeout --noconfirm -Syu
 TOOLS="chkrootkit secure-delete"
 for Tool in $TOOLS; do
-    yay --disable-download-timeout --noconfirm -Sy $Tool
+    sudo yay --disable-download-timeout --noconfirm -Sy $Tool
 done
 
 # Remove packages that are no longer required
-sudo pacman -Rns $(pacman -Qdtq)
+sudo pacman --noconfirm -Rns $(pacman -Qdtq)

@@ -12,7 +12,7 @@ sudo pacman --disable-download-timeout --noconfirm xorg xorg-drivers
 sudo pacman --disable-download-timeout --noconfirm lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xfce4
 
 # Install additional applications
-sudo pacman --disable-download-timeout --noconfirm mousepad ristretto thunar-archive-plugin thunar-media-tags-plugin xfce4-artwork xfce4-battery-plugin xfce4-cpugraph-plugin xfce4-fsguard-plugin xfce4-mount-plugin xfce4-netload-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-timer-plugin xfce4-xkb-plugin
+sudo pacman --disable-download-timeout --noconfirm mousepad ristretto thunar-archive-plugin thunar-media-tags-plugin xfce4-artwork xfce4-battery-plugin xfce4-cpugraph-plugin xfce4-fsguard-plugin xfce4-mount-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-timer-plugin xfce4-xkb-plugin
 
 # Remove unnecessary applications
 #

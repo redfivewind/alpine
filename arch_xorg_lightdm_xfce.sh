@@ -3,7 +3,8 @@ sudo loadkeys de-latin1
 sudo localectl set-keymap de
 
 # System update
-sudo pacman --disable-download-timeout --noconfirm -Syu
+echo "Updating the system..."
+pacman --disable-download-timeout --noconfirm -Syu
 
 # Install Xorg
 sudo pacman --disable-download-timeout --noconfirm -S xorg xorg-drivers

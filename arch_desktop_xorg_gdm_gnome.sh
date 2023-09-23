@@ -10,6 +10,10 @@ sudo pacman --disable-download-timeout --noconfirm -Sy gdm gnome-session gnome-s
 # Install Gnome core applications
 sudo pacman --disable-download-timeout --noconfirm -Sy baobab eog evince gnome-backgrounds gnome-calculator gnome-clocks gnome-console gnome-control-center gnome-disk-utility gnome-keyring gnome-logs gnome-menus gnome-photos gnome-settings-daemon gnome-system-monitor gnome-text-editor nautilus xdg-desktop-portal-gnome xdg-user-dirs
 
+# Remove unnecessary applications
+#gnome-bluetooth gnome-online-accounts smbclient
+sudo pacman -Rns $(pacman -Qdtq)
+
 # Ensure keyboard layout is German
 sudo localectl set-keymap de
 

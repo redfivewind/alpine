@@ -20,4 +20,4 @@ sudo systemctl enable lightdm.service
 sudo systemctl start lightdm.service
 
 # Remove packages that are no longer required
-sudo pacman -Rns $(pacman -Qdtq)
+sudo pacman --noconfirm -Rns $(pacman -Qdtq)

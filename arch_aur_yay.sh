@@ -12,3 +12,7 @@ TOOLS="chkrootkit secure-delete"
 for Tool in $TOOLS; do
     yay -Sy --noconfirm $Tool
 done
+
+
+# Remove packages that are no longer required
+sudo pacman -Rns $(pacman -Qdtq)

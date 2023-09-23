@@ -51,5 +51,3 @@ sudo systemctl disable autofs
 
 # Restrict SSH (no remote access, no root login, NO SSHD)
 echo "PermitRootLogin no" >> /etc/ssh/ssh_config
-
-# Remove Avahi

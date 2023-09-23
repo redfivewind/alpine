@@ -1,8 +1,9 @@
 # Update the system
-sudo pacman -Syu --noconfirm
+sudo pacman --disable-download-timeout --noconfirm -Syu 
 
 
 # Remove software
+#
 
 
 # Disable history for bash

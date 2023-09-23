@@ -29,7 +29,7 @@ echo "unset HISTFILE" >> ~/.bash_profile
 
 
 # New MAC address at each reboot
-sudo pacman -Sy --noconfirm macchanger
+sudo pacman --disable-download-timeout --noconfirm -Sy macchanger
 
 
 # New hostname at each reboot

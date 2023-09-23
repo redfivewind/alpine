@@ -1,3 +1,7 @@
+# Ensure German keyboard layout
+sudo loadkeys de-latin1
+sudo localectl set-keymap de
+
 # System update
 sudo pacman --disable-download-timeout --noconfirm -Syu
 

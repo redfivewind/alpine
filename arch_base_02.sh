@@ -13,7 +13,7 @@ USER="user" # Username
 
 # System update
 echo "Updating the system..."
-pacman --disable-download-timeout -Syyu # Synchronize Pacman repository again
+pacman --disable-download-timeout --noconfirm -Syu
 
 # Time
 echo "Setting timezone and hardware clock..."

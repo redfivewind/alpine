@@ -8,8 +8,7 @@ sudo pacman --disable-download-timeout --noconfirm -Sy xorg xorg-server
 sudo pacman --disable-download-timeout --noconfirm -Sy gdm gnome-session gnome-shell gnome-shell-extensions gnome-tweaks
 
 # Install Gnome core applications
-sudo pacman --disable-download-timeout --noconfirm -Sy baobab eog evince gnome-background gnome-calculator gnome-clocks gnome-console gnome-control-center gnome-disk-utility gnome-keyring gnome-logs gnome-menus gnome-photos gnome-settings-daemon gnome-system-monitor gnome-text-editor nautilus
-#gnome-color-manager sushi
+sudo pacman --disable-download-timeout --noconfirm -Sy baobab eog evince gnome-background gnome-calculator gnome-clocks gnome-console gnome-control-center gnome-disk-utility gnome-keyring gnome-logs gnome-menus gnome-photos gnome-settings-daemon gnome-system-monitor gnome-text-editor nautilus xdg-user-dirs
 
 # Ensure keyboard layout is German
 sudo localectl set-keymap de

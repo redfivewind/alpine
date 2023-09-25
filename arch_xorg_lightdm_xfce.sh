@@ -2,6 +2,9 @@
 sudo loadkeys de-latin1
 sudo localectl set-keymap de
 
+# Ensure German timezone
+sudo timedatectl set-timezone Europe/Berlin
+
 # System update
 echo "Updating the system..."
 pacman --disable-download-timeout --needed --noconfirm -Syu

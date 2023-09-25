@@ -1,8 +1,6 @@
-# Ensure German keyboard layout
+# Ensure German keyboard layout & timezone
 sudo loadkeys de-latin1
 sudo localectl set-keymap de
-
-# Ensure German timezone
 sudo timedatectl set-timezone Europe/Berlin
 
 # System update

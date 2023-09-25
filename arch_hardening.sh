@@ -1,5 +1,5 @@
 # Update the system
-sudo pacman --disable-download-timeout --noconfirm -Syu 
+sudo pacman --disable-download-timeout --needed --noconfirm -Syu 
 
 
 # Remove software

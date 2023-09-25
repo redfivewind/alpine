@@ -1,3 +1,8 @@
+# System update
+echo "Updating the system..."
+pacman --disable-download-timeout --needed --noconfirm -Syu
+
+
 # Install yay for access to the AUR ecosystem
 mkdir ~/tools
 cd ~/tools
@@ -9,12 +14,12 @@ yay --version
 # Pacman software
 TOOLS="dmidecode git gparted rkhunter wget"
 for Tool in $TOOLS; do
-    sudo pacman --disable-download-timeout --needed --noconfirm -Sy $Tool
+    sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool
 done
 
 
 # AUR software
 TOOLS="chkrootkit secure-delete"
 for Tool in $TOOLS; do
-    sudo yay --disable-download-timeout --needed --noconfirm -Sy $Tool
+    sudo yay --disable-download-timeout --needed --noconfirm -S $Tool
 done

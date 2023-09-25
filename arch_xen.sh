@@ -4,7 +4,7 @@ pacman --disable-download-timeout --needed --noconfirm -Syu
 
 
 # Install Xen via yay from AUR ecosystem
-sudo yay --disable-download-timeout --needed --noconfirm -Sy grub-xen-git xen
+sudo yay --disable-download-timeout --needed --noconfirm -S grub-xen-git xen
 
 
 # Configure Xen (xen.cfg)

@@ -2,7 +2,7 @@
 sudo pacman --disable-download-timeout --needed --noconfirm -Syu 
 
 # Remove software
-#
+#FIXME
 
 # Disable history for bash
 echo "export HISTFILESIZE=0" >> /etc/profile
@@ -29,16 +29,19 @@ echo "unset HISTFILE" >> ~/.bash_profile
 sudo pacman --disable-download-timeout --needed --noconfirm -Sy macchanger
 
 # New hostname at each reboot
+#FIXME
 
 # Disable auto-mounting
 sudo systemctl stop autofs
 sudo systemctl disable autofs
 
-# Enable automatic updates
-
-# Disable file access timestamps to be saved (noatime)
-
-# Disable further logs (forensic mode)
+# TODO: Enable automatic updates
+# TODO: Disable file access timestamps to be saved (noatime)
+# TODO: No automount
+# TODO: Disable further logs (forensic mode)
+# TODO: Periodical checks (file integrity, rkhunter, chkrootkit, ...)
+# TODO: No open ports
+# TODO: Control Startup Applications
 
 # Restrict SSH (no remote access, no root login, NO SSHD)
 echo "PermitRootLogin no" >> /etc/ssh/ssh_config

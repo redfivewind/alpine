@@ -9,12 +9,12 @@ yay --version
 # Pacman software
 TOOLS="dmidecode git gparted rkhunter wget"
 for Tool in $TOOLS; do
-    sudo pacman --disable-download-timeout --noconfirm -Sy $Tool
+    sudo pacman --disable-download-timeout --needed --noconfirm -Sy $Tool
 done
 
 
 # AUR software
 TOOLS="chkrootkit secure-delete"
 for Tool in $TOOLS; do
-    sudo yay --disable-download-timeout --noconfirm -Sy $Tool
+    sudo yay --disable-download-timeout --needed --noconfirm -Sy $Tool
 done

@@ -1,3 +1,8 @@
+# Ensure German keyboard layout & timezone
+sudo loadkeys de-latin1
+sudo localectl set-keymap de
+sudo timedatectl set-timezone Europe/Berlin
+
 # System update
 echo "Updating the system..."
 pacman --disable-download-timeout --needed --noconfirm -Syu

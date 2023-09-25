@@ -13,5 +13,6 @@ for Tool in $TOOLS; do
     sudo yay --disable-download-timeout --noconfirm -Sy $Tool
 done
 
-# Remove packages that are no longer required
-sudo pacman --noconfirm -Rns $(pacman -Qdtq)
+# Clean up
+sudo pacman -Rns $(pacman -Qdtq)
+sudo paccache -r

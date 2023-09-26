@@ -1,3 +1,7 @@
+# System update
+sudo pacman --disable-download-timeout --needed --noconfirm -Syu
+sudo pacman --disable-download-timeout --needed --noconfirm -S git
+
 # Install yay for access to the AUR ecosystem
 mkdir ~/tools
 cd ~/tools

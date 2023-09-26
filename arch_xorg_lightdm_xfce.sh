@@ -22,4 +22,3 @@ sudo systemctl start lightdm.service
 
 # Clean up
 sudo pacman -Rns $(pacman -Qdtq)
-sudo paccache -r

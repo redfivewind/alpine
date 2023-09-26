@@ -1,12 +1,10 @@
 # System update
 sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 
-# Install audio capabilities
-sudo pacman --disable-download-timeout --needed --noconfirm -S alsa-plugins alsa-utils pulseaudio
+# Install base packages
+sudo pacman --disable-download-timeout --needed --noconfirm -S alsa-plugins alsa-utils git go pulseaudio virtualbox-guest-utils
 
 # Install yay for access to the AUR ecosystem
-sudo pacman --disable-download-timeout --needed --noconfirm -S git go
-
 mkdir ~/tools
 cd ~/tools
 git clone https://aur.archlinux.org/yay.git

@@ -13,10 +13,10 @@ makepkg -si
 yay --version
 
 # Install required tools
-sudo yay --disable-download-timeout --noconfirm -Syu
+yay --disable-download-timeout --noconfirm -Syu
 TOOLS="chkrootkit secure-delete"
 for Tool in $TOOLS; do
-    sudo yay --disable-download-timeout --noconfirm -Sy $Tool
+    yay --disable-download-timeout --noconfirm -Sy $Tool
 done
 
 # Clean up

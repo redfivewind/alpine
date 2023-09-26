@@ -48,4 +48,3 @@ echo "PermitRootLogin no" >> /etc/ssh/ssh_config
 
 # Clean up
 sudo pacman -Rns $(pacman -Qdtq)
-sudo paccache -r

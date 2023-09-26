@@ -15,4 +15,3 @@ done
 
 # Clean up
 sudo pacman -Rns $(pacman -Qdtq)
-sudo paccache -r

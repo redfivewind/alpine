@@ -16,11 +16,13 @@ yay --version
 
 # Install required tools
 yay --disable-download-timeout --needed --noconfirm -Syu
-TOOLS="chkrootkit chromium gimp keepass libreoffice librewolf obsidian onboard pinta secure-delete vlc vscodium xmind"
+TOOLS="anaconda chkrootkit chromium cmake keepass libreoffice librewolf magic-wormhole make mingw nasm onboard pinta python3 python3-pip python3-virtualenv python3-wheel secure-delete vlc vscodium"
 for Tool in $TOOLS; do
     yay --disable-download-timeout --needed --noconfirm -S $Tool
 done
 #dconf-editor
+
+# Install VSCodium extensions
 
 # Clean up
 sudo pacman -Rns $(pacman -Qdtq)

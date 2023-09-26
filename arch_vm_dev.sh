@@ -21,6 +21,11 @@ done
 #dconf-editor
 
 # Install VSCodium extensions
+codium --install-extension bungcip.better-toml
+codium --install-extension nimsaem.nimvscode
+codium --install-extension canadaduane.notes
+codium --install-extension ms-python.python
+codium --install-extension rust-lang.rust-analyzer
 
 # Clean up
 sudo pacman -Rns $(pacman -Qdtq)

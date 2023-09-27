@@ -14,7 +14,7 @@ yay --version
 
 # Install required tools
 yay --disable-download-timeout --needed --noconfirm -Syu
-TOOLS="anaconda chkrootkit choosenim chromium cmake go keepass libreoffice librewolf-bin magic-wormhole make mingw monodevelop-bin nasm nim onboard pinta python3 python3-pip python3-virtualenv python3-wheel rustup secure-delete vlc vscodium-bin"
+TOOLS="chkrootkit choosenim chromium cmake go keepass libreoffice librewolf-bin magic-wormhole make mingw miniconda3 monodevelop-bin nasm nim onboard pinta python3 python3-pip python3-virtualenv python3-wheel rustup secure-delete vlc vscodium-bin"
 for Tool in $TOOLS; do
     yay --disable-download-timeout --needed --noconfirm -S $Tool
 done

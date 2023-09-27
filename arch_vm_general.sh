@@ -16,7 +16,7 @@ yay --version
 
 # Install required tools
 yay --disable-download-timeout --needed --noconfirm -Syu
-TOOLS="chkrootkit chromium gimp keepass libreoffice librewolf obsidian onboard pinta secure-delete thunderbird vlc vscodium xmind"
+TOOLS="chkrootkit chromium gimp keepass libreoffice librewolf-bin obsidian onboard pinta secure-delete thunderbird vlc vscodium-bin xmind"
 for Tool in $TOOLS; do
     yay --disable-download-timeout --needed --noconfirm -S $Tool
 done

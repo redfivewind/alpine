@@ -22,5 +22,8 @@ for Tool in $TOOLS; do
 done
 #cheese dconf-editor gimp okular simple-scan
 
+# VSCodium
+sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox
+
 # Clean up
 sudo pacman --noconfirm -Rns $(pacman -Qdtq)

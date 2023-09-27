@@ -3,12 +3,12 @@ echo "Initializing global variables..."
 DEV="/dev/sda" # Harddisk
 EFI="/dev/sda1" # EFI partition
 LUKS="/dev/sda2" # LUKS partition
-LUKS_LVM="lukslvm"
-LUKS_VG="luksvg"
-ROOT_LABEL="root"
-ROOT_NAME="root"
-SWAP_LABEL="swap"
-SWAP_NAME="swap"
+LUKS_LVM="lukslvm" # LUKS LVM
+LUKS_VG="luksvg" # LUKS volume group
+ROOT_LABEL="root" # Label of root partition
+ROOT_NAME="root" # Name of root partition
+SWAP_LABEL="swap" # Label of swap partition
+SWAP_NAME="swap" # Name of swap partition
 USER="user" # Username
 
 # System update

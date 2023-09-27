@@ -12,8 +12,6 @@ makepkg -si
 yay --version
 
 # Install required tools
-yay --disable-download-timeout --needed --noconfirm -Syu
-
 TOOLS="alsa-plugins alsa-utils chkrootkit chromium gimp keepass libreoffice librewolf-bin obsidian onboard pinta pulseaudio secure-delete thunderbird vlc vscodium-bin xmind"
 
 for Tool in $TOOLS; do

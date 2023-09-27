@@ -24,6 +24,11 @@ done
 
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox
+codium --install-extension bungcip.better-toml
+codium --install-extension nimsaem.nimvscode
+codium --install-extension canadaduane.notes
+codium --install-extension ms-python.python
+codium --install-extension rust-lang.rust-analyzer
 
 # Clean up
 sudo pacman --noconfirm -Rns $(pacman -Qdtq)

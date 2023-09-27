@@ -28,4 +28,4 @@ codium --install-extension ms-python.python
 codium --install-extension rust-lang.rust-analyzer
 
 # Clean up
-sudo pacman -Rns $(pacman -Qdtq)
+sudo pacman --noconfirm -Rns $(pacman -Qdtq)

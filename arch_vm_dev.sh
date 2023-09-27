@@ -22,7 +22,9 @@ done
 
 # Miniconda3
 echo "export PATH=\"/opt/miniconda3/condabin:$PATH\"" >> ~/.bash_profile
+echo "export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1" >> ~/.bash_profile
 echo "export PATH=\"/opt/miniconda3/condabin:$PATH\"" >> ~/.bashrc
+echo "export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1" >> ~/.bashrc
 
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox

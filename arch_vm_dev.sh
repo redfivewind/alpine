@@ -20,6 +20,10 @@ for Tool in $TOOLS; do
 done
 #dconf-editor
 
+# Miniconda3
+echo "export PATH=\"/opt/miniconda3/condabin:$PATH\"" >> ~/.bash_profile
+echo "export PATH=\"/opt/miniconda3/condabin:$PATH\"" >> ~/.bashrc
+
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox
 codium --install-extension bungcip.better-toml

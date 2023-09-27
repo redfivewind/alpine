@@ -25,4 +25,4 @@ sudo systemctl enable lightdm.service
 sudo systemctl start lightdm.service
 
 # Clean up
-sudo pacman -Rns $(pacman -Qdtq)
+sudo pacman --noconfirm -Rns $(pacman -Qdtq)

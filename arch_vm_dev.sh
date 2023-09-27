@@ -26,8 +26,11 @@ echo "export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1" >> ~/.bash_profile
 echo "export PATH=\"/opt/miniconda3/condabin:$PATH\"" >> ~/.bashrc
 echo "export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1" >> ~/.bashrc
 
+conda init
+
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox
+
 codium --install-extension bungcip.better-toml
 codium --install-extension nimsaem.nimvscode
 codium --install-extension canadaduane.notes

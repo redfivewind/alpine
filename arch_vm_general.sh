@@ -1,9 +1,6 @@
 # System update
 sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 
-# Install audio capabilities
-sudo pacman --disable-download-timeout --needed --noconfirm -S alsa-plugins alsa-utils pulseaudio
-
 # Install yay for access to the AUR ecosystem
 sudo pacman --disable-download-timeout --needed --noconfirm -S git go
 
@@ -16,11 +13,13 @@ yay --version
 
 # Install required tools
 yay --disable-download-timeout --needed --noconfirm -Syu
-TOOLS="chkrootkit chromium gimp keepass libreoffice librewolf-bin obsidian onboard pinta secure-delete thunderbird vlc vscodium-bin xmind"
+
+TOOLS="alsa-plugins alsa-utils chkrootkit chromium gimp keepass libreoffice librewolf-bin obsidian onboard pinta pulseaudio secure-delete thunderbird vlc vscodium-bin xmind"
+
 for Tool in $TOOLS; do
+    sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool
     yay --disable-download-timeout --needed --noconfirm -S $Tool
 done
-#cheese dconf-editor gimp okular simple-scan
 
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox

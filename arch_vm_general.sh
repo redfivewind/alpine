@@ -1,5 +1,5 @@
 # System update
-sudo pacman --disable-download-timeout --needed --noconfirm -Syu
+sudo pacman --disable-download-timeout --needed --noconfirm -Syyu
 
 # Install yay for access to the AUR ecosystem
 sudo pacman --disable-download-timeout --needed --noconfirm -S git go

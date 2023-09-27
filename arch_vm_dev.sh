@@ -20,7 +20,9 @@ for Tool in $TOOLS; do
 done
 #dconf-editor
 
-# Install VSCodium extensions
+# VSCodium
+
+
 codium --install-extension bungcip.better-toml
 codium --install-extension nimsaem.nimvscode
 codium --install-extension canadaduane.notes

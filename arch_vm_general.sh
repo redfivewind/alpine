@@ -23,4 +23,4 @@ done
 #cheese dconf-editor gimp okular simple-scan
 
 # Clean up
-sudo pacman -Rns $(pacman -Qdtq)
+sudo pacman --noconfirm -Rns $(pacman -Qdtq)

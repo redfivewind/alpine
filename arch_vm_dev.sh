@@ -13,7 +13,7 @@ yay --version
 yay --disable-download-timeout --needed --noconfirm -Syu
 
 # Install required tools
-TOOLS="alsa-plugins alsa-utils chkrootkit choosenim chromium cmake gimp git go keepass libreoffice librewolf-bin magic-wormhole make mingw miniconda3 monodevelop-bin nasm nim onboard pinta pulseaudio python3 python3-pip python3-virtualenv python3-wheel rustup secure-delete virtualbox-guest-utils vlc vscodium-bin"
+TOOLS="alsa-plugins alsa-utils chkrootkit choosenim chromium cmake gimp git go keepass libreoffice librewolf-bin magic-wormhole make mingw-w64 mingw-w64-llvm miniconda3 monodevelop-bin nasm nim onboard pinta pulseaudio python3 python3-pip python3-virtualenv python3-wheel rustup secure-delete virtualbox-guest-utils vlc vscodium-bin"
 
 for Tool in $TOOLS; do
     sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool

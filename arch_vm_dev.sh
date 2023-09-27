@@ -1,9 +1,3 @@
-# System update
-sudo pacman --disable-download-timeout --needed --noconfirm -Syu
-
-# Install base packages
-sudo pacman --disable-download-timeout --needed --noconfirm -S alsa-plugins alsa-utils git go pulseaudio virtualbox-guest-utils
-
 # Install yay for access to the AUR ecosystem
 mkdir ~/tools
 cd ~/tools
@@ -12,13 +6,16 @@ cd yay
 makepkg -si
 yay --version
 
-# Install required tools
+# System update
+sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 yay --disable-download-timeout --needed --noconfirm -Syu
-TOOLS="chkrootkit choosenim chromium cmake go keepass libreoffice librewolf-bin magic-wormhole make mingw miniconda3 monodevelop-bin nasm nim onboard pinta python3 python3-pip python3-virtualenv python3-wheel rustup secure-delete vlc vscodium-bin"
-for Tool in $TOOLS; do
-    yay --disable-download-timeout --needed --noconfirm -S $Tool
-done
-#dconf-editor
+
+# Install tools using pacman
+sudo pacman --disable-download-timeout --needed --noconfirm -S alsa-plugins alsa-utils git go pulseaudio python3 python3-pip python3-virtualenv python3-wheel rustup virtualbox-guest-utils vlc
+
+# Install tools using yay
+yay --disable-download-timeout --needed --noconfirm -Syu
+yay --disable-download-timeout --needed --noconfirm -S chkrootkit choosenim chromium cmake go keepass libreoffice librewolf-bin magic-wormhole make mingw miniconda3 monodevelop-bin nasm nim onboard pinta secure-delete vscodium-bin
 
 # Miniconda3
 echo "export PATH=\"/opt/miniconda3/condabin:$PATH\"" >> ~/.bash_profile

@@ -11,9 +11,9 @@ sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 sudo pacman --disable-download-timeout --needed --noconfirm -S xorg xorg-drivers
 
 # Install LightDM and Xfce
-sudo pacman --disable-download-timeout --needed --noconfirm -S lxqt sddm ttf-freefont xdg-utils
+sudo pacman --disable-download-timeout --needed --noconfirm -S lxqt oxygen-icons sddm ttf-freefont xdg-utils
 
-# Set dark theme
+# Custom theme
 #
 
 # Install additional applications

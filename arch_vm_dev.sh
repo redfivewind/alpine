@@ -4,7 +4,8 @@ sudo pacman --disable-download-timeout --needed --noconfirm -Syyu
 # Install yay for access to the AUR ecosystem
 sudo pacman --disable-download-timeout --needed --noconfirm -S git go
 
-mkdir ~/tools
+sudo mkdir -p ~/tools
+sudo chown -R user:users ~/tools
 cd ~/tools
 git clone https://aur.archlinux.org/yay.git
 cd yay

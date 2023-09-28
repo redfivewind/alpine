@@ -95,11 +95,14 @@ sudo systemctl enable wpa_supplicant.service # Required for WPAx connections
 
 # Add user paths & scripts
 mkdir -p /home/$USER/tools
+chmod -R user:users /home/$USER/tools
+
 echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" > /home/$USER/tools/update.sh
 echo "yay --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh
 echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER/tools/update.sh
 
 mkdir -p /home/$USER/workspace
+chmod -R user:users /home/$USER/workspace
 
 # Unmount previously required mount points
 exit

@@ -17,11 +17,15 @@ sudo pacman --disable-download-timeout --needed --noconfirm -S lxqt sddm ttf-fre
 #
 
 # Install additional applications
-sudo pacman --disable-download-timeout --needed --noconfirm -S 
+sudo pacman --disable-download-timeout --needed --noconfirm -S arch-linux-wallpaper leafpead
 
-# Configure LightDM service
-sudo systemctl enable lightdm.service
-sudo systemctl start lightdm.service
+# Enable services
+sudo systemctl enable NetworkManager
+sudo systemctl enable sddm
+
+# Start services
+sudo systemctl start NetworkManager
+sudo systemctl start sddm
 
 # Clean up
 sudo pacman --noconfirm -Rns $(pacman -Qdtq)

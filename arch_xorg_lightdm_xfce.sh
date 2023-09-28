@@ -5,7 +5,7 @@ sudo timedatectl set-timezone Europe/Berlin
 
 # System update
 echo "Updating the system..."
-pacman --disable-download-timeout --needed --noconfirm -Syu
+sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 
 # Install Xorg
 sudo pacman --disable-download-timeout --needed --noconfirm -S xorg xorg-drivers

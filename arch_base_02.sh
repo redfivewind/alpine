@@ -93,13 +93,15 @@ sudo systemctl enable thermald # Thermald
 sudo systemctl enable tlp.service # TLP
 sudo systemctl enable wpa_supplicant.service # Required for WPAx connections
 
-# Add update scripts
+# Add user paths & scripts
 mkdir -p /home/$USER/tools
 echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" > /home/$USER/tools/update.sh
 echo "yay --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh
 echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER/tools/update.sh
 
-# Unmount previously required entry points
+mkdir -p /home/$USER/workspace
+
+# Unmount previously required mount points
 exit
 umount /mnt/dev/pts
 umount /mnt/dev

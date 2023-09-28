@@ -17,7 +17,7 @@ sudo pacman --disable-download-timeout --needed --noconfirm -S lxqt sddm ttf-fre
 #
 
 # Install additional applications
-sudo pacman --disable-download-timeout --needed --noconfirm -S arch-linux-wallpaper leafpead
+sudo pacman --disable-download-timeout --needed --noconfirm -S archlinux-wallpaper leafpead
 
 # Enable services
 sudo systemctl enable NetworkManager

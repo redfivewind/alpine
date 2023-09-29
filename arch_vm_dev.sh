@@ -33,8 +33,11 @@ echo "export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1" >> ~/.bashrc
 conda init
 
 # Rustup
+rustup toolchain install stable-x86_64-unknown-linux-gnu
+rustup toolchain install nightly-x86_64-unknown-linux-gnu
+rustup toolchain install stable_x86_64-pc-windows-msvc
+rustup toolchain install nightly_x86_64-pc-windows-msvc
 rustup default stable
-rustup default nightly
 
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox

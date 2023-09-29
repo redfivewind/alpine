@@ -1,11 +1,14 @@
 # System update
 sudo pacman --disable-download-timeout --needed --noconfirm -Syyu
 
+# Correct folder ownership
+sudo chown -R user:users ~/tools
+sudo chown -R user:users ~/workspace
+
 # Install yay for access to the AUR ecosystem
 sudo pacman --disable-download-timeout --needed --noconfirm -S git go
 
 sudo mkdir -p ~/tools
-sudo chown -R user:users ~/tools
 cd ~/tools
 git clone https://aur.archlinux.org/yay.git
 cd yay

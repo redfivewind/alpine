@@ -49,9 +49,9 @@ echo "HOOKS=(base udev autodetect modconf block filesystems keyboard fsck encryp
 mkinitcpio -p linux-hardened # Rebuild initramfs image
 
 # Users
-#echo "Adding root and home user..."
-#echo "SET ROOT PASSWORD!"
-#passwd # Set root password
+echo "Adding root and home user..."
+echo "SET ROOT PASSWORD!"
+passwd # Set root password
 
 useradd -m -G wheel,users $USER # Add new user
 echo "SET HOME USER PASSWORD!"

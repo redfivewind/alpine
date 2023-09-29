@@ -9,7 +9,6 @@ sudo chown -R user:users ~/workspace
 sudo pacman --disable-download-timeout --needed --noconfirm -S git go
 
 sudo mkdir -p ~/tools
-sudo chown -R user:users ~/tools
 cd ~/tools
 git clone https://aur.archlinux.org/yay.git
 cd yay

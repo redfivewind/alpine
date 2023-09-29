@@ -34,6 +34,7 @@ conda init
 
 # Rustup
 rustup default stable
+rustup default nightly
 
 # VSCodium
 sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox

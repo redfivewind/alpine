@@ -13,7 +13,7 @@ USER="user" # Username
 
 # System update
 echo "Updating the system..."
-pacman --disable-download-timeout --noconfirm -Syu
+pacman --disable-download-timeout --noconfirm -Syyu
 
 # Time
 echo "Setting timezone and hardware clock..."

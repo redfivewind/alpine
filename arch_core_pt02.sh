@@ -58,17 +58,6 @@ passwd $USER # Set user password
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
 echo "@includedir /etc/sudoers.d" >> /etc/sudoers
 
-# Generate & integrate LUKS keyfile 
-#echo "Adding keyfile for LUKS partition..."
-#mkdir /root/keyfiles # Create folder to hold keyfiles
-#chmod 700 /root/keyfiles # Protect keyfiles folder
-#dd if=/dev/urandom of=/root/keyfiles/boot.keyfile bs=512 count=1 # Generate pseudorandom keyfile
-#sync # Assert that memory is written to disk
-#chmod 600 /root/keyfiles/boot.keyfile # Protect key file
-#cryptsetup -v luksAddKey -i 1 $LUKS /root/keyfiles/boot.keyfile # Adding keyfile as key for LUKS partition
-#echo "FILES=(/root/keyfiles/boot.keyfile)" >> /etc/mkinitcpio.conf # Adding keyfile as resource to iniramfs image
-#mkinitcpio -p linux-hardened # Recreate initramfs image
-
 # efibootmgr & GRUB
 echo "Installing GRUB with CRYPTODISK flag..."
 pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub # Install packages required for UEFI boot
@@ -94,9 +83,15 @@ sudo systemctl enable wpa_supplicant.service # Required for WPAx connections
 mkdir -p /home/$USER/tools
 chown -R user:users /home/$USER/tools
 
-echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" > /home/$USER/tools/update.sh
+echo "# Update all packages" > /home/$USER/tools/update.sh
+echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh
 echo "yay --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh
+echo "" >> /home/$USER/tools/update.sh
+echo "# Autoremove packages that are no longer required" >> /home/$USER/tools/update.sh
 echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER/tools/update.sh
+echo "" >> /home/$USER/tools/update.sh
+echo "# Fix the VSCodium bug" >> /home/$USER/tools/update.sh
+echo "sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox" >> /home/$USER/tools/update.sh
 
 mkdir -p /home/$USER/workspace
 chown -R user:users /home/$USER/workspace

@@ -19,6 +19,9 @@ USER="user" # Username
 ip link set eth0 up
 setup-interfaces -ar
 
+# Add required packages
+apk add cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2
+
 # Time zone
 echo "Enable network time synchronization..."
 setup-ntp busybox # Enable network time synchronization
@@ -29,8 +32,6 @@ echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk
 
 # Partitioning (GPT parititon table)
 echo "Partitioning the HDD/SSD with GPT partition layout..."
-
-apk add sgdisk
 
 sgdisk --zap-all $DEV # Wipe verything
 sgdisk --new=1:0:+512M $DEV # Create EFI partition

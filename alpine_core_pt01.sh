@@ -19,12 +19,19 @@ USER="user" # Username
 ip link set eth0 up
 setup-interfaces -ar
 
-# System clock
+# Time zone
 echo "Enable network time synchronization..."
-timedatectl set-ntp true # Enable network time synchronization
+setup-ntp busybox # Enable network time synchronization
+
+# Add the package repositories
+echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories
+echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
 
 # Partitioning (GPT parititon table)
 echo "Partitioning the HDD/SSD with GPT partition layout..."
+
+apk add sgdisk
+
 sgdisk --zap-all $DEV # Wipe verything
 sgdisk --new=1:0:+512M $DEV # Create EFI partition
 sgdisk --new=2:0:0 $DEV # Create LUKS partition

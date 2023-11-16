@@ -1,6 +1,7 @@
 # TODO
 # Disk selection
 # Clear EFI entries
+# Interfaces setup
 
 # German keyboard layout
 echo "Loading German keyboard layout..."

@@ -62,7 +62,7 @@ sleep 1
 
 # Mount root, boot and swap
 echo "Mounting filesystems..."
-mount /dev/$LUKS_VG/$ROOT_NAME /mnt # Mount root partition
+mount -t ext4 /dev/$LUKS_VG/$ROOT_NAME /mnt # Mount root partition
 mkdir -p /mnt/boot/efi # Create folder to hold /boot/efi files
 mount $EFI /mnt/boot/efi # Mount EFI partition
 sleep 1

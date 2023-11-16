@@ -54,7 +54,7 @@ sleep 1
 
 # Format partitions
 echo "Formatting the partitions..."
-mkfs.fat -F32 $EFI # EFI partition (FAT32)
+mkfs.vfat $EFI # EFI partition (FAT32)
 mkfs.ext4 /dev/mapper/$LUKS_VG-$ROOT_NAME -L $ROOT_LABEL # Root partition (ext4)
 mkswap /dev/mapper/$LUKS_VG-$SWAP_NAME -L $SWAP_LABEL # Swap partition
 sleep 1

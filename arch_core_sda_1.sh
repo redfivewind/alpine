@@ -1,3 +1,7 @@
+# TODO
+# Disk selection
+# Clear EFI entries
+
 # German keyboard layout
 echo "Loading German keyboard layout..."
 loadkeys de-latin1

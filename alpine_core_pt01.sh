@@ -22,7 +22,7 @@ setup-interfaces -ar
 # Add required packages
 setup-apkrepos -c -1
 apk update
-apk add cryptsetup e2fsprogs efibootmgr gptfdisk grub grub-efi lsblk lvm2 sudo
+apk add cryptsetup e2fsprogs efibootmgr gptfdisk grub grub-efi lsblk lvm2 sgdisk sudo
 
 # Time zone
 echo "Enable network time synchronization..."

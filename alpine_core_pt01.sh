@@ -20,8 +20,7 @@ ip link set eth0 up
 setup-interfaces -ar
 
 # Add required packages
-echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories
-echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
+setup-apkrepos -c -1
 apk update
 apk add cryptsetup e2fsprogs efibootmgr gptfdisk grub grub-efi lsblk lvm2 sudo
 

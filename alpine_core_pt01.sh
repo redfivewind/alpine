@@ -1,7 +1,6 @@
 # German keyboard layout
 echo "Loading German keyboard layout..."
-loadkeys de-latin1
-localectl set-keymap de
+setup-keymap de de
 
 # Global variables
 echo "Initializing global variables..."
@@ -17,8 +16,8 @@ SWAP_NAME="swap" # Name of swap partition
 USER="user" # Username
 
 # Connect to network
-sudo ip link set enp0s3 up
-sudo dhclient enp0s3
+ip link set eth0 up
+setup-interfaces -ar
 
 # System clock
 echo "Enable network time synchronization..."

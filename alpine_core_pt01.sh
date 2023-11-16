@@ -64,7 +64,7 @@ sleep 1
 echo "Mounting filesystems..."
 mount -t ext4 /dev/$LUKS_VG/$ROOT_NAME /mnt # Mount root partition
 mkdir -p /mnt/boot/efi # Create folder to hold /boot/efi files
-mount $EFI /mnt/boot/efi # Mount EFI partition
+mount -t vfat $EFI /mnt/boot/efi # Mount EFI partition
 sleep 1
 
 # Install base packages

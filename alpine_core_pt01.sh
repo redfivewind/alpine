@@ -20,15 +20,13 @@ ip link set eth0 up
 setup-interfaces -ar
 
 # Add required packages
+echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories
+echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
 apk add cryptsetup e2fsprogs efibootmgr gptfdisk grub grub-efi lsblk lvm2 sudo
 
 # Time zone
 echo "Enable network time synchronization..."
 setup-ntp busybox # Enable network time synchronization
-
-# Add the package repositories
-echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories
-echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
 
 # Partitioning (GPT parititon table)
 echo "Partitioning the HDD/SSD with GPT partition layout..."

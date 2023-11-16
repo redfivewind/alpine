@@ -20,7 +20,7 @@ ip link set eth0 up
 setup-interfaces -ar
 
 # Add required packages
-apk add cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sudo
+apk add cryptsetup e2fsprogs efibootmgr gptfdisk grub grub-efi lsblk lvm2 sudo
 
 # Time zone
 echo "Enable network time synchronization..."

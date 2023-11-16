@@ -84,5 +84,5 @@ sed -i 's/relatime/noatime/g' /mnt/etc/fstab # Replace 'relatime' with 'noatime'
 sleep 1
 
 # Enter new system chroot
-echo "Entering new system root... Run 'arch_base_02.sh' manually!" 
+echo "Entering new system root... Run 'arch_core_02.sh' manually!" 
 arch-chroot /mnt # /mnt becomes temporary root directory

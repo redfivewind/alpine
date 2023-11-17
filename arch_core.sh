@@ -31,7 +31,8 @@ if [ -e $DEV ]; then
         echo "[*] Target block device: '$DEV'."
     else
         echo "[X] ERROR: The target block device '$DEV' is not a block device."
-        exit 1        
+        exit 1
+    fi
 else
     echo "[X] ERROR: The target block device '$DEV' doesn't exist."
     exit 1  

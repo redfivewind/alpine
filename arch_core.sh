@@ -77,6 +77,7 @@ function fn_01 {
     
     # Enter new system chroot
     cp $SCRIPT /tmp/
+    SCRIPT=$"/tmp/$(basename $SCRIPT)"
     arch-chroot /mnt /bin/bash -c "sh /tmp/$0 $DEV 1"
 }
 

@@ -65,9 +65,7 @@ function fn_01 {
     mount -t sysfs sys /mnt/sys
     mount -o bind /dev /mnt/dev
     mount -t devpts /dev/pts /mnt/dev/pts/
-    mount -o bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars
-    mkdir -p /mnt/tmp
-    mount --bind /tmp /mnt/tmp
+    mount -o bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars    
     sleep 1
     
     # fstab
@@ -77,8 +75,9 @@ function fn_01 {
     sleep 1
     
     # Enter new system chroot
-    cp $SCRIPT /tmp/
-    SCRIPT=$"/tmp/$(basename $SCRIPT)"
+    mkdir -p /mnt/tmp/script
+    cp $SCRIPT /tmp/script
+    SCRIPT=$"/tmp/script/$(basename $SCRIPT)"
     arch-chroot /mnt /bin/bash -c "sh $SCRIPT $DEV 1"
 }
 

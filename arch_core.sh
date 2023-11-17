@@ -1,54 +1,3 @@
-# TODO
-# Clear EFI entries
-
-# Global variables
-echo "Initializing global variables..."
-DEV="$1" # Harddisk
-LV_ROOT="root" # Label & name of the root partition
-LV_SWAP="swap" # Label & name of the swap partition
-LVM_LUKS="lvm_luks" # LUKS LVM
-PART_EFI="${DEV}p1" # EFI partition
-PART_LUKS="${DEV}p2" # LUKS partition
-SCRIPT=$(readlink -f "$0")
-USER="user" # Username
-VG_LUKS="vg_luks" # LUKS volume group
-
-# Interpreting the commandline arguments
-if [ "$#" -le 0 ]; then
-    arg_err
-elif [ "$#" -eq 1 ]; then
-    DEV="$1"
-    MODE=0
-elif [ "$#" -eq 2 ]; then
-    DEV="$1"
-    MODE=$2
-else
-    arg_err
-fi
-
-if [ -e $DEV ]; then
-    if [ -b $DEV ]; then
-        echo "[*] Target block device: '$DEV'."
-    else
-        echo "[X] ERROR: The target block device '$DEV' is not a block device."
-        exit 1
-    fi
-else
-    echo "[X] ERROR: The target block device '$DEV' doesn't exist."
-    exit 1
-fi
-
-if [ $MODE -eq 0 ]; then
-    echo "[*] Selected mode: $MODE."
-    fn_01
-elif [ $MODE -eq 1 ]; then
-    echo "[*] Selected mode: $MODE."
-    fn_02
-else
-    echo "[X] ERROR: The selected mode is $MODE but must be 0 or 1."
-    exit 1
-fi
-
 function arg_err {
     echo "[X] ERROR: The target hard disk must be passed as the first argument, while the second argument is optional and specifies the mode (0/1)."
     echo "[*] Usage: sh $0 <target_disk> [<mode (0/1)>]"
@@ -230,3 +179,51 @@ function fn_02 {
     sync
     exit
 }
+
+# Global variables
+echo "Initializing global variables..."
+DEV="$1" # Harddisk
+LV_ROOT="root" # Label & name of the root partition
+LV_SWAP="swap" # Label & name of the swap partition
+LVM_LUKS="lvm_luks" # LUKS LVM
+PART_EFI="${DEV}p1" # EFI partition
+PART_LUKS="${DEV}p2" # LUKS partition
+SCRIPT=$(readlink -f "$0")
+USER="user" # Username
+VG_LUKS="vg_luks" # LUKS volume group
+
+# Interpreting the commandline arguments
+if [ "$#" -le 0 ]; then
+    arg_err
+elif [ "$#" -eq 1 ]; then
+    DEV="$1"
+    MODE=0
+elif [ "$#" -eq 2 ]; then
+    DEV="$1"
+    MODE=$2
+else
+    arg_err
+fi
+
+if [ -e $DEV ]; then
+    if [ -b $DEV ]; then
+        echo "[*] Target block device: '$DEV'."
+    else
+        echo "[X] ERROR: The target block device '$DEV' is not a block device."
+        exit 1
+    fi
+else
+    echo "[X] ERROR: The target block device '$DEV' doesn't exist."
+    exit 1
+fi
+
+if [ $MODE -eq 0 ]; then
+    echo "[*] Selected mode: $MODE."
+    fn_01
+elif [ $MODE -eq 1 ]; then
+    echo "[*] Selected mode: $MODE."
+    fn_02
+else
+    echo "[X] ERROR: The selected mode is $MODE but must be 0 or 1."
+    exit 1
+fi

@@ -66,6 +66,7 @@ function fn_01 {
     mount -o bind /dev /mnt/dev
     mount -t devpts /dev/pts /mnt/dev/pts/
     mount -o bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars
+    mount /tmp /mnt/tmp
     sleep 1
     
     # fstab
@@ -75,8 +76,7 @@ function fn_01 {
     sleep 1
     
     # Enter new system chroot
-    mkdir /mnt/tmp/
-    cp $SCRIPT /mnt/tmp/
+    cp $SCRIPT /tmp/
     arch-chroot /mnt /bin/bash -c "sh /tmp/$0 $DEV 1"
 }
 

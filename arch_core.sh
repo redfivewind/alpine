@@ -10,16 +10,15 @@ localectl set-keymap de
 
 # Global variables
 echo "Initializing global variables..."
-DEV="/dev/sda" # Harddisk
-EFI="/dev/sda1" # EFI partition
-LUKS="/dev/sda2" # LUKS partition
-LUKS_LVM="lukslvm" # LUKS LVM
-LUKS_VG="luksvg" # LUKS volume group
-ROOT_LABEL="root" # Label of root partition
-ROOT_NAME="root" # Name of root partition
-SWAP_LABEL="swap" # Label of swap partition
-SWAP_NAME="swap" # Name of swap partition
+DEV="${1}" # Harddisk
+LV_ROOT="root" # Label & name of the root partition
+LV_SWAP="swap" # Label & name of the swap partition
+LVM_LUKS="lvm_luks" # LUKS LVM
+PART_EFI="${DEV}p1" # EFI partition
+PART_LUKS="${DEV}p2" # LUKS partition
+SCRIPT=$(readlink -f "$0")
 USER="user" # Username
+VG_LUKS="vg_luks" # LUKS volume group
 
 # Connect to network
 sudo ip link set enp0s3 up
@@ -41,29 +40,29 @@ sleep 1
 
 # LUKS 
 echo "Formatting the second partition as LUKS crypto partition..."
-cryptsetup luksFormat $LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 # Format LUKS partition
-cryptsetup luksOpen $LUKS $LUKS_LVM # Open LUKS partition
+cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 # Format LUKS partition
+cryptsetup luksOpen $PART_LUKS $LVM_LUKS # Open LUKS partition
 sleep 1
 
 # LVM 
 echo "Setting up LVM..."
-pvcreate /dev/mapper/$LUKS_LVM # Create physical volume
-vgcreate $LUKS_VG /dev/mapper/$LUKS_LVM # Create volume group
-lvcreate -L 6144M $LUKS_VG -n $SWAP_NAME # Create logical swap volume
-lvcreate -l 100%FREE $LUKS_VG -n $ROOT_NAME # Create logical root volume
+pvcreate /dev/mapper/$LVM_LUKS # Create physical volume
+vgcreate $VG_LUKS /dev/mapper/$LVM_LUKS # Create volume group
+lvcreate -L 6144M $VG_LUKS -n $LV_SWAP # Create logical swap volume
+lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT # Create logical root volume
 sleep 1
 
 # Format partitions
 echo "Formatting the partitions..."
-mkfs.fat -F32 $EFI # EFI partition (FAT32)
-mkfs.ext4 /dev/mapper/$LUKS_VG-$ROOT_NAME -L $ROOT_LABEL # Root partition (ext4)
-mkswap /dev/mapper/$LUKS_VG-$SWAP_NAME -L $SWAP_LABEL # Swap partition
-swapon /dev/$LUKS_VG/$SWAP_NAME # Activate swap partition
+mkfs.fat -F32 $PART_EFI # EFI partition (FAT32)
+mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT -L $LV_ROOT # Root partition (ext4)
+mkswap /dev/mapper/$VG_LUKS-$LV_SWAP -L $LV_SWAP # Swap partition
+swapon /dev/$VG_LUKS/$LV_SWAP # Activate swap partition
 sleep 1
 
 # Mount root, boot and swap
 echo "Mounting filesystems..."
-mount /dev/$LUKS_VG/$ROOT_NAME /mnt # Mount root partition
+mount /dev/$VG_LUKS/$LV_ROOT /mnt # Mount root partition
 mkdir -p /mnt/boot/efi # Create folder to hold /boot/efi files
 mount $EFI /mnt/boot/efi # Mount EFI partition
 sleep 1
@@ -89,5 +88,6 @@ sed -i 's/relatime/noatime/g' /mnt/etc/fstab # Replace 'relatime' with 'noatime'
 sleep 1
 
 # Enter new system chroot
-echo "Entering new system root... Run 'arch_core_02.sh' manually!" 
-arch-chroot /mnt # /mnt becomes temporary root directory
+mkdir /mnt/tmp/
+cp $SCRIPT /mnt/tmp/
+arch-chroot /mnt /bin/bash -c "/mnt/tmp/$0"

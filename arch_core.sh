@@ -66,7 +66,8 @@ function fn_01 {
     mount -o bind /dev /mnt/dev
     mount -t devpts /dev/pts /mnt/dev/pts/
     mount -o bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars
-    mount /tmp /mnt/tmp
+    mkdir -p /mnt/tmp
+    mount --bind /tmp /mnt/tmp
     sleep 1
     
     # fstab

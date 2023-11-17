@@ -77,7 +77,7 @@ function fn_01 {
     # Enter new system chroot
     mkdir /mnt/tmp/
     cp $SCRIPT /mnt/tmp/
-    arch-chroot /mnt /bin/bash -c "sh /mnt/tmp/$0 $DEV 1"
+    arch-chroot /mnt /bin/bash -c "sh /tmp/$0 $DEV 1"
 }
 
 function fn_02 {

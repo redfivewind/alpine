@@ -35,7 +35,8 @@ if [ -e $DEV ]; then
     fi
 else
     echo "[X] ERROR: The target block device '$DEV' doesn't exist."
-    exit 1  
+    exit 1
+fi
 
 if [ $MODE -eq 0 ]; then
     echo "[*] Selected mode: $MODE."
@@ -46,6 +47,7 @@ elif [ $MODE -eq 1 ]; then
 else
     echo "[X] ERROR: The selected mode is $MODE but must be 0 or 1."
     exit 1
+fi
 
 function arg_err {
     echo "[X] ERROR: The target hard disk must be passed as the first argument, while the second argument is optional and specifies the mode (0/1)."

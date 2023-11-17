@@ -91,3 +91,7 @@ function part_01 {
   cp $SCRIPT /mnt/tmp/
   arch-chroot /mnt /bin/bash -c "sh /mnt/tmp/$0 $DEV 1"
 }
+
+function 2 {
+  
+}

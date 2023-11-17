@@ -36,6 +36,16 @@ else
     echo "[X] ERROR: The target block device '$DEV' doesn't exist."
     exit 1  
 
+if [ $MODE -eq 0 ]; then
+    echo "[*] Selected mode: $MODE."
+    fn_01
+elif [ $MODE -eq 1 ]; then
+    echo "[*] Selected mode: $MODE."
+    fn_02
+else
+    echo "[X] ERROR: The selected mode is $MODE but must be 0 or 1."
+    exit 1
+
 function arg_err {
     echo "[X] ERROR: The target hard disk must be passed as the first argument, while the second argument is optional and specifies the mode (0/1)."
     echo "[*] Usage: sh $0 <target_disk> [<mode (0/1)>]"
@@ -119,6 +129,15 @@ function fn_01 {
 }
 
 function fn_02 {
+    # German keyboard layout
+    echo "Loading German keyboard layout..."
+    loadkeys de-latin1
+    localectl set-keymap de
+  
+    # Network time synchronisation
+    echo "Enable network time synchronization..."
+    timedatectl set-ntp true # Enable network time synchronization
+    
     # System update
     echo "Updating the system..."
     pacman --disable-download-timeout --noconfirm -Scc

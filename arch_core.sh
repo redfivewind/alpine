@@ -75,13 +75,17 @@ function fn_01 {
     sleep 1
     
     # Enter new system chroot
-    mkdir -p /mnt/tmp/script
-    cp $SCRIPT /tmp/script
-    SCRIPT=$"/tmp/script/$(basename $SCRIPT)"
-    arch-chroot /mnt /bin/bash -c "sh $SCRIPT $DEV 1"
+    cp $SCRIPT /mnt/
+    SCRIPT=$(basename $0)"
+    arch-chroot /mnt /bin/bash -c "sh /$SCRIPT $DEV 1"
 }
 
 function fn_02 {
+    # Securely overwrite the script file
+    SIZE=$(stat -c%s $0)
+    dd if=/dev/urandom of=$0 bs=1 count=$SIZE status=progress
+    rm -f $0
+    
     # German keyboard layout
     echo "Loading German keyboard layout..."
     loadkeys de-latin1

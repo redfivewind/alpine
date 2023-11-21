@@ -105,10 +105,10 @@ function fn_02 {
     # Locale
     echo "Initializing the locale..."
     timedatectl set-ntp true # Enable NTP time synchronization again
-    echo "en_GB.UTF-8 UTF-8" > /etc/locale.gen # Change en-US (UTF-8) to en-GB (UTF-8)
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen # en-US (UTF-8)
     locale-gen # Generate locale
-    echo "LANG=en_GB.UTF-8" > /etc/locale.conf # Save locale to locale configuration
-    export LANG=en_GB.UTF-8 # Export LANG variable
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf # Save locale to locale configuration
+    export LANG=en_US.UTF-8 # Export LANG variable
     echo "KEYMAP=de-latin1" > /etc/vconsole.conf # Set keyboard layout
     echo "FONT=lat9w-16" >> /etc/vconsole.conf # Set console font
     

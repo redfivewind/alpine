@@ -155,7 +155,7 @@ function fn_02 {
     pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub # Install packages required for UEFI boot
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub # Enable booting from encrypted /boot
     sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /etc/default/grub # Disable default value
-    echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):lukslvm root=/dev/$VG_LUKS/$LV_ROOT\"" >> /etc/default/grub # Add encryption hook to GRUB
+    echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LVM_LUKS root=/dev/$VG_LUKS/$LV_ROOT\"" >> /etc/default/grub # Add encryption hook to GRUB
     grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
     grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
     chmod 700 /boot # Protect /boot

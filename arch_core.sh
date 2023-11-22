@@ -125,13 +125,15 @@ function fn_02 {
     echo "Setting hostname and /etc/hosts..."
     echo $HOSTNAME > /etc/hostname # Set hostname
     echo "127.0.0.1 localhost" > /etc/hosts # Hosts file: Localhost (IP4)
-    echo "::1 localhost" >> /etc/hosts # Hosts file: Localhost (IP6)
-    #echo "127.0.1.1 $HOSTNAME >> /etc/hosts # Hosts file: This host (IP4) #FIXME
-    
+    echo "::1 localhost" >> /etc/hosts # Hosts file: Localhost (IP6) 
     systemctl enable dhcpcd
+
+    # /etc/crypttab & initramfs
+    printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /etc/crypttab
+    update-initramfs -u -k all
     
-    # initramfs
-    echo "Rebuilding initramfs image using mkinitcpio..."
+    # mkinitcpio
+    echo "[*] Rebuilding initramfs image using mkinitcpio..."
     echo "MODULES=()" > /etc/mkinitcpio.conf
     echo "BINARIES=()" >> /etc/mkinitcpio.conf
     #echo "FILES=()" >> /etc/mkinitcpio.conf

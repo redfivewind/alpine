@@ -74,12 +74,16 @@ function fn_01 {
     genfstab -U /mnt > /mnt/etc/fstab # Generate fstab file
     sed -i 's/relatime/noatime/g' /mnt/etc/fstab # Replace 'relatime' with 'noatime' (Access time will not be saved in files)
     sleep 2
+
+    # Copy the installation script to the new system root
+    mkdir /install/
+    cp $SCRIPT /install/
+    mount /install /mnt/install
+    SCRIPT=$(basename $0)
     
     # Enter new system root
-    echo "[!] ALERT: Entering the new system root..."
-    cp $SCRIPT /mnt/
-    SCRIPT=$(basename $0)
-    arch-chroot /mnt /bin/bash -c "sh $SCRIPT $DEV 1"
+    echo "[!] ALERT: Entering the new system root..."    
+    arch-chroot /mnt /bin/bash -c "sh /install/$SCRIPT $DEV 1"
 }
 
 function fn_02 {

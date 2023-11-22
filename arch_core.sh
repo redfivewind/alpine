@@ -79,7 +79,7 @@ function fn_01 {
     echo "[!] ALERT: Entering the new system root..."
     cp $SCRIPT /mnt/
     SCRIPT=$(basename $0)"
-    arch-chroot /mnt /bin/bash -c "sh /$SCRIPT $DEV 1"
+    arch-chroot /mnt /bin/bash -c "sh $SCRIPT $DEV 1"
 }
 
 function fn_02 {

@@ -97,22 +97,22 @@ function fn_02 {
     sleep 2
   
     # Network time synchronisation
-    echo "Enable network time synchronization..."
+    echo "[*] Enabling network time synchronization..."
     timedatectl set-ntp true # Enable network time synchronization
     
     # System update
-    echo "Updating the system..."
+    echo "[*] Updating the system..."
     pacman --disable-download-timeout --noconfirm -Scc
     pacman --disable-download-timeout --noconfirm -Syyu
     
     # Time
-    echo "Setting timezone and hardware clock..."
+    echo "[*] Setting the timezone and hardware clock..."
     timedatectl set-timezone Europe/Berlin # Berlin timezone
     ln /usr/share/zoneinfo/Europe/Berlin /etc/localtime # Berlin timezone
     hwclock --systohc --utc # Assume hardware clock is UTC
     
     # Locale
-    echo "Initializing the locale..."
+    echo "[*] Initializing the locale..."
     timedatectl set-ntp true # Enable NTP time synchronization again
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen # en-US (UTF-8)
     locale-gen # Generate locale
@@ -122,13 +122,14 @@ function fn_02 {
     echo "FONT=lat9w-16" >> /etc/vconsole.conf # Set console font
     
     # Network
-    echo "Setting hostname and /etc/hosts..."
+    echo "[*] Setting hostname and /etc/hosts..."
     echo $HOSTNAME > /etc/hostname # Set hostname
     echo "127.0.0.1 localhost" > /etc/hosts # Hosts file: Localhost (IP4)
     echo "::1 localhost" >> /etc/hosts # Hosts file: Localhost (IP6) 
     systemctl enable dhcpcd
 
     # /etc/crypttab & initramfs
+    echo "[*] Adding the LUKS partition to /etc/crypttab..."
     printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /etc/crypttab
     cat /etc/crypttab
     update-initramfs -u -k all

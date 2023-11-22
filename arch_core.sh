@@ -6,75 +6,77 @@ function arg_err {
 
 function fn_01 {
     # German keyboard layout
-    echo "Loading German keyboard layout..."
+    echo "[*] Loading German keyboard layout..."
     loadkeys de-latin1
     localectl set-keymap de
   
     # Network time synchronisation
-    echo "Enable network time synchronization..."
+    echo "[*] Enabling network time synchronization..."
     timedatectl set-ntp true # Enable network time synchronization
     
     # Partitioning (GPT parititon table)
-    echo "Partitioning the HDD/SSD with GPT partition layout..."
+    echo "[*] Partitioning the HDD/SSD with GPT partition layout..."
     sgdisk --zap-all $DEV # Wipe verything
     sgdisk --new=1:0:+512M $DEV # Create EFI partition
     sgdisk --new=2:0:0 $DEV # Create LUKS partition
     sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV # Write partition type codes
     sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV # Label partitions
     sgdisk --print $DEV # Print partition table
-    sleep 1
+    sleep 2
     
     # LUKS 
-    echo "Formatting the second partition as LUKS crypto partition..."
+    echo "[*] Formatting the second partition as LUKS crypto partition..."
     cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 # Format LUKS partition
     cryptsetup luksOpen $PART_LUKS $LVM_LUKS # Open LUKS partition
-    sleep 1
+    sleep 2
   
     # LVM 
-    echo "Setting up LVM..."
+    echo "[*] Setting up LVM..."
     pvcreate /dev/mapper/$LVM_LUKS # Create physical volume
     vgcreate $VG_LUKS /dev/mapper/$LVM_LUKS # Create volume group
     lvcreate -L 6144M $VG_LUKS -n $LV_SWAP # Create logical swap volume
     lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT # Create logical root volume
-    sleep 1
+    sleep 2
     
     # Format partitions
-    echo "Formatting the partitions..."
+    echo "[*] Formatting the partitions..."
     mkfs.fat -F32 $PART_EFI # EFI partition (FAT32)
     mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT -L $LV_ROOT # Root partition (ext4)
     mkswap /dev/mapper/$VG_LUKS-$LV_SWAP -L $LV_SWAP # Swap partition
     swapon /dev/$VG_LUKS/$LV_SWAP # Activate swap partition
-    sleep 1
+    sleep 2
     
     # Mount root, boot and swap
-    echo "Mounting filesystems..."
+    echo "[*] Mounting filesystems..."
     mount /dev/$VG_LUKS/$LV_ROOT /mnt # Mount root partition
     mkdir -p /mnt/boot/efi # Create folder to hold /boot/efi files
     mount $PART_EFI /mnt/boot/efi # Mount EFI partition
-    sleep 1
+    sleep 2
     
     # Install base packages
-    echo "Bootstrapping Arch Linux into /mnt with base packages..."
+    echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
     pacman --disable-download-timeout --noconfirm -Scc
     pacman --disable-download-timeout --noconfirm -Syy
     pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode linux-hardened linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
-    sleep 1
+    sleep 2
     
     # Mount or create necessary entry points
+    echo "[*] Mounting necessary filesystems..."
     mount -t proc proc /mnt/proc
     mount -t sysfs sys /mnt/sys
     mount -o bind /dev /mnt/dev
     mount -t devpts /dev/pts /mnt/dev/pts/
     mount -o bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars    
-    sleep 1
+    sleep 2
     
     # fstab
-    echo "Generating fstab file and setting 'noatime'..."
+    echo "[*] Generating fstab file and setting 'noatime'..."
     genfstab -U /mnt > /mnt/etc/fstab # Generate fstab file
     sed -i 's/relatime/noatime/g' /mnt/etc/fstab # Replace 'relatime' with 'noatime' (Access time will not be saved in files)
-    sleep 1
+    sleep 2
     
-    # Enter new system chroot
+    # Enter new system root
+    echo "[!] ALERT: Entering the new system root..."
     cp $SCRIPT /mnt/
     SCRIPT=$(basename $0)"
     arch-chroot /mnt /bin/bash -c "sh /$SCRIPT $DEV 1"
@@ -82,14 +84,17 @@ function fn_01 {
 
 function fn_02 {
     # Securely overwrite the script file
+    echo "[*] Securely overwriting the temporary script file..."    
     SIZE=$(stat -c%s $0)
     dd if=/dev/urandom of=$0 bs=1 count=$SIZE status=progress
     rm -f $0
+    sleep 2
     
     # German keyboard layout
-    echo "Loading German keyboard layout..."
+    echo "[*] Loading German keyboard layout..."
     loadkeys de-latin1
     localectl set-keymap de
+    sleep 2
   
     # Network time synchronisation
     echo "Enable network time synchronization..."
@@ -132,19 +137,21 @@ function fn_02 {
     #echo "FILES=()" >> /etc/mkinitcpio.conf
     echo "HOOKS=(base udev autodetect modconf block filesystems keyboard fsck encrypt lvm2)" >> /etc/mkinitcpio.conf
     mkinitcpio -p linux-hardened # Rebuild initramfs image
+    sleep 2
     
     # Users
-    echo "Adding a generic home user: '$USER'..."
+    echo "[*] Adding a generic home user: '$USER'..."
     useradd -m -G wheel,users $USER # Add new user
-    echo "SET HOME USER PASSWORD!"
+    echo "[!] ALERT: Set the home user password!"
     passwd $USER # Set user password
     #echo "EDITOR=nano visudo" > /etc/sudoers #FIXME
     #echo "root ALL=(ALL) ALL" > /etc/sudoers # Root account may execute any command
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
     echo "@includedir /etc/sudoers.d" >> /etc/sudoers
+    sleep 2
     
     # efibootmgr & GRUB
-    echo "Installing GRUB with CRYPTODISK flag..."
+    echo "[*] Installing GRUB with CRYPTODISK flag..."
     pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub # Install packages required for UEFI boot
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub # Enable booting from encrypted /boot
     sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /etc/default/grub # Disable default value
@@ -152,6 +159,7 @@ function fn_02 {
     grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
     grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
     chmod 700 /boot # Protect /boot
+    sleep 2
     
     # Start services
     echo "Starting system services..."
@@ -162,6 +170,7 @@ function fn_02 {
     sudo systemctl enable thermald # Thermald
     sudo systemctl enable tlp.service # TLP
     sudo systemctl enable wpa_supplicant.service # Required for WPAx connections
+    sleep 2
     
     # Add user paths & scripts
     mkdir -p /home/$USER/tools
@@ -186,7 +195,7 @@ function fn_02 {
 }
 
 # Global variables
-echo "Initializing global variables..."
+echo "[*] Initializing global variables..."
 DEV="$1" # Harddisk
 LV_ROOT="root" # Label & name of the root partition
 LV_SWAP="swap" # Label & name of the swap partition

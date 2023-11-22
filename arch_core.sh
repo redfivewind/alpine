@@ -130,7 +130,9 @@ function fn_02 {
 
     # /etc/crypttab & initramfs
     printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /etc/crypttab
+    cat /etc/crypttab
     update-initramfs -u -k all
+    sleep 2
     
     # mkinitcpio
     echo "[*] Rebuilding initramfs image using mkinitcpio..."

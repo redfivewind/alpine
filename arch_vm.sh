@@ -1,3 +1,5 @@
+#FIXME: Everything
+
 # Install the VirtualBox guest additions
 sudo pacman -Sy --disable-download-timeout --needed --noconfirm virtualbox-guest-utils
 

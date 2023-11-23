@@ -1,3 +1,5 @@
+#FIXME: Everything
+
 # Ensure German keyboard layout & timezone
 sudo loadkeys de-latin1
 sudo localectl set-keymap de

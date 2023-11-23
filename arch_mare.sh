@@ -1,3 +1,5 @@
+#FIXME: Everything
+
 # System update
 sudo pacman --disable-download-timeout --needed --noconfirm -Syyu
 

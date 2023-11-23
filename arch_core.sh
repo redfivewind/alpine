@@ -161,8 +161,8 @@ function fn_02 {
 
     echo "[*] Installing GRUB..."
     mkinitcpio -P linux-hardened
-    grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
     grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
+    grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
     chmod 700 /boot # Protect /boot
     sleep 2
     

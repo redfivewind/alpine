@@ -145,8 +145,6 @@ function fn_02 {
     useradd -m -G wheel,users $USER # Add new user
     echo "[!] ALERT: Set the home user password!"
     passwd $USER # Set user password
-    #echo "EDITOR=nano visudo" > /etc/sudoers #FIXME
-    #echo "root ALL=(ALL) ALL" > /etc/sudoers # Root account may execute any command
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
     echo "@includedir /etc/sudoers.d" >> /etc/sudoers
     sleep 2

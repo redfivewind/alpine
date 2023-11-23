@@ -128,19 +128,15 @@ function fn_02 {
     echo "::1 localhost" >> /etc/hosts # Hosts file: Localhost (IP6) 
     systemctl enable dhcpcd
 
-    # /etc/crypttab & initramfs
+    # mkinitcpio
     echo "[*] Adding the LUKS partition to /etc/crypttab..."
     printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /etc/crypttab
     cat /etc/crypttab
-    update-initramfs -u -k all
-    sleep 2
     
-    # mkinitcpio
     echo "[*] Rebuilding initramfs image using mkinitcpio..."
     echo "MODULES=()" > /etc/mkinitcpio.conf
     echo "BINARIES=()" >> /etc/mkinitcpio.conf
-    #echo "FILES=()" >> /etc/mkinitcpio.conf
-    echo "HOOKS=(base udev autodetect modconf block filesystems keyboard fsck encrypt lvm2)" >> /etc/mkinitcpio.conf
+    echo "HOOKS=(base udev autodetect modconf kms block filesystems keyboard fsck encrypt lvm2)" >> /etc/mkinitcpio.conf
     mkinitcpio -p linux-hardened # Rebuild initramfs image
     sleep 2
     
@@ -161,6 +157,7 @@ function fn_02 {
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub # Enable booting from encrypted /boot
     sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /etc/default/grub # Disable default value
     echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LVM_LUKS root=/dev/$VG_LUKS/$LV_ROOT\"" >> /etc/default/grub # Add encryption hook to GRUB
+    echo "GRUB_PRELOAD_MODULES=\"cryptodisk\"" >> /etc/default/grub
     grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
     grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
     chmod 700 /boot # Protect /boot

@@ -16,7 +16,7 @@ makepkg -si
 yay --version
 
 # Install required tools
-TOOLS="alsa-plugins alsa-utils chkrootkit chromium gimp keepass libreoffice librewolf-bin obsidian onboard pinta pulseaudio secure-delete thunderbird vlc vscodium-bin xmind"
+TOOLS="alsa-plugins alsa-utils chkrootkit chromium gimp keepass libreoffice librewolf-bin onboard pinta pulseaudio secure-delete thunderbird tor-browser-bin vlc vscodium-bin xmind"
 
 for Tool in $TOOLS; do
     sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool

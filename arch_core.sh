@@ -152,14 +152,19 @@ function fn_02 {
     sleep 2
     
     # efibootmgr & GRUB
-    echo "[*] Installing GRUB with CRYPTODISK flag..."
+    echo "[*] Configuring GRUB for encrypted boot..."
     pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub # Install packages required for UEFI boot
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub # Enable booting from encrypted /boot
     sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /etc/default/grub # Disable default value
     echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LVM_LUKS root=/dev/$VG_LUKS/$LV_ROOT\"" >> /etc/default/grub # Add encryption hook to GRUB
     echo "GRUB_PRELOAD_MODULES=\"cryptodisk\"" >> /etc/default/grub
-    grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
+    tail /etc/default/grub
+    sleep 2
+
+    echo "[*] Installing GRUB..."
+    mkinitcpio -P linux-hardened
     grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
     chmod 700 /boot # Protect /boot
     sleep 2
     

@@ -57,7 +57,7 @@ function fn_01 {
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
     pacman --disable-download-timeout --noconfirm -Scc
     pacman --disable-download-timeout --noconfirm -Syy
-    pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode linux-hardened linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
+    pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode iwd linux-hardened linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
     sleep 2
     
     # Mount or create necessary entry points

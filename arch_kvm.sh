@@ -7,8 +7,8 @@ sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils dnsm
 sleep 1
 
 # Allow the standard user to use KVM
-echo "unix_sock_group = \"libvirt\"" | tee -a /etc/libvirt/libvirtd.conf
-echo "unix_sock_rw_perms = \"0770\"" | tee -a /etc/libvirt/libvirtd.conf
+echo "unix_sock_group = \"libvirt\"" | sudo tee -a /etc/libvirt/libvirtd.conf
+echo "unix_sock_rw_perms = \"0770\"" | sudo tee -a /etc/libvirt/libvirtd.conf
 tail /etc/libvirt/libvirtd.conf
 sleep 1
 
@@ -23,8 +23,8 @@ sudo systemctl status libvirtd.service
 sleep 1
 
 # Enable nested virtualisation
-sudo echo "options kvm-amd nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
-sudo echo "options kvm-intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
+echo "options kvm-amd nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
+echo "options kvm-intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
 #cat /etc/modprobe.d/kvm.conf
 sleep 1
 

@@ -9,7 +9,7 @@ sleep 1
 # Allow the standard user to use KVM
 echo "unix_sock_group = \"libvirt\"" >> /etc/libvirt/libvirtd.conf
 echo "unix_sock_rw_perms = \"0770\"" >> /etc/libvirt/libvirtd.conf
-cat /etc/libvirt/libvirtd.conf
+#cat /etc/libvirt/libvirtd.conf
 sleep 1
 
 # Add the standard user to the libvirt group
@@ -25,7 +25,7 @@ sleep 1
 # Enable nested virtualisation
 echo "options kvm-amd nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
 echo "options kvm-intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
-cat /etc/modprobe.d/kvm.conf
+#cat /etc/modprobe.d/kvm.conf
 sleep 1
 
 # Create a network bridge

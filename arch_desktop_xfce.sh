@@ -23,8 +23,7 @@ xfce4-settings-manager --reload
 sudo pacman --disable-download-timeout --needed --noconfirm -S mousepad ristretto thunar-archive-plugin thunar-media-tags-plugin xarchiver xfce4-artwork xfce4-cpugraph-plugin xfce4-mount-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
 
 # Configure LightDM service
-sudo systemctl enable lightdm.service
-sudo systemctl start lightdm.service
+sudo systemctl enable --now lightdm.service
 
 # Clean up
 sudo pacman --noconfirm -Rns $(pacman -Qdtq)

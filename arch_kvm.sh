@@ -23,8 +23,8 @@ sudo systemctl status libvirtd.service
 sleep 1
 
 # Enable nested virtualisation
-echo "options kvm-amd nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
-echo "options kvm-intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
+sudo echo "options kvm-amd nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
+sudo echo "options kvm-intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
 #cat /etc/modprobe.d/kvm.conf
 sleep 1
 

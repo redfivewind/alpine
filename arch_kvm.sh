@@ -17,8 +17,9 @@ sudo newgrp libvirt
 sudo usermod -a -G libvirt $(whoami)
 sleep 1
 
-# Start the libvirt service
-sudo systemctl enable --now libvirtd.service
+# Enable the libvirt service
+sudo systemctl enable libvirtd.service
+sudo systemctl start libvirtd.service
 sudo systemctl status libvirtd.service
 sleep 1
 

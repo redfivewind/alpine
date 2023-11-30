@@ -7,8 +7,8 @@ sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils dnsm
 sleep 1
 
 # Allow the standard user to use KVM
-echo "unix_sock_group = \"libvirt\"" >> /etc/libvirt/libvirtd.conf
-echo "unix_sock_rw_perms = \"0770\"" >> /etc/libvirt/libvirtd.conf
+sudo echo "unix_sock_group = \"libvirt\"" >> /etc/libvirt/libvirtd.conf
+sudo echo "unix_sock_rw_perms = \"0770\"" >> /etc/libvirt/libvirtd.conf
 #cat /etc/libvirt/libvirtd.conf
 sleep 1
 

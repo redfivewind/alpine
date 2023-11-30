@@ -3,7 +3,7 @@ sudo pacman -Syyu
 sleep 1
 
 # Install KVM-related packages
-sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils dnsmasq ebtables iptables-nft libguestfs libvirt openbsd-netcat ovmf qemu-full vde2 virt-manager virt-viewer
+sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils dmidecode dnsmasq ebtables iptables-nft libguestfs libvirt openbsd-netcat ovmf qemu-full vde2 virt-manager virt-viewer
 sleep 1
 
 # Allow the standard user to use KVM

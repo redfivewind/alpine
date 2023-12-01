@@ -194,7 +194,7 @@ function fn_02 {
     mkdir -p /home/$USER/workspace
     chown -R user:users /home/$USER/workspace
 
-    # Install yay for access to the AUR ecosystem
+    # Install yay for AUR access
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
     cd /home/$USER/tools
@@ -203,6 +203,8 @@ function fn_02 {
     makepkg -si
     yay --version
     cd
+
+    # Install base AUR packages
     
     # Synchronise & exit
     sync

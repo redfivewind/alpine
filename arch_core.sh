@@ -204,7 +204,13 @@ function fn_02 {
     yay --version
     cd
 
-    # Install base AUR packages
+    # Install base packages
+    TOOLS="chkrootkit keepass librewolf-bin onboard secure-delete tor-browser-bin"
+    
+    for Tool in $TOOLS; do
+        sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool
+        yay --disable-download-timeout --needed --noconfirm -S $Tool
+    done
     
     # Synchronise & exit
     sync

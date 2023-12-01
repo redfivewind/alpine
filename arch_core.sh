@@ -188,11 +188,21 @@ function fn_02 {
     echo "# Autoremove packages that are no longer required" >> /home/$USER/tools/update.sh
     echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER/tools/update.sh
     echo "" >> /home/$USER/tools/update.sh
-    echo "# Fix the VSCodium bug" >> /home/$USER/tools/update.sh
-    echo "sudo chmod 4755 /opt/vscodium-bin/chrome-sandbox" >> /home/$USER/tools/update.sh
+    echo "# Fix the chrome-sandbox bug" >> /home/$USER/tools/update.sh
+    echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER/tools/update.sh
     
     mkdir -p /home/$USER/workspace
     chown -R user:users /home/$USER/workspace
+
+    # Install yay for access to the AUR ecosystem
+    sudo pacman --disable-download-timeout --needed --noconfirm -S git go
+    
+    cd /home/$USER/tools
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    yay --version
+    cd
     
     # Synchronise & exit
     sync

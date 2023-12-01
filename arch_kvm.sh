@@ -45,17 +45,3 @@ echo "<network><name>br0</name><forward mode='nat'><nat><port start='1024' end='
 sudo virsh net-define /tmp/br0.xml
 sudo virsh net-start br0
 sudo virsh net-autostart br0
-
-# Correct folder ownership
-sudo chown -R user:users ~/tools
-sudo chown -R user:users ~/workspace
-
-# Install yay for access to the AUR ecosystem
-sudo pacman --disable-download-timeout --needed --noconfirm -S git go
-
-sudo mkdir -p ~/tools
-cd ~/tools
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-yay --version

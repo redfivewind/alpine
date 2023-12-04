@@ -13,7 +13,7 @@ sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 sudo pacman --disable-download-timeout --needed --noconfirm -S xorg xorg-drivers
 
 # Install LightDM and Xfce
-sudo pacman --disable-download-timeout --needed --noconfirm -S light-locker lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xfce4
+sudo pacman --disable-download-timeout --needed --noconfirm -S archlinux-wallpaper light-locker lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings xfce4
 
 # Install additional applications
 sudo pacman --disable-download-timeout --needed --noconfirm -S mousepad network-manager-applet ristretto thunar-archive-plugin thunar-media-tags-plugin xarchiver xfce4-artwork xfce4-cpugraph-plugin xfce4-mount-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin

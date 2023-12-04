@@ -21,6 +21,9 @@ sudo pacman --disable-download-timeout --needed --noconfirm -S mousepad network-
 # Enable screen locking
 xfconf-query -c xfce4-session -p /general/LockCommand -s "light-locker-command -l"
 
+# Set the background wallpaper
+xfconf-qery -c xfce4-desktop -p $(xfconf-query -c xfce4-desktop -l | grep "workspace0/last-image") -s /usr/share/backgrounds/archlinux/wallpaper.jpg
+
 # Set dark theme
 xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
 xfce4-settings-manager --reload

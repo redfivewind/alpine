@@ -57,7 +57,7 @@ function fn_01 {
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
     pacman --disable-download-timeout --noconfirm -Scc
     pacman --disable-download-timeout --noconfirm -Syy
-    pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode iptables-nft iwd linux-hardened linux-hardened-headers linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip pavucontrol pulseaudio pulseaudio-alsa rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
+    pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode iptables-nft iwd $KERNEL $KERNEL-headers linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip pavucontrol pulseaudio pulseaudio-alsa rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
     sleep 2
     
     # Mount or create necessary entry points
@@ -137,7 +137,7 @@ function fn_02 {
     echo "MODULES=()" > /etc/mkinitcpio.conf
     echo "BINARIES=()" >> /etc/mkinitcpio.conf
     echo "HOOKS=(base udev autodetect modconf kms block filesystems keyboard fsck encrypt lvm2)" >> /etc/mkinitcpio.conf
-    mkinitcpio -p linux-hardened # Rebuild initramfs image
+    mkinitcpio -p $KERNEL # Rebuild initramfs image
     sleep 2
     
     # Users
@@ -160,7 +160,7 @@ function fn_02 {
     sleep 2
 
     echo "[*] Installing GRUB..."
-    mkinitcpio -P linux-hardened
+    mkinitcpio -P $KERNEL
     grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
     grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
     chmod 700 /boot # Protect /boot
@@ -220,6 +220,7 @@ function fn_02 {
 # Global variables
 echo "[*] Initializing global variables..."
 DEV="$1" # Harddisk
+KERNEL="linux" # Linux kernel (e.g., linux, linux-hardened, linux-lts, etc.)
 LV_ROOT="root" # Label & name of the root partition
 LV_SWAP="swap" # Label & name of the swap partition
 LVM_LUKS="lvm_luks" # LUKS LVM

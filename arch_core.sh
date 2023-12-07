@@ -198,9 +198,9 @@ function fn_02 {
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
     cd /home/$USER/tools
-    git clone https://aur.archlinux.org/yay.git
+    su $USER -c "git clone https://aur.archlinux.org/yay.git"
     cd yay
-    makepkg -si
+    su $USER -c "makepkg -si"
     yay --version
     cd
 
@@ -220,7 +220,7 @@ function fn_02 {
 # Global variables
 echo "[*] Initializing global variables..."
 DEV="$1" # Harddisk
-KERNEL="linux" # Linux kernel (e.g., linux, linux-hardened, linux-lts, etc.)
+KERNEL="linux-hardened" # Linux kernel (e.g., linux, linux-hardened, linux-lts, etc.)
 LV_ROOT="root" # Label & name of the root partition
 LV_SWAP="swap" # Label & name of the swap partition
 LVM_LUKS="lvm_luks" # LUKS LVM

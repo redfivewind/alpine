@@ -9,6 +9,31 @@ function fn_01 {
     echo "[*] Loading German keyboard layout..."
     loadkeys de-latin1
     localectl set-keymap de
+
+    # Retrieve the LUKS & user password
+    echo "[*] Please enter the LUKS password: "
+    read -s luks_pass_a
+    echo "[*] Please reenter the LUKS password: "
+    read -s luks_pass_b
+
+    if [ "$luks_pass_a" == "$luks_pass_b" ]; then
+        LUKS_PASS=$luks_pass_a
+    else
+        echo "[X] ERROR: The LUKS passwords do not match."
+        exit 1
+    fi
+
+    echo "[*] Please enter the user password: "
+    read -s user_pass_a
+    echo "[*] Please reenter the user password: "
+    read -s user_pass_b
+
+    if [ "$user_pass_a" == "$user_pass_b" ]; then
+        USER_PASS=$user_pass_a
+    else
+        echo "[X] ERROR: The user passwords do not match."
+        exit 1
+    fi
   
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
@@ -26,8 +51,8 @@ function fn_01 {
     
     # LUKS 
     echo "[*] Formatting the second partition as LUKS crypto partition..."
-    cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 # Format LUKS partition
-    cryptsetup luksOpen $PART_LUKS $LVM_LUKS # Open LUKS partition
+    echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 - # Format LUKS partition
+    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LVM_LUKS - # Open LUKS partition
     sleep 2
   
     # LVM 
@@ -198,9 +223,9 @@ function fn_02 {
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
     cd /home/$USER/tools
-    su $USER -c "git clone https://aur.archlinux.org/yay.git"
+    echo $USER_PASS | sudo -S -iu $USER git clone https://aur.archlinux.org/yay.git
     cd yay
-    su $USER -c "makepkg -si"
+    echo $USER_PASS | sudo -S -iu $USER makepkg -si
     yay --version
     cd
 
@@ -221,6 +246,7 @@ function fn_02 {
 echo "[*] Initializing global variables..."
 DEV="$1" # Harddisk
 KERNEL="linux-hardened" # Linux kernel (e.g., linux, linux-hardened, linux-lts, etc.)
+LUKS_PASS=""
 LV_ROOT="root" # Label & name of the root partition
 LV_SWAP="swap" # Label & name of the swap partition
 LVM_LUKS="lvm_luks" # LUKS LVM
@@ -228,6 +254,7 @@ PART_EFI="${DEV}p1" # EFI partition
 PART_LUKS="${DEV}p2" # LUKS partition
 SCRIPT=$(readlink -f "$0")
 USER="user" # Username
+USER_PASS=""
 VG_LUKS="vg_luks" # LUKS volume group
 
 # Interpreting the commandline arguments

@@ -109,6 +109,13 @@ function fn_01 {
     cp $SCRIPT /mnt
     SCRIPT=$(basename $SCRIPT)
     arch-chroot /mnt /bin/bash -c "sh $SCRIPT $DEV 1"
+
+    # Set the home user password
+    echo "[*] Setting the home user password..."
+    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt # Set user password
+
+    # Exit message
+    echo "[*] Work done. Returning..."
 }
 
 function fn_02 {
@@ -172,8 +179,7 @@ function fn_02 {
     echo "[*] Adding a generic home user: '$USER_NAME'..."
     useradd -m -G wheel,users $USER_NAME # Add new user
     
-    echo "[*] Setting the home user password..."
-    echo -n "$USER_PASS" | passwd $USER_NAME --stdin # Set user password
+    echo "[*] Granting sudo rights to the home user..."
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
     echo "@includedir /etc/sudoers.d" >> /etc/sudoers
     sleep 2
@@ -227,7 +233,7 @@ function fn_02 {
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
     git clone https://aur.archlinux.org/yay.git /home/$USER_NAME/tools
-    cd /home/$USER_NAME/tools & makepkg -si
+    cd /home/$USER_NAME/tools && (echo -n "$USER_PASS | sudo -S -iu $USER_NAME makepkg -si)
     yay --version
     cd
     sleep 3

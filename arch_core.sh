@@ -233,7 +233,7 @@ function fn_02 {
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
     git clone https://aur.archlinux.org/yay.git /home/$USER_NAME/tools
-    cd /home/$USER_NAME/tools && (echo -n "$USER_PASS | sudo -S -iu $USER_NAME makepkg -si)
+    cd /home/$USER_NAME/tools && (echo -n "$USER_PASS" | sudo -S -iu $USER_NAME makepkg -si)
     yay --version
     cd
     sleep 3

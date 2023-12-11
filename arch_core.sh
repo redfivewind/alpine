@@ -34,6 +34,10 @@ function fn_01 {
         echo "[X] ERROR: The user passwords do not match."
         exit 1
     fi
+
+    # Retrieve required packages
+    echo "[*] Retrieving required packages..."
+    pacman --disable-download-timeout --needed --noconfirm -S build-essential git
   
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
@@ -82,7 +86,7 @@ function fn_01 {
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
     pacman --disable-download-timeout --noconfirm -Scc
     pacman --disable-download-timeout --noconfirm -Syy
-    pacstrap /mnt amd-ucode base base-devel build-essential dhcpcd gptfdisk grub gvfs intel-ucode iptables-nft iwd $KERNEL linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip pavucontrol pulseaudio pulseaudio-alsa rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
+    pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode iptables-nft iwd $KERNEL linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip pavucontrol pulseaudio pulseaudio-alsa rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
     sleep 2
     
     # Mount or create necessary entry points

@@ -170,10 +170,10 @@ function fn_02 {
     sleep 2
     
     # Users
-    echo "[*] Adding a generic home user: '$USER'..."
-    useradd -m -G wheel,users $USER # Add new user
+    echo "[*] Adding a generic home user: '$USER_NAME'..."
+    useradd -m -G wheel,users $USER_NAME # Add new user
     echo "[!] ALERT: Set the home user password!"
-    echo -n "$USER:$USER_PASS" | chpasswd # Set user password
+    echo -n "$USER_NAME:$USER_PASS" | chpasswd # Set user password
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
     echo "@includedir /etc/sudoers.d" >> /etc/sudoers
     sleep 2
@@ -207,31 +207,32 @@ function fn_02 {
     sleep 2
     
     # Add user paths & scripts
-    mkdir -p /home/$USER/tools
-    chown -R $USER:users /home/$USER/tools
+    mkdir -p /home/$USER_NAME/tools
+    chown -R $USER_NAME:users /home/$USER_NAME/tools
     
-    echo "# Update all packages" > /home/$USER/tools/update.sh
-    echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh
-    echo "yay --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh
-    echo "" >> /home/$USER/tools/update.sh
-    echo "# Autoremove packages that are no longer required" >> /home/$USER/tools/update.sh
-    echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER/tools/update.sh
-    echo "" >> /home/$USER/tools/update.sh
-    echo "# Fix the chrome-sandbox bug" >> /home/$USER/tools/update.sh
-    echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER/tools/update.sh
+    echo "# Update all packages" > /home/$USER_NAME/tools/update.sh
+    echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER_NAME/tools/update.sh
+    echo "yay --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER_NAME/tools/update.sh
+    echo "" >> /home/$USER_NAME/tools/update.sh
+    echo "# Autoremove packages that are no longer required" >> /home/$USER_NAME/tools/update.sh
+    echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER_NAME/tools/update.sh
+    echo "" >> /home/$USER_NAME/tools/update.sh
+    echo "# Fix the chrome-sandbox bug" >> /home/$USER_NAME/tools/update.sh
+    echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER_NAME/tools/update.sh
     
-    mkdir -p /home/$USER/workspace
-    chown -R user:users /home/$USER/workspace
+    mkdir -p /home/$USER_NAME/workspace
+    chown -R user:users /home/$USER_NAME/workspace
 
     # Install yay for AUR access
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
-    cd /home/$USER/tools
-    echo $USER_PASS | sudo -S -iu $USER git clone https://aur.archlinux.org/yay.git
+    cd /home/$USER_NAME/tools
+    echo $USER_PASS | sudo -S -iu $USER_NAME git clone https://aur.archlinux.org/yay.git
     cd yay
-    echo $USER_PASS | sudo -S -iu $USER makepkg -si
+    echo $USER_PASS | sudo -S -iu $USER_NAME makepkg -si
     yay --version
     cd
+    sleep 3
 
     # Install base packages
     TOOLS="chkrootkit keepass librewolf-bin onboard secure-delete tor-browser-bin"
@@ -257,7 +258,7 @@ LVM_LUKS="lvm_luks" # LUKS LVM
 PART_EFI="${DEV}p1" # EFI partition
 PART_LUKS="${DEV}p2" # LUKS partition
 SCRIPT=$(readlink -f "$0")
-USER="user" # Username
+USER_NAME="user" # Username
 USER_PASS=""
 VG_LUKS="vg_luks" # LUKS volume group
 

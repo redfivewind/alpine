@@ -169,7 +169,7 @@ function fn_02 {
     echo "[*] Adding a generic home user: '$USER'..."
     useradd -m -G wheel,users $USER # Add new user
     echo "[!] ALERT: Set the home user password!"
-    passwd $USER # Set user password
+    echo -n "$USER:$USER_PASS" | chpasswd # Set user password
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
     echo "@includedir /etc/sudoers.d" >> /etc/sudoers
     sleep 2
@@ -204,7 +204,7 @@ function fn_02 {
     
     # Add user paths & scripts
     mkdir -p /home/$USER/tools
-    chown -R user:users /home/$USER/tools
+    chown -R $USER:users /home/$USER/tools
     
     echo "# Update all packages" > /home/$USER/tools/update.sh
     echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER/tools/update.sh

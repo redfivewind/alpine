@@ -35,9 +35,9 @@ function fn_01 {
         exit 1
     fi
 
-    # Retrieve required packages
-    echo "[*] Retrieving required packages..."
-    pacman --disable-download-timeout --needed --noconfirm -S build-essential git
+    # Update pacman database
+    echo "[*] Updating the pacman database..."
+    pacman --disable-download-timeout --needed --noconfirm -Sy
   
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."

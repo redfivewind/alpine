@@ -171,8 +171,9 @@ function fn_02 {
     # Users
     echo "[*] Adding a generic home user: '$USER_NAME'..."
     useradd -m -G wheel,users $USER_NAME # Add new user
-    echo "[!] ALERT: Set the home user password!"
-    echo -n "$USER_PASS" | passwd $USER_NAME # Set user password
+    
+    echo "[*] Setting the home user password..."
+    echo -n "$USER_PASS" | passwd $USER_NAME --stdin # Set user password
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
     echo "@includedir /etc/sudoers.d" >> /etc/sudoers
     sleep 2

@@ -129,12 +129,12 @@ function fn_02 {
     # German keyboard layout
     echo "[*] Loading German keyboard layout..."
     loadkeys de-latin1
-    localectl set-keymap de
+    #localectl set-keymap de
     sleep 2
   
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
-    timedatectl set-ntp true # Enable network time synchronization
+    #timedatectl set-ntp true # Enable network time synchronization
     
     # System update
     echo "[*] Updating the system..."
@@ -143,7 +143,7 @@ function fn_02 {
     
     # Time
     echo "[*] Setting the timezone and hardware clock..."
-    timedatectl set-timezone Europe/Berlin # Berlin timezone
+    #timedatectl set-timezone Europe/Berlin # Berlin timezone
     ln /usr/share/zoneinfo/Europe/Berlin /etc/localtime # Berlin timezone
     hwclock --systohc --utc # Assume hardware clock is UTC
     

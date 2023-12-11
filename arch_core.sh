@@ -142,7 +142,6 @@ function fn_02 {
     
     # Locale
     echo "[*] Initializing the locale..."
-    timedatectl set-ntp true # Enable NTP time synchronization again
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen # en-US (UTF-8)
     locale-gen # Generate locale
     echo "LANG=en_US.UTF-8" > /etc/locale.conf # Save locale to locale configuration
@@ -226,10 +225,8 @@ function fn_02 {
     # Install yay for AUR access
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
-    cd /home/$USER_NAME/tools
-    echo $USER_PASS | sudo -S -iu $USER_NAME git clone https://aur.archlinux.org/yay.git
-    cd yay
-    echo $USER_PASS | sudo -S -iu $USER_NAME makepkg -si
+    git clone https://aur.archlinux.org/yay.git /home/$USER_NAME/tools
+    cd /home/$USER_NAME/tools & makepkg -si
     yay --version
     cd
     sleep 3

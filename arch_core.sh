@@ -38,6 +38,10 @@ function fn_01 {
     # Update pacman database
     echo "[*] Updating the pacman database..."
     pacman --disable-download-timeout --needed --noconfirm -Sy
+
+    # Temporary install Git
+    echo "[*] Temporary installing Git..."
+    pacman --disable-download-timeout --needed --noconfirm -S git
   
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
@@ -214,7 +218,7 @@ function fn_02 {
     
     # Add user paths & scripts
     mkdir -p /home/$USER_NAME/tools
-    chown -R $USER_NAME:users /home/$USER_NAME/tools
+    mkdir -p /home/$USER_NAME/workspace
     
     echo "# Update all packages" > /home/$USER_NAME/tools/update.sh
     echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER_NAME/tools/update.sh
@@ -224,20 +228,17 @@ function fn_02 {
     echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER_NAME/tools/update.sh
     echo "" >> /home/$USER_NAME/tools/update.sh
     echo "# Fix the chrome-sandbox bug" >> /home/$USER_NAME/tools/update.sh
-    echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER_NAME/tools/update.sh
+    echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER_NAME/tools/update.sh    
     
-    mkdir -p /home/$USER_NAME/workspace
-    chown -R user:users /home/$USER_NAME/workspace
+    chown -R user:users ~
 
     # Install yay for AUR access
-    sudo pacman --disable-download-timeout --needed --noconfirm -S git go
-
-    sudo -iu $USER_NAME
-    git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin
-    cd /home/$USER_NAME/tools/yay-bin && makepkg --noconfirm -si
+    echo "git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin" > /home/$USER_NAME/tools/install_yay.sh
+    echo "cd /home/$USER_NAME/tools/yay-bin" >> /home/$USER_NAME/tools/install_yay.sh
+    echo "makepkg --noconfirm -si" >> /home/$USER_NAME/tools/install_yay.sh
+    
+    echo -n "$USER_PASS" | sudo -S -iu $USER_NAME --chdir="/home/$USER_NAME/tools/" sh install_yay.sh
     yay --version
-    cd
-    exit
     sleep 3
 
     # Install base packages

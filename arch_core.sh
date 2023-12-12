@@ -235,7 +235,7 @@ function fn_02 {
     echo "# Fix the chrome-sandbox bug" >> /home/$USER_NAME/tools/update.sh
     echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER_NAME/tools/update.sh    
     
-    chown -R user:users ~
+    chown -R $USER_NAME:users /home/$USER_NAME
 
     # Install yay for AUR access
     echo "git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin" > /home/$USER_NAME/tools/install_yay.sh

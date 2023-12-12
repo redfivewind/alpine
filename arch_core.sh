@@ -231,11 +231,13 @@ function fn_02 {
 
     # Install yay for AUR access
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
-    
-    : 'git clone https://aur.archlinux.org/yay.git /home/$USER_NAME/tools
-    cd /home/$USER_NAME/tools && (echo -n "$USER_PASS" | sudo -S -iu $USER_NAME makepkg -si)
+
+    sudo -iu $USER_NAME
+    git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin
+    cd /home/$USER_NAME/tools/yay-bin && makepkg --noconfirm -si
     yay --version
     cd
+    exit
     sleep 3
 
     # Install base packages
@@ -244,7 +246,7 @@ function fn_02 {
     for Tool in $TOOLS; do
         sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool
         yay --disable-download-timeout --needed --noconfirm -S $Tool
-    done'
+    done
     
     # Synchronise & exit
     sync

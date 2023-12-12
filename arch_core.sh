@@ -232,7 +232,7 @@ function fn_02 {
     # Install yay for AUR access
     sudo pacman --disable-download-timeout --needed --noconfirm -S git go
     
-    :'git clone https://aur.archlinux.org/yay.git /home/$USER_NAME/tools
+    : 'git clone https://aur.archlinux.org/yay.git /home/$USER_NAME/tools
     cd /home/$USER_NAME/tools && (echo -n "$USER_PASS" | sudo -S -iu $USER_NAME makepkg -si)
     yay --version
     cd

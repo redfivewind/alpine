@@ -243,11 +243,9 @@ function fn_02 {
     echo "makepkg --noconfirm -si" >> /home/$USER_NAME/tools/install_yay.sh
     chmod +x /home/$USER_NAME/tools/install_yay.sh
 
-    pacman --disable-download-timeout --needed --noconfirm -S git
-    
+    pacman --disable-download-timeout --needed --noconfirm -S git    
     sudo -u $USER_NAME /home/$USER_NAME/tools/install_yay.sh
     yay --version
-
     pacman --noconfirm -Rns git
     
     sleep 3

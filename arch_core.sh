@@ -118,6 +118,11 @@ function fn_01 {
     echo "[*] Setting the home user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt # Set user password
 
+    # Secure deleting temporary files
+    srm -v -r /mnt/$SCRIPT
+    srm -v -r /mnt/home/$USER_NAME/tools/install_yay.sh
+    srm -v -r /mnt/home/$USER_NAME/tools/yay-bin
+
     # Exit message
     echo "[*] Work done. Returning..."
 }

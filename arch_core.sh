@@ -242,9 +242,14 @@ function fn_02 {
     echo "cd /home/$USER_NAME/tools/yay-bin" >> /home/$USER_NAME/tools/install_yay.sh
     echo "makepkg --noconfirm -si" >> /home/$USER_NAME/tools/install_yay.sh
     chmod +x /home/$USER_NAME/tools/install_yay.sh
+
+    pacman --disable-download-timeout --needed --noconfirm -S git
     
     sudo -u $USER_NAME /home/$USER_NAME/tools/install_yay.sh
     yay --version
+
+    pacman --noconfirm -Rns git
+    
     sleep 3
 
     # Install base packages

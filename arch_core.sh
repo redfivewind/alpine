@@ -108,6 +108,10 @@ function fn_01 {
     sed -i 's/relatime/noatime/g' /mnt/etc/fstab # Replace 'relatime' with 'noatime' (Access time will not be saved in files)
     sleep 2
 
+    #FIXME
+    #FIXME
+    #FIXME
+
     # Enter new system root
     echo "[!] ALERT: Entering the new system root..."
     cp $SCRIPT /mnt

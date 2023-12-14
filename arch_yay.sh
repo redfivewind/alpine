@@ -1,3 +1,6 @@
+# Global variables
+USER_NAME=$(whoami)
+
 # Temporary install Git
 sudo pacman --disable-download-timeout --needed --noconfirm -S git
 

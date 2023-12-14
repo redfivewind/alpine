@@ -8,7 +8,7 @@ cd
 yay --version
 
 # Install required tools
-TOOLS="chkrootkit onboard secure-delete"
+TOOLS="chkrootkit secure-delete"
 
 for Tool in $TOOLS; do
     sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool

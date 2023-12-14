@@ -1,4 +1,4 @@
-# Temporary install git
+# Temporary install Git
 sudo pacman --disable-download-timeout --needed --noconfirm -S git
 
 # Retrieve yay

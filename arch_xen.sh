@@ -1,7 +1,6 @@
-#FIXME: REVIEW ANYTHING!
-
-# Notes
+# NOTES
 # Reference: https://wiki.archlinux.org/title/xen
+# FIXME: Everything!
 
 # Global variables
 LV_ROOT="root" # Label & name of the root partition

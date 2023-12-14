@@ -1,6 +1,4 @@
-# NOTES
 # Reference: https://wiki.archlinux.org/title/xen
-# FIXME: Everything!
 
 # Global variables
 LV_ROOT="root" # Label & name of the root partition
@@ -11,7 +9,7 @@ XEN_CFG_FILE="/boot/efi/xen.cfg" # Xen EFI boot configuration file
 # Install required packages
 sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils dmidecode ebtables libguestfs libvirt openbsd-netcat virt-manager virt-viewer
 #dnsmasq vde2
-yay --disable-download-timeout --needed --noconfirm -S xen xen-qemu
+yay --disable-download-timeout --needed --noconfirm -S xen xen-qemu xen-tools
 #xen-pvhgrub
 sudo pacman -S edk2-ovmf # For UEFI support in virtual machines
 sudo pacman -S seabios # For BIOS support in virtual machines
@@ -41,16 +39,5 @@ yay --disable-download-timeout --needed --noconfirm -S grub-xen-git
 sudo echo "GRUB_CMDLINE_XEN_DEFAULT=\"dom0_mem=512M\"" >> /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-#FIXME: Adjust UEFI settings
-
-#FIXME: Install/configure GRUB for XEN
-
-#FIXME: Create a network brigde between dom0 and domU*
-
-#FIXME: Installation of Xen systemd services???
-
-#FIXME: Confirming succesful installation
-
-#FIXME: Configuring best practices???
-
-#FIXME: Xen Hardening
+# FIXME: Install/configure GRUB for XEN
+#yay --disable-download-timeout --needed --noconfirm -S grub-xen-git

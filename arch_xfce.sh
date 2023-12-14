@@ -32,7 +32,7 @@ done
 xfconf-query -c xfce4-session -p /general/LockCommand -s "light-locker-command -l"
 
 # Customise the appearance
-xfconf-qery -c xfce4-desktop -p $(xfconf-query -c xfce4-desktop -l | grep "workspace0/last-image") -s /usr/share/backgrounds/archlinux/simple.jpg
+#xfconf-qery -c xfce4-desktop -p $(xfconf-query -c xfce4-desktop -l | grep "workspace0/last-image") -s /usr/share/backgrounds/archlinux/simple.jpg
 xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
 xfce4-settings-manager --reload
 

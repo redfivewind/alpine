@@ -1,6 +1,9 @@
+# TODO: Secure Boot
+# TODO: Modules
+
 function arg_err {
-    echo "[X] ERROR: The target hard disk must be passed as the first argument, while the second argument is optional and specifies the mode (0/1)."
-    echo "[*] Usage: sh $0 <target_disk> [<mode (0/1)>]"
+    echo "[X] ERROR: The target hard disk must be passed as the first and only argument."
+    echo "[*] Usage: sh $0 <target_disk>"
     exit 1
 }
 
@@ -35,17 +38,14 @@ function fn_01 {
         exit 1
     fi
 
-    # Update pacman database
+    # Update the pacman database
     echo "[*] Updating the pacman database..."
-    pacman --disable-download-timeout --needed --noconfirm -Sy
-
-    # Temporary install Git
-    echo "[*] Temporary installing Git..."
-    pacman --disable-download-timeout --needed --noconfirm -S git
+    pacman --disable-download-timeout --noconfirm -Scc
+    pacman --disable-download-timeout --noconfirm -Syy
   
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
-    timedatectl set-ntp true # Enable network time synchronization
+    timedatectl set-ntp true
     
     # Partitioning (GPT parititon table)
     echo "[*] Partitioning the HDD/SSD with GPT partition layout..."
@@ -59,38 +59,65 @@ function fn_01 {
     
     # LUKS 
     echo "[*] Formatting the second partition as LUKS crypto partition..."
-    echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 - # Format LUKS partition
-    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LVM_LUKS - # Open LUKS partition
+    echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
+    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LVM_LUKS -
     sleep 2
   
     # LVM 
     echo "[*] Setting up LVM..."
-    pvcreate /dev/mapper/$LVM_LUKS # Create physical volume
-    vgcreate $VG_LUKS /dev/mapper/$LVM_LUKS # Create volume group
-    lvcreate -L 6144M $VG_LUKS -n $LV_SWAP # Create logical swap volume
-    lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT # Create logical root volume
+    pvcreate /dev/mapper/$LVM_LUKS
+    vgcreate $VG_LUKS /dev/mapper/$LVM_LUKS
+    lvcreate -L 6144M $VG_LUKS -n $LV_SWAP
+    lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT
     sleep 2
     
     # Format partitions
     echo "[*] Formatting the partitions..."
-    mkfs.fat -F32 $PART_EFI # EFI partition (FAT32)
-    mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT -L $LV_ROOT # Root partition (ext4)
-    mkswap /dev/mapper/$VG_LUKS-$LV_SWAP -L $LV_SWAP # Swap partition
-    swapon /dev/$VG_LUKS/$LV_SWAP # Activate swap partition
+    mkfs.fat -F32 $PART_EFI
+    mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT -L $LV_ROOT
+    mkswap /dev/mapper/$VG_LUKS-$LV_SWAP -L $LV_SWAP
+    swapon /dev/$VG_LUKS/$LV_SWAP
     sleep 2
     
     # Mount root, boot and swap
     echo "[*] Mounting filesystems..."
-    mount /dev/$VG_LUKS/$LV_ROOT /mnt # Mount root partition
-    mkdir -p /mnt/boot/efi # Create folder to hold /boot/efi files
-    mount $PART_EFI /mnt/boot/efi # Mount EFI partition
+    mount /dev/$VG_LUKS/$LV_ROOT /mnt
+    mkdir -p /mnt/boot/efi
+    mount $PART_EFI /mnt/boot/efi
     sleep 2
     
     # Install base packages
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
-    pacman --disable-download-timeout --noconfirm -Scc
-    pacman --disable-download-timeout --noconfirm -Syy
-    pacstrap /mnt amd-ucode base base-devel dhcpcd gptfdisk grub gvfs intel-ucode iptables-nft iwd $KERNEL linux-firmware lvm2 mkinitcpio nano networkmanager net-tools p7zip pavucontrol pulseaudio pulseaudio-alsa rkhunter sudo thermald tlp unrar unzip wpa_supplicant zip
+    pacstrap /mnt \
+        amd-ucode \
+        base \
+        base-devel \
+        dhcpcd \
+        gptfdisk \
+        grub \
+        gvfs \
+        intel-ucode \
+        iptables-nft \
+        iwd \
+        $KERNEL \
+        linux-firmware \
+        lvm2 \
+        mkinitcpio \
+        nano \
+        networkmanager \
+        net-tools \
+        p7zip \
+        pavucontrol \
+        pulseaudio \
+        pulseaudio-alsa \
+        rkhunter \
+        sudo \
+        thermald \
+        tlp \
+        unrar \
+        unzip \
+        wpa_supplicant \
+        zip
     sleep 2
     
     # Mount or create necessary entry points
@@ -104,25 +131,147 @@ function fn_01 {
     
     # fstab
     echo "[*] Generating fstab file and setting 'noatime'..."
-    genfstab -U /mnt > /mnt/etc/fstab # Generate fstab file
-    sed -i 's/relatime/noatime/g' /mnt/etc/fstab # Replace 'relatime' with 'noatime' (Access time will not be saved in files)
+    genfstab -U /mnt > /mnt/etc/fstab
+    sed -i 's/relatime/noatime/g' /mnt/etc/fstab
     sleep 2
 
-    #FIXME
-    #FIXME
-    #FIXME
+    # German keyboard layout
+    echo "[*] Loading German keyboard layout..."
+    arch-chroot /mnt /bin/bash -c "\
+        loadkeys de-latin1;\
+        localectl set-keymap de"
+    sleep 2
+  
+    # Network time synchronisation
+    echo "[*] Enabling network time synchronization..."
+    arch-chroot /mnt /bin/bash -c "\
+        timedatectl set-ntp true"
+    sleep 2
 
-    # Enter new system root
-    echo "[!] ALERT: Entering the new system root..."
-    cp $SCRIPT /mnt
-    SCRIPT=$(basename $SCRIPT)
-    arch-chroot /mnt /bin/bash -c "sh $SCRIPT $DEV 1"
+    # System update
+    echo "[*] Updating the system..."
+    arch-chroot /mnt /bin/bash -c "\
+        pacman --disable-download-timeout --noconfirm -Scc;\
+        pacman --disable-download-timeout --noconfirm -Syyu"
+    sleep 2
+    
+    # Time
+    echo "[*] Setting the timezone and hardware clock..."
+    arch-chroot /mnt /bin/bash -c "\
+        timedatectl set-timezone Europe/Berlin;\
+        ln /usr/share/zoneinfo/Europe/Berlin /etc/localtime;\
+        hwclock --systohc --utc"
+    sleep 2
+    
+    # Locale
+    echo "[*] Initializing the locale..."
+    arch-chroot /mnt /bin/bash -c "\
+        echo \"en_US.UTF-8 UTF-8\" > /etc/locale.gen;\
+        locale-gen;\
+        echo \"LANG=en_US.UTF-8\" > /etc/locale.conf;\
+        export LANG=en_US.UTF-8;\
+        echo \"KEYMAP=de-latin1\" > /etc/vconsole.conf;\
+        echo \"FONT=lat9w-16\" >> /etc/vconsole.conf"
+    
+    # Network
+    echo "[*] Setting hostname and /etc/hosts..."
+    echo $HOSTNAME > /mnt/etc/hostname
+    echo "127.0.0.1 localhost" > /mnt/etc/hosts
+    echo "::1 localhost" >> /mnt/etc/hosts
+    arch-chroot /mnt /bin/bash -c "\
+        systemctl enable dhcpcd"
 
-    # Set the home user password
+    # mkinitcpio
+    echo "[*] Adding the LUKS partition to /etc/crypttab..."
+    printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /mnt/etc/crypttab
+    cat /mnt/etc/crypttab
+    
+    echo "[*] Rebuilding initramfs image using mkinitcpio..."
+    echo "MODULES=()" > /mnt/etc/mkinitcpio.conf
+    echo "BINARIES=()" >> /mnt/etc/mkinitcpio.conf
+    echo "HOOKS=(base udev autodetect modconf kms block filesystems keyboard fsck encrypt lvm2)" >> /mnt/etc/mkinitcpio.conf
+    arch-chroot /mnt /bin/bash -c "\
+        mkinitcpio -p $KERNEL"
+    sleep 2
+
+    # Home user
+    echo "[*] Adding a generic home user: '$USER_NAME'..."
+    arch-chroot /mnt /bin/bash -c "\
+        useradd -m -G wheel,users $USER_NAME"
+    
+    echo "[*] Granting sudo rights to the home user..."
+    echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
+    echo "@includedir /etc/sudoers.d" >> /mnt/etc/sudoers
+
     echo "[*] Setting the home user password..."
-    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt # Set user password
+    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
+    sleep 2
+    
+    # efibootmgr & GRUB
+    echo "[*] Configuring GRUB for encrypted boot..."
+    arch-chroot /mnt /bin/bash -c "\
+        pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub"
+    echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
+    sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /mnt/etc/default/grub
+    echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LVM_LUKS root=/dev/$VG_LUKS/$LV_ROOT\"" >> /mnt/etc/default/grub
+    echo "GRUB_PRELOAD_MODULES=\"cryptodisk part_gpt part_msdos\"" >> /mnt/etc/default/grub
+    tail /mnt/etc/default/grub
+    sleep 2
 
-    # Secure deleting temporary files
+    echo "[*] Installing GRUB..."
+    arch-chroot /mnt /bin/bash -c "\
+        mkinitcpio -P $KERNEL;\
+        grub-install --target=x86_64-efi --efi-directory=/boot/efi;\
+        grub-mkconfig -o /boot/grub/grub.cfg;\
+        chmod 700 /boot"
+    sleep 2
+
+    # Start services
+    echo "Enabling system services..."
+    arch-chroot /mnt /bin/bash -c "\
+        sudo systemctl enable dhcpcd.service;\
+        sudo systemctl enable fstrim.timer;\
+        sudo systemctl enable NetworkManager.service;\
+        sudo systemctl enable systemd-timesyncd.service;\
+        sudo systemctl enable thermald;\
+        sudo systemctl enable tlp.service;\
+        sudo systemctl enable wpa_supplicant.service"
+    sleep 2
+    
+    # Add user paths & scripts
+    mkdir -p /mnt/home/$USER_NAME/tools
+    mkdir -p /mnt/home/$USER_NAME/workspace
+
+    echo "\
+        sudo pacman --disable-download-timeout --needed --noconfirm -Syyu\n\
+        yay --disable-download-timeout --needed --noconfirm -Syyu\n\
+        sudo pacman --noconfirm -Rns \$(pacman -Qdtq)\n\
+        sudo chmod 4755 /opt/*/chrome-sandbox\n"\
+    > /mnt/home/$USER_NAME/tools/update.sh
+
+    arch-chroot /mnt /bin/bash -c "\
+        chown -R $USER_NAME:users /home/$USER_NAME"
+
+    # Install yay to access the AUR ecosystem
+    arch-chroot /mnt /bin/bash -c "\
+        su $USER_NAME;
+        sudo pacman --disable-download-timeout --needed --noconfirm -S git;\
+        git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin;\
+        cd /home/$USER_NAME/tools/yay-bin;\
+        makepkg -si;\
+        cd;\
+        yay --version;\
+        yay --disable-download-timeout --needed --noconfirm -S chkrootkit;\
+        yay --disable-download-timeout --needed --noconfirm -S secure-delete;\
+        su;\
+        sudo pacman -Rns git"
+    sleep 3
+
+    # Synchronise & unmount everything
+    sync
+    umount -a
+
+    # Secure delete temporary files
     srm -v -r /mnt/$SCRIPT
     srm -v -r /mnt/home/$USER_NAME/tools/install_yay.sh
     srm -v -r /mnt/home/$USER_NAME/tools/yay-bin
@@ -131,155 +280,19 @@ function fn_01 {
     echo "[*] Work done. Returning..."
 }
 
-function fn_02 {
-    # Securely overwrite the script file
-    echo "[*] Securely overwriting the temporary script file..."    
-    SIZE=$(stat -c%s $0)
-    dd if=/dev/urandom of=$0 bs=1 count=$SIZE status=progress
-    rm -f $0
-    sleep 2
-    
-    # German keyboard layout
-    echo "[*] Loading German keyboard layout..."
-    loadkeys de-latin1
-    #localectl set-keymap de
-    sleep 2
-  
-    # Network time synchronisation
-    echo "[*] Enabling network time synchronization..."
-    #timedatectl set-ntp true # Enable network time synchronization
-    
-    # System update
-    echo "[*] Updating the system..."
-    pacman --disable-download-timeout --noconfirm -Scc
-    pacman --disable-download-timeout --noconfirm -Syyu
-    
-    # Time
-    echo "[*] Setting the timezone and hardware clock..."
-    #timedatectl set-timezone Europe/Berlin # Berlin timezone
-    ln /usr/share/zoneinfo/Europe/Berlin /etc/localtime # Berlin timezone
-    hwclock --systohc --utc # Assume hardware clock is UTC
-    
-    # Locale
-    echo "[*] Initializing the locale..."
-    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen # en-US (UTF-8)
-    locale-gen # Generate locale
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf # Save locale to locale configuration
-    export LANG=en_US.UTF-8 # Export LANG variable
-    echo "KEYMAP=de-latin1" > /etc/vconsole.conf # Set keyboard layout
-    echo "FONT=lat9w-16" >> /etc/vconsole.conf # Set console font
-    
-    # Network
-    echo "[*] Setting hostname and /etc/hosts..."
-    echo $HOSTNAME > /etc/hostname # Set hostname
-    echo "127.0.0.1 localhost" > /etc/hosts # Hosts file: Localhost (IP4)
-    echo "::1 localhost" >> /etc/hosts # Hosts file: Localhost (IP6) 
-    systemctl enable dhcpcd
-
-    # mkinitcpio
-    echo "[*] Adding the LUKS partition to /etc/crypttab..."
-    printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /etc/crypttab
-    cat /etc/crypttab
-    
-    echo "[*] Rebuilding initramfs image using mkinitcpio..."
-    echo "MODULES=()" > /etc/mkinitcpio.conf
-    echo "BINARIES=()" >> /etc/mkinitcpio.conf
-    echo "HOOKS=(base udev autodetect modconf kms block filesystems keyboard fsck encrypt lvm2)" >> /etc/mkinitcpio.conf
-    mkinitcpio -p $KERNEL # Rebuild initramfs image
-    sleep 2
-    
-    # Users
-    echo "[*] Adding a generic home user: '$USER_NAME'..."
-    useradd -m -G wheel,users $USER_NAME # Add new user
-    
-    echo "[*] Granting sudo rights to the home user..."
-    echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers # Users of group wheel may execute any command
-    echo "@includedir /etc/sudoers.d" >> /etc/sudoers
-    sleep 2
-    
-    # efibootmgr & GRUB
-    echo "[*] Configuring GRUB for encrypted boot..."
-    pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub # Install packages required for UEFI boot
-    echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub # Enable booting from encrypted /boot
-    sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /etc/default/grub # Disable default value
-    echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LVM_LUKS root=/dev/$VG_LUKS/$LV_ROOT\"" >> /etc/default/grub # Add encryption hook to GRUB
-    echo "GRUB_PRELOAD_MODULES=\"cryptodisk part_gpt part_msdos\"" >> /etc/default/grub
-    tail /etc/default/grub
-    sleep 2
-
-    echo "[*] Installing GRUB..."
-    mkinitcpio -P $KERNEL
-    grub-install --target=x86_64-efi --efi-directory=/boot/efi # Install GRUB --bootloader-id=GRUB
-    grub-mkconfig -o /boot/grub/grub.cfg # Generate GRUB configuration file
-    chmod 700 /boot # Protect /boot
-    sleep 2
-    
-    # Start services
-    echo "Starting system services..."
-    sudo systemctl enable dhcpcd.service # DHCP
-    sudo systemctl enable fstrim.timer # TRIM timer for SSDs
-    sudo systemctl enable NetworkManager.service # Network managament
-    sudo systemctl enable systemd-timesyncd.service # Time synchronization
-    sudo systemctl enable thermald # Thermald
-    sudo systemctl enable tlp.service # TLP
-    sudo systemctl enable wpa_supplicant.service # Required for WPAx connections
-    sleep 2
-    
-    # Add user paths & scripts
-    mkdir -p /home/$USER_NAME/tools
-    mkdir -p /home/$USER_NAME/workspace
-    
-    echo "# Update all packages" > /home/$USER_NAME/tools/update.sh
-    echo "sudo pacman --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER_NAME/tools/update.sh
-    echo "yay --disable-download-timeout --needed --noconfirm -Syyu" >> /home/$USER_NAME/tools/update.sh
-    echo "" >> /home/$USER_NAME/tools/update.sh
-    echo "# Autoremove packages that are no longer required" >> /home/$USER_NAME/tools/update.sh
-    echo "sudo pacman --noconfirm -Rns $(pacman -Qdtq)" >> /home/$USER_NAME/tools/update.sh
-    echo "" >> /home/$USER_NAME/tools/update.sh
-    echo "# Fix the chrome-sandbox bug" >> /home/$USER_NAME/tools/update.sh
-    echo "sudo chmod 4755 /opt/*/chrome-sandbox" >> /home/$USER_NAME/tools/update.sh    
-    
-    chown -R $USER_NAME:users /home/$USER_NAME
-
-    # Install yay for AUR access
-    echo "git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin" > /home/$USER_NAME/tools/install_yay.sh
-    echo "cd /home/$USER_NAME/tools/yay-bin" >> /home/$USER_NAME/tools/install_yay.sh
-    echo "makepkg --noconfirm -si" >> /home/$USER_NAME/tools/install_yay.sh
-    chmod +x /home/$USER_NAME/tools/install_yay.sh
-
-    pacman --disable-download-timeout --needed --noconfirm -S git    
-    sudo -u $USER_NAME /home/$USER_NAME/tools/install_yay.sh
-    yay --version
-    pacman --noconfirm -Rns git
-    
-    sleep 3
-
-    # Install base packages
-    TOOLS="chkrootkit keepass librewolf-bin onboard secure-delete tor-browser-bin"
-    
-    for Tool in $TOOLS; do
-        sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool
-        yay --disable-download-timeout --needed --noconfirm -S $Tool
-    done
-    
-    # Synchronise & exit
-    sync
-    exit
-}
-
 # Global variables
 echo "[*] Initializing global variables..."
 DEV="$1" # Harddisk
 KERNEL="linux-hardened" # Linux kernel (e.g., linux, linux-hardened, linux-lts, etc.)
-LUKS_PASS=""
+LUKS_PASS="" # LUKS FDE password
 LV_ROOT="root" # Label & name of the root partition
 LV_SWAP="swap" # Label & name of the swap partition
 LVM_LUKS="lvm_luks" # LUKS LVM
 PART_EFI="${DEV}p1" # EFI partition
 PART_LUKS="${DEV}p2" # LUKS partition
-SCRIPT=$(readlink -f "$0")
+SCRIPT=$(readlink -f "$0") # Absolute script path
 USER_NAME="user" # Username
-USER_PASS=""
+USER_PASS="" # Home user password
 VG_LUKS="vg_luks" # LUKS volume group
 
 # Interpreting the commandline arguments
@@ -318,13 +331,4 @@ else
     exit 1
 fi
 
-if [ $MODE -eq 0 ]; then
-    echo "[*] Selected mode: $MODE."
-    fn_01
-elif [ $MODE -eq 1 ]; then
-    echo "[*] Selected mode: $MODE."
-    fn_02
-else
-    echo "[X] ERROR: The selected mode is $MODE but must be 0 or 1."
-    exit 1
-fi
+fn_01

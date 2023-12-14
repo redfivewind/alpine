@@ -1,3 +1,6 @@
+# Temporary install git
+sudo pacman --disable-download-timeout --needed --noconfirm -S git
+
 # Retrieve yay
 git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin
 cd /home/$USER_NAME/tools/yay-bin
@@ -14,6 +17,9 @@ for Tool in $TOOLS; do
     sudo pacman --disable-download-timeout --needed --noconfirm -S $Tool
     yay --disable-download-timeout --needed --noconfirm -S $Tool
 done
+
+# Uninstall Git
+sudo pacman --noconfirm -Rns git
 
 # Cleanup
 srm -v -r /home/$USER_NAME/tools/arch_yay.sh

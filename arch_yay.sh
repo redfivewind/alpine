@@ -22,7 +22,7 @@ done
 sudo pacman --noconfirm -Rns git
 
 # Cleanup
-srm -v -r /home/$USER_NAME/tools/arch_yay.sh
+srm -v -r $(readlink -f $0)
 srm -v -r /home/$USER_NAME/tools/yay-bin
 
 sudo pacman --noconfirm -Rns $(pacman -Qdtq)

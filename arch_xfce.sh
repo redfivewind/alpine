@@ -40,4 +40,6 @@ xfce4-settings-manager --reload
 sudo systemctl enable --now lightdm.service
 
 # Cleanup
+shred --force --zero --remove=wipesync $(readlink -f $0)
+
 sudo pacman --noconfirm -Rns $(pacman -Qdtq)

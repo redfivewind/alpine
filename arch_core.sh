@@ -254,16 +254,14 @@ function fn_01 {
 
     # Install yay to access the AUR ecosystem
     arch-chroot /mnt /bin/bash -c "\
-        su $USER_NAME;
         sudo pacman --disable-download-timeout --needed --noconfirm -S git;\
         git clone https://aur.archlinux.org/yay-bin.git /home/$USER_NAME/tools/yay-bin;\
         cd /home/$USER_NAME/tools/yay-bin;\
-        makepkg -si;\
+        sudo -u $USER_NAME makepkg -si;\
         cd;\
         yay --version;\
         yay --disable-download-timeout --needed --noconfirm -S chkrootkit;\
         yay --disable-download-timeout --needed --noconfirm -S secure-delete;\
-        su;\
         sudo pacman -Rns git"
     sleep 3
 

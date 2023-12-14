@@ -4,13 +4,27 @@
 
 # Global variables
 LV_ROOT="root" # Label & name of the root partition
+USER_NAME="user" # Home user
 VG_LUKS="vg_luks" # LUKS volume group
 XEN_CFG_FILE="/boot/efi/xen.cfg" # Xen EFI boot configuration file
 
-# Install Xen packages
-yay -S xen xen-qemu
+# Install required packages
+sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils dmidecode ebtables libguestfs libvirt openbsd-netcat virt-manager virt-viewer
+#dnsmasq vde2
+yay --disable-download-timeout --needed --noconfirm -S xen xen-qemu
+#xen-pvhgrub
 sudo pacman -S edk2-ovmf # For UEFI support in virtual machines
 sudo pacman -S seabios # For BIOS support in virtual machines
+
+# Configure the libvirt service
+echo "unix_sock_group = \"libvirt\"" >> /etc/libvirt/libvirtd.conf
+echo "unix_sock_rw_perms = \"0770\"" >> /etc/libvirt/libvirtd.conf
+
+sudo usermod -aG libvirt $USER_NAME
+newgrp libvirt
+
+sudo systemctl enable libvirtd.service
+sudo systemctl start libvirtd.service
 
 # Modificate the bootloader
 echo "[global]" > XEN_CFG_FILE

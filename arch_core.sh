@@ -256,11 +256,6 @@ function fn_01 {
     sync
     umount -a
 
-    # Secure delete temporary files
-    srm -v -r /mnt/$SCRIPT
-    srm -v -r /mnt/home/$USER_NAME/tools/install_yay.sh
-    srm -v -r /mnt/home/$USER_NAME/tools/yay-bin
-
     # Exit message
     echo "[*] Work done. Returning..."
 }

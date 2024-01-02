@@ -9,7 +9,7 @@ sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 sudo pacman --disable-download-timeout --needed --noconfirm -S bridge-utils \
   dmidecode \
   dnsmasq \
-  ebptables \
+  ebtables \
   edk2-ovmf \
   iptables-nft \
   libguestfs \

@@ -6,8 +6,7 @@ echo "Updating the system..."
 sudo pacman --disable-download-timeout --needed --noconfirm -Syu
 
 # Install required packages
-pacman --disable-download-timeout --needed --noconfirm -S \
-  bridge-utils \
+pacman --disable-download-timeout --needed --noconfirm -S bridge-utils \
   dmidecode \
   dnsmasq \
   ebptables \

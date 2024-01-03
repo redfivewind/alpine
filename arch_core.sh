@@ -295,11 +295,17 @@ if [ -e $DEV ]; then
         if [[ $DEV == "/dev/nvme"* ]]; then
             PART_EFI="${DEV}p1"
             PART_LUKS="${DEV}p2"
+        elif [[ $DEV == "/dev/hd"* ]]; then
+            PART_EFI="${DEV}1"
+            PART_LUKS="${DEV}2"
         elif [[ $DEV == "/dev/sd"* ]]; then
             PART_EFI="${DEV}1"
             PART_LUKS="${DEV}2"
+        elif [[ $DEV == "/dev/vd"* ]]; then
+            PART_EFI="${DEV}1"
+            PART_LUKS="${DEV}2"
         else
-            echo "[X] ERROR: Currently only nvme* and sd* harddisks are allowed. Please edit the script manually."
+            echo "[X] ERROR: Currently only nvme*, hd*, sd* and vd* harddisks are allowed. Please edit the script manually."
             exit 1
         fi
     else

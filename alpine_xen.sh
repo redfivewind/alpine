@@ -121,131 +121,41 @@ function fn_01 {
     echo "normal" >> /mnt/root/grub-pre.cfg'''
 
     echo "[*] Installing GRUB..."
-    arch-chroot /mnt /bin/bash -c "\
-        mkinitcpio -P $KERNEL;\
-        grub-install --target=x86_64-efi --efi-directory=/boot/efi;\
-        grub-mkconfig -o /boot/grub/grub.cfg;\
-        chmod 700 /boot"
+    chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
+    chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+    chroot /mnt chmod 700 /boot
     sleep 2
+
+    # Configure Secure Boot
+    #FIXME
     
     # FIXME: Install base packages
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
-    ''':pacstrap /mnt \
-        amd-ucode \
-        base \
-        base-devel \
-        dhcpcd \
-        gptfdisk \
-        grub \
-        gvfs \
-        intel-ucode \
-        iptables-nft \
-        iwd \
-        $KERNEL \
-        linux-firmware \
-        lvm2 \
-        mkinitcpio \
-        nano \
-        networkmanager \
-        net-tools \
-        p7zip \
-        pavucontrol \
-        pulseaudio \
-        pulseaudio-alsa \
-        rkhunter \
-        sudo \
-        thermald \
-        tlp \
-        unrar \
-        unzip \
-        wpa_supplicant \
-        zip
+    ''':pacstrap /mnt amd-ucode \ base \  base-devel \ dhcpcd \  gptfdisk \
+        grub \ gvfs \ intel-ucode \ iptables-nft \ iwd \ linux-firmware \ lvm2 \
+        mkinitcpio \ nano \ networkmanager \ net-tools \ p7zip \
+        pavucontrol \ pulseaudio \ pulseaudio-alsa \ rkhunter \ sudo \
+        thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip
     sleep 2'''
     
     # FIXME: German keyboard layout
-    '''echo "[*] Loading German keyboard layout..."
-    arch-chroot /mnt /bin/bash -c "\
-        loadkeys de-latin1;\
-        localectl set-keymap de"
-    sleep 2'''
-  
-    # FIXME: Network time synchronisation
-    '''echo "[*] Enabling network time synchronization..."
-    arch-chroot /mnt /bin/bash -c "\
-        timedatectl set-ntp true"
-    sleep 2'''
-
-    # FIXME: System update
-    '''echo "[*] Updating the system..."
-    arch-chroot /mnt /bin/bash -c "\
-        pacman --disable-download-timeout --noconfirm -Scc;\
-        pacman --disable-download-timeout --noconfirm -Syyu"
-    sleep 2'''
-    
-    # FIXME: Time
-    '''echo "[*] Setting the timezone and hardware clock..."
-    arch-chroot /mnt /bin/bash -c "\
-        timedatectl set-timezone Europe/Berlin;\
-        ln /usr/share/zoneinfo/Europe/Berlin /etc/localtime;\
-        hwclock --systohc --utc"
-    sleep 2'''
-    
     # FIXME: Locale
-    '''echo "[*] Initializing the locale..."
-    arch-chroot /mnt /bin/bash -c "\
-        echo \"en_US.UTF-8 UTF-8\" > /etc/locale.gen;\
-        locale-gen;\
-        echo \"LANG=en_US.UTF-8\" > /etc/locale.conf;\
-        export LANG=en_US.UTF-8;\
-        echo \"KEYMAP=de-latin1\" > /etc/vconsole.conf;\
-        echo \"FONT=lat9w-16\" >> /etc/vconsole.conf"'''
-    
+    # FIXME: Time
     # FIXME: Network
-    '''echo "[*] Setting hostname and /etc/hosts..."
-    echo $HOSTNAME > /mnt/etc/hostname
-    echo "127.0.0.1 localhost" > /mnt/etc/hosts
-    echo "::1 localhost" >> /mnt/etc/hosts
-    arch-chroot /mnt /bin/bash -c "\
-        systemctl enable dhcpcd"'''
-
+    # FIXME: Network time synchronisation
+    # FIXME: System update       
     # FIXME: mkinitcpio
     '''echo "[*] Adding the LUKS partition to /etc/crypttab..."
     printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /mnt/etc/crypttab
-    cat /mnt/etc/crypttab
-
-    # FIXME: Home user
-    '''echo "[*] Adding a generic home user: '$USER_NAME'..."
-    arch-chroot /mnt /bin/bash -c "\
-        useradd -m -G wheel,users $USER_NAME"
-    
-    echo "[*] Granting sudo rights to the home user..."
-    echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-    echo "@includedir /etc/sudoers.d" >> /mnt/etc/sudoers
-
-    echo "[*] Setting the home user password..."
-    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
-    sleep 2'''
-
-    # FIXME: Start services
-    '''echo "Enabling system services..."
-    arch-chroot /mnt /bin/bash -c "\
-        sudo systemctl enable dhcpcd.service;\
-        sudo systemctl enable fstrim.timer;\
-        sudo systemctl enable NetworkManager.service;\
-        sudo systemctl enable systemd-timesyncd.service;\
-        sudo systemctl enable thermald;\
-        sudo systemctl enable tlp.service;\
-        sudo systemctl enable wpa_supplicant.service"
-    sleep 2'''
+    cat /mnt/etc/crypttab'''
+    # FIXME: Root user??? --- Home user (Add, SUdo rights, Password)
+    # FIXME: Start services (dhcpcd, fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
     
     # Add user paths & scripts
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
-
-    #FIXME: Update script
-
-    '''arch-chroot /mnt /bin/bash -c "\
-        chown -R $USER_NAME:users /home/$USER_NAME"'''
+    #FIXME: Own paths for user
+    #FIXME: Update script    
 
     # Synchronise & unmount everything
     sync

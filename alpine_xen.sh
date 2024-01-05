@@ -14,10 +14,6 @@ function fn_01 {
     # German keyboard layout
     echo "[*] Loading German keyboard layout..."
     setup-keymap de de
-
-    # Network time synchronisation
-    echo "[*] Enabling network time synchronization..."
-    setup-ntp busybox
     
     # Retrieve the LUKS & user password
     echo "[*] Please enter the LUKS password: "
@@ -44,6 +40,14 @@ function fn_01 {
         exit 1
     fi
 
+    # Set the hostname
+    echo "[*] Setting the hostname..."
+    setup-hostname workstation
+
+    # Network time synchronisation
+    echo "[*] Enabling network time synchronization..."
+    setup-ntp busybox
+
     # Configure apk
     echo "[*] Configuring apk & enabling the Alpine community repository..."
     setup-apkrepos -c -f
@@ -62,13 +66,13 @@ function fn_01 {
     partprobe $DEV
     sleep 2
     
-    # LUKS 
+    # Setup LUKS partition
     echo "[*] Formatting the second partition as LUKS crypto partition..."
     echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
     echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
     sleep 2
   
-    # LVM 
+    # Setup LVM within LUKS partition
     echo "[*] Setting up LVM..."
     pvcreate /dev/mapper/$LUKS_LVM
     vgcreate $VG_LUKS /dev/mapper/$LUKS_LVM
@@ -76,7 +80,7 @@ function fn_01 {
     lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT
     sleep 2
     
-    # Format partitions
+    # Format logical volumes
     echo "[*] Formatting the partitions..."
     mkfs.vfat $PART_EFI
     mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT
@@ -84,7 +88,7 @@ function fn_01 {
     swapon /dev/$VG_LUKS/$LV_SWAP
     sleep 2
     
-    # Mount root, boot and swap
+    # Mount root, EFI and swap volume
     echo "[*] Mounting filesystems..."
     mount -t ext4 /dev/$VG_LUKS/$LV_ROOT /mnt
     mkdir -p /mnt/boot/efi
@@ -92,9 +96,11 @@ function fn_01 {
     sleep 2
 
     # Install Alpine
+    echo "[*] Installing Alpine Linux..."
     setup-disk -m sys /mnt/
 
     # Set mkinitfs settings & modules
+    echo "[*] Adding LVM and crypto modules to mkinitfs..."
     echo "features=\"ata base ide scsi usb virtio ext4 lvm nvme keymap cryptsetup cryptkey resume\"" | tee /mnt/etc/mkinitfs/mkinitfs.conf
     mkinitfs -c /mnt/etc/mkinitfs/mkinitfs.conf -b /mnt/ $(ls /mnt/lib/modules/)
 
@@ -126,14 +132,15 @@ function fn_01 {
     sleep 2
 
     # Configure Secure Boot
+    echo "[*] Configuring Secure Boot..."
     chroot /mnt apk add sbctl
     chroot /mnt sbctl status
     chroot /mnt sbctl create-keys
     chroot /mnt sbctl sign /boot/efi/Alpine/linux-lts.efi
-    chroot /mnt sbctl enroll-keys -m  
+    chroot /mnt sbctl enroll-keys -m
+    sleep 2
     
     # FIXME: Install base packages
-    echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
     ''':pacstrap /mnt amd-ucode \ base(???) \  base-devel(???) \ curl \ dhcpcd(???) \  
         gptfdisk \ gvfs \ intel-ucode \ iptables-nft \ iwd \ linux-firmware \
         nano \ networkmanager(???) \ net-tools \ p7zip \
@@ -151,6 +158,7 @@ function fn_01 {
     # FIXME: Start services (dhcpcd, fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
     
     # Add user paths & scripts
+    echo "[*] Adding user paths & scripts..."
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
     chown -R $USER_NAME:users /mnt/home/$USER_NAME/

@@ -132,15 +132,6 @@ function fn_01 {
         zip
     sleep 2'''
     
-    # FIXME: Mount or create necessary entry points
-    echo "[*] Mounting necessary filesystems..."
-    '''mount -t proc proc /mnt/proc
-    mount -t sysfs sys /mnt/sys
-    mount -o bind /dev /mnt/dev
-    mount -t devpts /dev/pts /mnt/dev/pts/
-    mount -o bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars    
-    sleep 2'''
-    
     # FIXME: fstab
     '''echo "[*] Generating fstab file and setting 'noatime'..."
     genfstab -U /mnt > /mnt/etc/fstab

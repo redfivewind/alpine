@@ -1,3 +1,8 @@
+# NOTE: Fixme
+# NOTE: Xen
+# NOTE: Hardening
+# NOTE: Secure Boot
+
 function arg_err {
     echo "[X] ERROR: The target hard disk must be passed as the first and only argument."
     echo "[*] Usage: sh $0 <target_disk>"
@@ -105,20 +110,13 @@ function fn_01 {
     cat /mnt/etc/fstab
     sleep 2
 
-    # FIXME: efibootmgr & GRUB
+    # Setup GRUB
     echo "[*] Configuring GRUB for encrypted boot..."
     chroot /mnt apk add efibootmgr grub grub-efi
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
     echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub
     tail /mnt/etc/default/grub
     sleep 2
-
-    '''echo "set crypto_uuid=$(cryptsetup luksUUID $PART_LUKS)" > /mnt/root/grub-pre.cfg
-    echo "cryptomount -u $crypto_uuid" >> /mnt/root/grub-pre.cfg
-    echo "set root='lvmid/<YYYY>/<ZZZZ>'" >> /mnt/root/grub-pre.cfg
-    echo "set prefix=($root)/boot/grub" >> /mnt/root/grub-pre.cfg
-    echo "insmod normal" >> /mnt/root/grub-pre.cfg
-    echo "normal" >> /mnt/root/grub-pre.cfg'''
 
     echo "[*] Installing GRUB..."
     chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
@@ -127,13 +125,17 @@ function fn_01 {
     sleep 2
 
     # Configure Secure Boot
-    #FIXME
+    chroot /mnt apk add sbctl
+    chroot /mnt sbctl status
+    chroot /mnt sbctl create-keys
+    chroot /mnt sbctl sign /boot/efi/Alpine/linux-lts.efi
+    chroot /mnt sbctl enroll-keys -m  
     
     # FIXME: Install base packages
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
-    ''':pacstrap /mnt amd-ucode \ base \  base-devel \ dhcpcd \  gptfdisk \
-        grub \ gvfs \ intel-ucode \ iptables-nft \ iwd \ linux-firmware \ lvm2 \
-        mkinitcpio \ nano \ networkmanager \ net-tools \ p7zip \
+    ''':pacstrap /mnt amd-ucode \ base(???) \  base-devel(???) \ curl \ dhcpcd(???) \  
+        gptfdisk \ gvfs \ intel-ucode \ iptables-nft \ iwd \ linux-firmware \
+        nano \ networkmanager(???) \ net-tools \ p7zip \
         pavucontrol \ pulseaudio \ pulseaudio-alsa \ rkhunter \ sudo \
         thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip
     sleep 2'''
@@ -143,18 +145,14 @@ function fn_01 {
     # FIXME: Time
     # FIXME: Network
     # FIXME: Network time synchronisation
-    # FIXME: System update       
-    # FIXME: mkinitcpio
-    '''echo "[*] Adding the LUKS partition to /etc/crypttab..."
-    printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /mnt/etc/crypttab
-    cat /mnt/etc/crypttab'''
+    # FIXME: System update 
     # FIXME: Root user??? --- Home user (Add, SUdo rights, Password)
     # FIXME: Start services (dhcpcd, fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
     
     # Add user paths & scripts
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
-    #FIXME: Own paths for user
+    chown -R $USER_NAME:users /mnt/home/$USER_NAME/
     #FIXME: Update script    
 
     # Synchronise & unmount everything

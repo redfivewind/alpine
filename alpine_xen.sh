@@ -1,4 +1,5 @@
-# NOTE: Fixme
+# NOTE: FIXME
+# NOTE: Partitioning
 # NOTE: Xen
 # NOTE: Hardening
 # NOTE: Secure Boot
@@ -44,33 +45,33 @@ function fn_01 {
     fi
 
     # Configure apk
-    echo "[*] Configuring apk enabling the Alpine community repository..."
+    echo "[*] Configuring apk & enabling the Alpine community repository..."
     setup-apkrepos -c -f
 
     # Install required packages
     apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk xen-hypervisor
     
-    # Partitioning (GPT parititon table)
-    echo "[*] Partitioning the HDD/SSD with GPT partition layout..."
-    sgdisk --zap-all $DEV # Wipe verything
-    sgdisk --new=1:0:+512M $DEV # Create EFI partition
-    sgdisk --new=2:0:0 $DEV # Create LUKS partition
-    sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV # Write partition type codes
-    sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV # Label partitions
-    sgdisk --print $DEV # Print partition table
+    # GPT partitioning
+    echo "[*] Partitioning the target disk using GPT partition layout..."
+    sgdisk --zap-all $DEV
+    sgdisk --new=1:0:+512M $DEV
+    sgdisk --new=2:0:0 $DEV
+    sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV
+    sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
+    sgdisk --print $DEV
     partprobe $DEV
     sleep 2
     
     # LUKS 
     echo "[*] Formatting the second partition as LUKS crypto partition..."
     echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
-    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LVM_LUKS -
+    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
     sleep 2
   
     # LVM 
     echo "[*] Setting up LVM..."
-    pvcreate /dev/mapper/$LVM_LUKS
-    vgcreate $VG_LUKS /dev/mapper/$LVM_LUKS
+    pvcreate /dev/mapper/$LUKS_LVM
+    vgcreate $VG_LUKS /dev/mapper/$LUKS_LVM
     lvcreate -L 6144M $VG_LUKS -n $LV_SWAP
     lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT
     sleep 2
@@ -169,7 +170,7 @@ DEV="$1" # Harddisk
 LUKS_PASS="" # LUKS FDE password
 LV_ROOT="root" # Label & name of the root partition
 LV_SWAP="swap" # Label & name of the swap partition
-LVM_LUKS="lvm_luks" # LUKS LVM
+LUKS_LVM="luks_lvm" # LUKS LVM
 PART_EFI="${DEV}p1" # EFI partition
 PART_LUKS="${DEV}p2" # LUKS partition
 SCRIPT=$(readlink -f "$0") # Absolute script path

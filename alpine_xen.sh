@@ -93,10 +93,32 @@ function fn_01 {
     mkinitfs -c /mnt/etc/mkinitfs/mkinitfs.conf -b /mnt/ $(ls /mnt/lib/modules/)
 
     # Mount required filesystems
+    echo "[*] Mounting required filesystems..."
     mount -t proc /proc /mnt/proc
     mount --rbind /dev /mnt/dev
     mount --make-rslave /mnt/dev
     mount --rbind /sys /mnt/sys
+
+    # Set 'noatime' within the fstab
+    echo "[*] Setting 'noatime' within the fstab file..."
+    sed -i 's/relatime/noatime/g' /mnt/etc/fstab
+    cat /mnt/etc/fstab
+    sleep 2
+
+    # FIXME: efibootmgr & GRUB
+    echo "[*] Configuring GRUB for encrypted boot..."
+    chroot /mnt apk add efibootmgr grub grub-efi
+    echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
+    tail /mnt/etc/default/grub
+    sleep 2
+
+    echo "[*] Installing GRUB..."
+    arch-chroot /mnt /bin/bash -c "\
+        mkinitcpio -P $KERNEL;\
+        grub-install --target=x86_64-efi --efi-directory=/boot/efi;\
+        grub-mkconfig -o /boot/grub/grub.cfg;\
+        chmod 700 /boot"
+    sleep 2
     
     # FIXME: Install base packages
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."
@@ -132,12 +154,6 @@ function fn_01 {
         zip
     sleep 2'''
     
-    # FIXME: fstab
-    '''echo "[*] Generating fstab file and setting 'noatime'..."
-    genfstab -U /mnt > /mnt/etc/fstab
-    sed -i 's/relatime/noatime/g' /mnt/etc/fstab
-    sleep 2'''
-
     # FIXME: German keyboard layout
     '''echo "[*] Loading German keyboard layout..."
     arch-chroot /mnt /bin/bash -c "\
@@ -188,14 +204,6 @@ function fn_01 {
     '''echo "[*] Adding the LUKS partition to /etc/crypttab..."
     printf "${LVM_LUKS}\tUUID=%s\tnone\tluks\n" "$(cryptsetup luksUUID $PART_LUKS)" | tee -a /mnt/etc/crypttab
     cat /mnt/etc/crypttab
-    
-    echo "[*] Rebuilding initramfs image using mkinitcpio..."
-    echo "MODULES=()" > /mnt/etc/mkinitcpio.conf
-    echo "BINARIES=()" >> /mnt/etc/mkinitcpio.conf
-    echo "HOOKS=(base udev autodetect modconf kms block filesystems keyboard fsck encrypt lvm2)" >> /mnt/etc/mkinitcpio.conf
-    arch-chroot /mnt /bin/bash -c "\
-        mkinitcpio -p $KERNEL"
-    sleep 2'''
 
     # FIXME: Home user
     '''echo "[*] Adding a generic home user: '$USER_NAME'..."
@@ -208,25 +216,6 @@ function fn_01 {
 
     echo "[*] Setting the home user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
-    sleep 2'''
-    
-    # FIXME: efibootmgr & GRUB
-    '''echo "[*] Configuring GRUB for encrypted boot..."
-    arch-chroot /mnt /bin/bash -c "\
-        pacman --noconfirm --disable-download-timeout -Syyu efibootmgr grub"
-    echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
-    sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /mnt/etc/default/grub
-    echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LVM_LUKS root=/dev/$VG_LUKS/$LV_ROOT\"" >> /mnt/etc/default/grub
-    echo "GRUB_PRELOAD_MODULES=\"cryptodisk part_gpt part_msdos\"" >> /mnt/etc/default/grub
-    tail /mnt/etc/default/grub
-    sleep 2'''
-
-    echo "[*] Installing GRUB..."
-    arch-chroot /mnt /bin/bash -c "\
-        mkinitcpio -P $KERNEL;\
-        grub-install --target=x86_64-efi --efi-directory=/boot/efi;\
-        grub-mkconfig -o /boot/grub/grub.cfg;\
-        chmod 700 /boot"
     sleep 2'''
 
     # FIXME: Start services

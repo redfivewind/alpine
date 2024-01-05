@@ -8,6 +8,10 @@ function fn_01 {
     # German keyboard layout
     echo "[*] Loading German keyboard layout..."
     setup-keymap de de
+
+    # Network time synchronisation
+    echo "[*] Enabling network time synchronization..."
+    setup-ntp busybox
     
     # Retrieve the LUKS & user password
     echo "[*] Please enter the LUKS password: "
@@ -34,13 +38,12 @@ function fn_01 {
         exit 1
     fi
 
-    # FIXME: Update the pacman database
-    echo "[*] FIXME..."
-    #FIXME
-  
-    # Network time synchronisation
-    echo "[*] Enabling network time synchronization..."
-    setup-ntp busybox
+    # Configure apk
+    echo "[*] Configuring apk enabling the Alpine community repository..."
+    setup-apkrepos -c -f
+
+    # Install required packages
+    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk xen-hypervisor
     
     # Partitioning (GPT parititon table)
     echo "[*] Partitioning the HDD/SSD with GPT partition layout..."
@@ -50,6 +53,7 @@ function fn_01 {
     sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV # Write partition type codes
     sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV # Label partitions
     sgdisk --print $DEV # Print partition table
+    partprobe $DEV
     sleep 2
     
     # LUKS 
@@ -68,18 +72,31 @@ function fn_01 {
     
     # Format partitions
     echo "[*] Formatting the partitions..."
-    mkfs.fat -F32 $PART_EFI
-    mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT -L $LV_ROOT
+    mkfs.vfat $PART_EFI
+    mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT
     mkswap /dev/mapper/$VG_LUKS-$LV_SWAP -L $LV_SWAP
     swapon /dev/$VG_LUKS/$LV_SWAP
     sleep 2
     
     # Mount root, boot and swap
     echo "[*] Mounting filesystems..."
-    mount /dev/$VG_LUKS/$LV_ROOT /mnt
+    mount -t ext4 /dev/$VG_LUKS/$LV_ROOT /mnt
     mkdir -p /mnt/boot/efi
-    mount $PART_EFI /mnt/boot/efi
+    mount -t vfat $PART_EFI /mnt/boot/efi
     sleep 2
+
+    # Install Alpine
+    setup-disk -m sys /mnt/
+
+    # Set mkinitfs settings & modules
+    echo "features=\"ata base ide scsi usb virtio ext4 lvm nvme keymap cryptsetup cryptkey resume\"" | tee /mnt/etc/mkinitfs/mkinitfs.conf
+    mkinitfs -c /mnt/etc/mkinitfs/mkinitfs.conf -b /mnt/ $(ls /mnt/lib/modules/)
+
+    # Mount required filesystems
+    mount -t proc /proc /mnt/proc
+    mount --rbind /dev /mnt/dev
+    mount --make-rslave /mnt/dev
+    mount --rbind /sys /mnt/sys
     
     # FIXME: Install base packages
     echo "[*] Bootstrapping Arch Linux into /mnt with base packages..."

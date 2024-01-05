@@ -109,6 +109,7 @@ function fn_01 {
     echo "[*] Configuring GRUB for encrypted boot..."
     chroot /mnt apk add efibootmgr grub grub-efi
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
+    echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub
     tail /mnt/etc/default/grub
     sleep 2
 

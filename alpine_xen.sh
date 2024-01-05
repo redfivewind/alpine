@@ -113,6 +113,13 @@ function fn_01 {
     tail /mnt/etc/default/grub
     sleep 2
 
+    '''echo "set crypto_uuid=$(cryptsetup luksUUID $PART_LUKS)" > /mnt/root/grub-pre.cfg
+    echo "cryptomount -u $crypto_uuid" >> /mnt/root/grub-pre.cfg
+    echo "set root='lvmid/<YYYY>/<ZZZZ>'" >> /mnt/root/grub-pre.cfg
+    echo "set prefix=($root)/boot/grub" >> /mnt/root/grub-pre.cfg
+    echo "insmod normal" >> /mnt/root/grub-pre.cfg
+    echo "normal" >> /mnt/root/grub-pre.cfg'''
+
     echo "[*] Installing GRUB..."
     arch-chroot /mnt /bin/bash -c "\
         mkinitcpio -P $KERNEL;\

@@ -46,7 +46,7 @@ function fn_01 {
 
     # Set the timezone
     echo "[*] Setting the timezone..."
-    #FIXME
+    setup-timezone Europe/Berlin
 
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
@@ -57,7 +57,11 @@ function fn_01 {
     setup-apkrepos -c -f
 
     # Install required packages
-    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk #xen-hypervisor
+    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk xen-hypervisor xen-qemu
+
+    # Configure Alpine Linux as Xen dom0
+    echo "[*] Configuring Alpine Linux as Xen dom0..."
+    setup-xen-dom0
     
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."

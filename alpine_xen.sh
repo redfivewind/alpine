@@ -44,6 +44,10 @@ function fn_01 {
     echo "[*] Setting the hostname..."
     setup-hostname workstation
 
+    # Set the timezone
+    echo "[*] Setting the timezone..."
+    #FIXME
+
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
     setup-ntp busybox
@@ -53,7 +57,7 @@ function fn_01 {
     setup-apkrepos -c -f
 
     # Install required packages
-    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk xen-hypervisor
+    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk #xen-hypervisor
     
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."
@@ -64,6 +68,7 @@ function fn_01 {
     sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
     sgdisk --print $DEV
     partprobe $DEV
+    mdev -s
     sleep 2
     
     # Setup LUKS partition
@@ -148,13 +153,12 @@ function fn_01 {
         thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip
     sleep 2'''
     
-    # FIXME: German keyboard layout
+    
     # FIXME: Locale
     # FIXME: Time
-    # FIXME: Network
-    # FIXME: Network time synchronisation
+    # FIXME: Network    
     # FIXME: System update 
-    # FIXME: Root user??? --- Home user (Add, SUdo rights, Password)
+    # FIXME: Root user??? &&& Home user (Add, SUdo rights, Password)
     # FIXME: Start services (dhcpcd, fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
     
     # Add user paths & scripts

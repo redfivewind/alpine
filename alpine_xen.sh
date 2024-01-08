@@ -1,6 +1,4 @@
-# NOTE: FIXME
-# NOTE: Partitioning
-# NOTE: Xen
+# NOTE: Resume from hibernation
 # NOTE: Hardening
 # NOTE: Secure Boot
 

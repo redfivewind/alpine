@@ -139,12 +139,12 @@ function fn_01 {
     sleep 2
 
     # Configure Secure Boot
-    echo "[*] Configuring Secure Boot..."
-    chroot /mnt apk add sbctl
-    chroot /mnt sbctl status
-    chroot /mnt sbctl create-keys
-    chroot /mnt sbctl sign /boot/efi/Alpine/linux-lts.efi
-    chroot /mnt sbctl enroll-keys -m
+    #echo "[*] Configuring Secure Boot..."
+    #chroot /mnt apk add sbctl
+    #chroot /mnt sbctl status
+    #chroot /mnt sbctl create-keys
+    #chroot /mnt sbctl sign /boot/efi/Alpine/linux-lts.efi
+    #chroot /mnt sbctl enroll-keys -m
     sleep 2
     
     # FIXME: Install base packages

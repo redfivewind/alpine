@@ -1,4 +1,5 @@
 # Desktop Environment
+# Network, WiFi, NetworkManager (&udev)
 # Tools & services
 # virt-manager
 # Secure Boot

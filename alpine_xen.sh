@@ -55,6 +55,10 @@ function fn_01 {
     echo "[*] Enabling network time synchronization..."
     setup-ntp busybox
 
+    # Disable SSHD
+    echo "[*] Disabling SSHD..."
+    setup-sshd none
+
     # Configure apk
     echo "[*] Configuring apk & enabling the Alpine community repository..."
     setup-apkrepos -c -f

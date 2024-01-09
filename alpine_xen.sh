@@ -55,7 +55,7 @@ function fn_01 {
     setup-apkrepos -c -f
 
     # Install required packages
-    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk xen-qemu #xen-hypervisor
+    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 sgdisk xen-qemu
 
     # Configure Alpine Linux as Xen dom0
     echo "[*] Configuring Alpine Linux as Xen dom0..."
@@ -70,7 +70,7 @@ function fn_01 {
     sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
     sgdisk --print $DEV
     for i in $(seq 10)
-        do echo "[*] Populating the kernel filesystem table..." && partprobe $DEV && sleep 1 && mdev -s && sleep 1
+        do echo "[*] Populating the kernel filesystem table ($i/10)..." && partprobe $DEV && sleep 1 && mdev -s && sleep 1
     done        
     sleep 2
     

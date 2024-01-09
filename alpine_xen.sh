@@ -55,7 +55,7 @@ function fn_01 {
     setup-apkrepos -c -f
 
     # Install required packages
-    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi lsblk lvm2 nano sgdisk xen-qemu
+    apk add bridge cryptsetup e2fsprogs efibootmgr grub grub-efi iwd lsblk lvm2 nano sgdisk xen-qemu
 
     # Configure Alpine Linux as Xen dom0
     echo "[*] Configuring Alpine Linux as Xen dom0..."

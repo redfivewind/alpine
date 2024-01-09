@@ -1,7 +1,4 @@
 # Desktop Environment
-# Network, WiFi, NetworkManager (&udev)
-# Base packages 
-# virt-manager
 # Secure Boot
 # Resume from hibernation
 # Hardening
@@ -81,7 +78,7 @@ function fn_01 {
     setup-xen-dom0
 
     # Set udev as devd
-    echo "[*] Setting udev as devd...]
+    echo "[*] Setting udev as devd...]"
     setup-devd -C udev
     
     # GPT partitioning
@@ -212,6 +209,18 @@ function fn_01 {
     rc-update add iwd default
     rc-update add networkmanager default
     rc-update add tlp default
+
+    # Install virt-manager infrastructure
+    echo "[*] Installing virt-manager infrastructure..."
+    chroot /mnt apk add bridge-utils \
+        dmidecode \
+        ebtables \
+        libguestfs \
+        libvirt \
+        openbsd-netcat \
+        vde2 \
+        virt-manager \
+        virt-viewer
 
     # Setup desktop environment
     #FIXME

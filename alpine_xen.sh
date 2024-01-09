@@ -1,7 +1,6 @@
 # Desktop Environment
 # Network, WiFi, NetworkManager (&udev)
 # Base packages 
-# Configure services
 # virt-manager
 # Secure Boot
 # Resume from hibernation
@@ -80,6 +79,10 @@ function fn_01 {
     # Configure Alpine Linux as Xen dom0
     echo "[*] Configuring Alpine Linux as Xen dom0..."
     setup-xen-dom0
+
+    # Set udev as devd
+    echo "[*] Setting udev as devd...]
+    setup-devd -C udev
     
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."
@@ -178,14 +181,33 @@ function fn_01 {
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
     echo 'permit persist :wheel' > /mnt/etc/doas.d/doas.conf
     
-    # FIXME: Install base packages
-    ''':amd-ucode \ base(???) \  base-devel(???) \ curl \ gptfdisk \ 
-        gvfs \ intel-ucode \ iptables-nft \
-        nano \ networkmanager(???) \ net-tools \ p7zip \
-        pavucontrol \ pulseaudio \ pulseaudio-alsa \ rkhunter \ sudo \
-        thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip
-    '''
-    # FIXME: Start services (fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
+    # Install base packages
+    chroot /mnt apk add alsa-plugins-pulse \
+        amd-ucode \
+        intel-ucode \
+        iptables-nft \
+        iwd \
+        networkmanager \
+        networkmanager-applet \
+        networkmanager-tui \
+        networkmanager-wifi \
+        pavucontrol \
+        pulseaudio \
+        pulseaudio-alsa \
+        p7zip \
+        tlp \
+        unrar \
+        unzip \
+        zip    
+    #AUDIO: alsa-plugins-pulse pavucontrol(???) pulseaudio pulseaudio-alsa pulseaudio-bluez(???)
+    #BASE: p7zip tlp unrar unzip zip
+    #CPU MICROCODE: amd-ucode intel-ucode
+    #NETWORK: iptables-nft iwd networkmanager networkmanager-applet networkmanager-tui networkmanager-wifi
+    
+    # Configure services
+    echo "[*] Configuring services..."
+    rc-update add networkmanager default
+    rc-update add tlp default
 
     # Setup desktop environment
     #FIXME

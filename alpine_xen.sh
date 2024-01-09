@@ -1,6 +1,7 @@
 # Desktop Environment
 # Network, WiFi, NetworkManager (&udev)
-# Tools & services
+# Base packages 
+# Configure services
 # virt-manager
 # Secure Boot
 # Resume from hibernation
@@ -163,20 +164,22 @@ function fn_01 {
     echo 'permit persist :wheel' > /mnt/etc/doas.d/doas.conf
     
     # FIXME: Install base packages
-    ''':pacstrap /mnt amd-ucode \ base(???) \  base-devel(???) \ curl \ dhcpcd(???) \  
-        gptfdisk \ gvfs \ intel-ucode \ iptables-nft \ iwd \ linux-firmware \
+    ''':amd-ucode \ base(???) \  base-devel(???) \ curl \ gptfdisk \ 
+        gvfs \ intel-ucode \ iptables-nft \ linux-firmware \
         nano \ networkmanager(???) \ net-tools \ p7zip \
         pavucontrol \ pulseaudio \ pulseaudio-alsa \ rkhunter \ sudo \
         thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip
-    sleep 2'''
-    # FIXME: Start services (dhcpcd, fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
+    '''
+    # FIXME: Start services (fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
+
+    # Setup desktop environment
+    #FIXME
     
     # Add user paths & scripts
     echo "[*] Adding user paths & scripts..."
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
-    chown -R $USER_NAME:users /mnt/home/$USER_NAME/
-    #FIXME: Update script    
+    chown -R $USER_NAME:users /mnt/home/$USER_NAME/    
 
     # Synchronise & unmount everything
     sync

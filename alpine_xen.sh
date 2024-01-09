@@ -203,9 +203,13 @@ function fn_01 {
     #BASE: p7zip tlp unrar unzip zip
     #CPU MICROCODE: amd-ucode intel-ucode
     #NETWORK: iptables-nft iwd networkmanager networkmanager-applet networkmanager-tui networkmanager-wifi
+
+    # Remove unnecessary packages
+    chroot /mnt apk del wpa_supplicant
     
     # Configure services
     echo "[*] Configuring services..."
+    rc-update add iwd default
     rc-update add networkmanager default
     rc-update add tlp default
 

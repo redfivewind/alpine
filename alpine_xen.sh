@@ -173,7 +173,7 @@ function fn_01 {
 
     # Synchronise & unmount everything
     sync
-    umount -a
+    #umount -a
 
     # Exit message
     echo "[*] Work done. Returning..."

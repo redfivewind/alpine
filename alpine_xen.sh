@@ -223,6 +223,7 @@ function fn_01 {
         virt-viewer
 
     # Setup desktop environment
+    echo "[*] Installing <FIXME> desktop environment..."
     #FIXME
     
     # Add user paths & scripts

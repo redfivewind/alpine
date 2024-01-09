@@ -69,8 +69,7 @@ function fn_01 {
     sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV
     sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
     sgdisk --print $DEV
-    partprobe $DEV
-    mdev -s
+    for ((i=0;i<=9;i++)); do partprobe $DEV && sleep 1 && mdev -s && sleep 1; done
     sleep 2
     
     # Setup LUKS partition

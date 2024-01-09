@@ -151,11 +151,6 @@ function fn_01 {
     #chroot /mnt sbctl enroll-keys -m
     sleep 2
     
-    # FIXME: Locale
-    # FIXME: Time
-    # FIXME: Network
-    
-    # FIXME: Root user??? &&& Home user (Add, SUdo rights, Password)
     # User management
     echo "[*] Disabling the root account..."
     chroot /mnt passwd -l root

@@ -1,6 +1,9 @@
-# NOTE: Resume from hibernation
-# NOTE: Hardening
-# NOTE: Secure Boot
+# Desktop Environment
+# Tools & services
+# virt-manager
+# Secure Boot
+# Resume from hibernation
+# Hardening
 
 function arg_err {
     echo "[X] ERROR: The target hard disk must be passed as the first and only argument."
@@ -148,6 +151,21 @@ function fn_01 {
     #chroot /mnt sbctl enroll-keys -m
     sleep 2
     
+    # FIXME: Locale
+    # FIXME: Time
+    # FIXME: Network
+    
+    # FIXME: Root user??? &&& Home user (Add, SUdo rights, Password)
+    # User management
+    echo "[*] Disabling the root account..."
+    chroot /mnt passwd -l root
+
+    echo "[*] Creating a default user with administrator rights..."
+    chroot /mnt apk add doas
+    chroot /mnt adduser -D $USER_NAME
+    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
+    echo 'permit $USER_NAME as root' > /mnt/etc/doas.d/doas.conf
+    
     # FIXME: Install base packages
     ''':pacstrap /mnt amd-ucode \ base(???) \  base-devel(???) \ curl \ dhcpcd(???) \  
         gptfdisk \ gvfs \ intel-ucode \ iptables-nft \ iwd \ linux-firmware \
@@ -155,13 +173,6 @@ function fn_01 {
         pavucontrol \ pulseaudio \ pulseaudio-alsa \ rkhunter \ sudo \
         thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip
     sleep 2'''
-    
-    
-    # FIXME: Locale
-    # FIXME: Time
-    # FIXME: Network    
-    # FIXME: System update 
-    # FIXME: Root user??? &&& Home user (Add, SUdo rights, Password)
     # FIXME: Start services (dhcpcd, fstrim.timer, NetworkManager.service, timesync, thermald, tlp, wpa_supplicant)
     
     # Add user paths & scripts

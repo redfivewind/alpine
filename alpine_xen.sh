@@ -162,9 +162,9 @@ function fn_01 {
 
     echo "[*] Creating a default user with administrator rights..."
     chroot /mnt apk add doas
-    chroot /mnt adduser -D $USER_NAME
+    chroot /mnt adduser -D $USER_NAME wheel
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
-    echo 'permit $USER_NAME as root' > /mnt/etc/doas.d/doas.conf
+    echo 'permit persist :wheel' > /mnt/etc/doas.d/doas.conf
     
     # FIXME: Install base packages
     ''':pacstrap /mnt amd-ucode \ base(???) \  base-devel(???) \ curl \ dhcpcd(???) \  

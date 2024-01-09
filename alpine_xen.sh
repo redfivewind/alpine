@@ -180,7 +180,7 @@ function fn_01 {
     
     # FIXME: Install base packages
     ''':amd-ucode \ base(???) \  base-devel(???) \ curl \ gptfdisk \ 
-        gvfs \ intel-ucode \ iptables-nft \ linux-firmware \
+        gvfs \ intel-ucode \ iptables-nft \
         nano \ networkmanager(???) \ net-tools \ p7zip \
         pavucontrol \ pulseaudio \ pulseaudio-alsa \ rkhunter \ sudo \
         thermald \ tlp \ unrar \ unzip \ wpa_supplicant \ zip

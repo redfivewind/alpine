@@ -70,7 +70,7 @@ function fn_01 {
     sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
     sgdisk --print $DEV
     for i in $(seq 10)
-        do echo "[*] Populating the kernel filesystem table ($i/10)..." && partprobe $DEV && sleep 1 && mdev -s && sleep 1
+        do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DEV && sleep 1 && mdev -s && sleep 1
     done        
     sleep 2
     

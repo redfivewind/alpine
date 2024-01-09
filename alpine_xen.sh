@@ -87,22 +87,22 @@ function fn_01 {
     # Setup LVM within LUKS partition
     echo "[*] Setting up LVM..."
     pvcreate /dev/mapper/$LUKS_LVM
-    vgcreate $VG_LUKS /dev/mapper/$LUKS_LVM
-    lvcreate -L 6144M $VG_LUKS -n $LV_SWAP
-    lvcreate -l 100%FREE $VG_LUKS -n $LV_ROOT
+    vgcreate $VG_LVM /dev/mapper/$LUKS_LVM
+    lvcreate -L 6144M $VG_LVM -n $LV_SWAP
+    lvcreate -l 100%FREE $VG_LVM -n $LV_ROOT
     sleep 2
     
     # Format logical volumes
     echo "[*] Formatting the partitions..."
     mkfs.vfat $PART_EFI
-    mkfs.ext4 /dev/mapper/$VG_LUKS-$LV_ROOT
-    mkswap /dev/mapper/$VG_LUKS-$LV_SWAP -L $LV_SWAP
-    swapon /dev/$VG_LUKS/$LV_SWAP
+    mkfs.ext4 /dev/mapper/$VG_LVM-$LV_ROOT
+    mkswap /dev/mapper/$VG_LVM-$LV_SWAP -L $LV_SWAP
+    swapon /dev/$VG_LVM/$LV_SWAP
     sleep 2
     
     # Mount root, EFI and swap volume
     echo "[*] Mounting filesystems..."
-    mount -t ext4 /dev/$VG_LUKS/$LV_ROOT /mnt
+    mount -t ext4 /dev/$VG_LVM/$LV_ROOT /mnt
     mkdir -p /mnt/boot/efi
     mount -t vfat $PART_EFI /mnt/boot/efi
     sleep 2
@@ -198,7 +198,7 @@ PART_LUKS="${DEV}p2" # LUKS partition
 SCRIPT=$(readlink -f "$0") # Absolute script path
 USER_NAME="user" # Username
 USER_PASS="" # Home user password
-VG_LUKS="vg_luks" # LUKS volume group
+VG_LVM="vg_lvm" # LUKS volume group
 
 # Interpreting the commandline arguments
 if [ "$#" -le 0 ]; then

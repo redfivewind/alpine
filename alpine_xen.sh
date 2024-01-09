@@ -218,6 +218,8 @@ function fn_01 {
         libguestfs \
         libvirt \
         openbsd-netcat \
+        ovmf \
+        seabios \
         vde2 \
         virt-manager \
         virt-viewer

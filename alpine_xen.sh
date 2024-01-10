@@ -78,7 +78,7 @@ function fn_01 {
     setup-xen-dom0
 
     # Set udev as devd
-    echo "[*] Setting udev as devd...]"
+    echo "[*] Setting udev as devd..."
     setup-devd -C udev
     
     # GPT partitioning
@@ -174,7 +174,9 @@ function fn_01 {
 
     echo "[*] Creating a default user with administrator rights..."
     chroot /mnt apk add doas
-    chroot /mnt adduser -D $USER_NAME wheel
+    chroot /mnt adduser -D $USER_NAME
+    chroot /mnt addgroup $USER_NAME users
+    chroot /mnt addgroup $USER_NAME wheel
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
     echo 'permit persist :wheel' > /mnt/etc/doas.d/doas.conf
     

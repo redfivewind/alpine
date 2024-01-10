@@ -84,7 +84,8 @@ function fn_01 {
 
     # Setup desktop environment
     echo "[*] Installing Xfce..."
-    setup-xorg-base pavucontrol xfce4-pulseaudio-plugin    
+    setup-desktop xfce
+    apk add pavucontrol xfce4-pulseaudio-plugin    
 
     # Setup a standard user
     echo "[*] Setting up a standard user..."

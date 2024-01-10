@@ -82,12 +82,8 @@ function fn_01 {
     setup-devd -C udev
 
     # Setup desktop environment
-    echo "[*] Installing <FIXME> desktop environment..."
-    #FIXME
-
-    # Setup desktop environment
-    echo "[*] Installing <FIXME> desktop environment..."
-    #FIXME
+    echo "[*] Installing Xfce..."
+    setup-xorg-base pavucontrol xfce4-pulseaudio-plugin    
 
     # Setup a standard user
     echo "[*] Setting up a standard user..."
@@ -195,7 +191,6 @@ function fn_01 {
         iwd \
         networkmanager \
         networkmanager-wifi \
-        pavucontrol \
         pulseaudio \
         pulseaudio-alsa \
         p7zip \

@@ -205,9 +205,11 @@ function fn_01 {
     
     # Configure services
     echo "[*] Configuring services..."
-    rc-update add iwd default
-    rc-update add networkmanager default
-    rc-update add tlp default
+    chroot /mnt rc-update add iwd default
+    chroot /mnt rc-update add networkmanager default
+    chroot /mnt rc-update add tlp default
+
+    chroot /mnt rc-update del networking boot
 
     # Install virt-manager infrastructure
     echo "[*] Installing virt-manager infrastructure..."

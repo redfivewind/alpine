@@ -64,6 +64,7 @@ function fn_01 {
         cryptsetup \
         e2fsprogs \
         efibootmgr \
+        file \
         grub \
         grub-efi \
         iwd \

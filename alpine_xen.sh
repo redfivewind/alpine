@@ -80,6 +80,18 @@ function fn_01 {
     # Set udev as devd
     echo "[*] Setting udev as devd..."
     setup-devd -C udev
+
+    # Setup desktop environment
+    echo "[*] Installing <FIXME> desktop environment..."
+    #FIXME
+
+    # Setup desktop environment
+    echo "[*] Installing <FIXME> desktop environment..."
+    #FIXME
+
+    # Setup a standard user
+    echo "[*] Setting up a standard user..."
+    setup-user -a -g users $USER_NAME
     
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."
@@ -168,17 +180,12 @@ function fn_01 {
     #chroot /mnt sbctl enroll-keys -m
     sleep 2
     
-    # User management
+    # User security
     echo "[*] Disabling the root account..."
     chroot /mnt passwd -l root
 
-    echo "[*] Creating a default user with administrator rights..."
-    chroot /mnt apk add doas
-    chroot /mnt adduser -D $USER_NAME
-    chroot /mnt addgroup $USER_NAME users
-    chroot /mnt addgroup $USER_NAME wheel
+    echo "[*] Setting the user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
-    echo 'permit persist :wheel' > /mnt/etc/doas.d/doas.conf
     
     # Install base packages
     chroot /mnt apk add alsa-plugins-pulse \
@@ -216,24 +223,20 @@ function fn_01 {
     chroot /mnt apk add bridge-utils \
         dmidecode \
         ebtables \
-        libguestfs \
         libvirt \
-        openbsd-netcat \
+        netcat-openbsd \
         ovmf \
         seabios \
-        vde2 \
         virt-manager \
         virt-viewer
-
-    # Setup desktop environment
-    echo "[*] Installing <FIXME> desktop environment..."
-    #FIXME
+        #libguestfs (Edge)
+        #vde2 (~libwolfssl.so)
     
     # Add user paths & scripts
     echo "[*] Adding user paths & scripts..."
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
-    chown -R $USER_NAME:users /mnt/home/$USER_NAME/    
+    chroot /mnt chown -R $USER_NAME:users /mnt/home/$USER_NAME/    
 
     # Synchronise & unmount everything
     sync

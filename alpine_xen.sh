@@ -184,24 +184,21 @@ function fn_01 {
     chroot /mnt apk add alsa-plugins-pulse \
         amd-ucode \
         intel-ucode \
-        iptables-nft \
+        iptables \
         iwd \
         networkmanager \
-        networkmanager-applet \
-        networkmanager-tui \
         networkmanager-wifi \
         pavucontrol \
         pulseaudio \
         pulseaudio-alsa \
         p7zip \
         tlp \
-        unrar \
         unzip \
         zip    
     #AUDIO: alsa-plugins-pulse pavucontrol(???) pulseaudio pulseaudio-alsa pulseaudio-bluez(???)
-    #BASE: p7zip tlp unrar unzip zip
+    #BASE: p7zip tlp unzip zip
     #CPU MICROCODE: amd-ucode intel-ucode
-    #NETWORK: iptables-nft iwd networkmanager networkmanager-applet networkmanager-tui networkmanager-wifi
+    #NETWORK: iptables iwd networkmanager networkmanager-applet networkmanager-tui networkmanager-wifi
 
     # Remove unnecessary packages
     chroot /mnt apk del wpa_supplicant

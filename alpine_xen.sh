@@ -204,17 +204,20 @@ function fn_01 {
     #BASE: p7zip tlp unzip zip
     #CPU MICROCODE: amd-ucode intel-ucode
     #NETWORK: iptables iwd networkmanager networkmanager-applet networkmanager-tui networkmanager-wifi
+    sleep 2
 
     # Remove unnecessary packages
+    echo "[*] Removing unnecessary packages..."
     chroot /mnt apk del wpa_supplicant
+    sleep 2
     
     # Configure services
     echo "[*] Configuring services..."
     chroot /mnt rc-update add iwd default
     chroot /mnt rc-update add networkmanager default
     chroot /mnt rc-update add tlp default
-
     chroot /mnt rc-update del networking boot
+    sleep 2
 
     # Install virt-manager infrastructure
     echo "[*] Installing virt-manager infrastructure..."
@@ -229,6 +232,7 @@ function fn_01 {
         virt-viewer
         #libguestfs (Edge)
         #vde2 (~libwolfssl.so)
+    sleep 2
     
     # Add user paths & scripts
     echo "[*] Adding user paths & scripts..."

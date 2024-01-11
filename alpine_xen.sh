@@ -39,10 +39,6 @@ function fn_01 {
         exit 1
     fi
 
-    # Setup a standard user
-    echo "[*] Setting up a standard user..."
-    setup-user -a -g users $USER_NAME
-
     # Set the hostname
     echo "[*] Setting the hostname..."
     setup-hostname workstation
@@ -64,6 +60,7 @@ function fn_01 {
     setup-apkrepos -c -f
 
     # Install required packages
+    echo "[*] Installing required packages..."
     apk add bridge \
         cryptsetup \
         e2fsprogs \
@@ -77,15 +74,22 @@ function fn_01 {
         nano \
         sgdisk \
         xen-qemu
+    sleep 2
+
+    # Configure Alpine Linux as Xen dom0
+    echo "[*] Configuring Alpine Linux as Xen dom0..."
+    setup-xen-dom0
+
+    # User management
+    echo "[*] Setting up a standard user..."
+    setup-user -a -g users $USER_NAME
+    echo -n "$USER_NAME:$USER_PASS" | chpasswd
+    chroot /mnt adduser $USER_NAME plugdev
 
     # Setup desktop environment
     echo "[*] Installing Xfce..."
     setup-desktop xfce
     apk add pavucontrol xfce4-pulseaudio-plugin  
-
-    # Configure Alpine Linux as Xen dom0
-    echo "[*] Configuring Alpine Linux as Xen dom0..."
-    setup-xen-dom0
 
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."
@@ -176,16 +180,6 @@ function fn_01 {
     #chroot /mnt sbctl enroll-keys -m
     sleep 2
     
-    # User security
-    echo "[*] Disabling the root account..."
-    chroot /mnt passwd -l root
-
-    echo "[*] Setting the user password..."
-    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
-
-    echo "[*] Adding the user to the 'plugdev' group..."
-    chroot /mnt adduser $USER_NAME plugdev
-    
     # Install base packages
     chroot /mnt apk add alsa-plugins-pulse \
         amd-ucode \
@@ -233,6 +227,10 @@ function fn_01 {
         #libguestfs (Edge)
         #vde2 (~libwolfssl.so)
     sleep 2
+
+    # Disable root account
+    echo "[*] Disabling the root account..."
+    chroot /mnt passwd -l root
     
     # Add user paths & scripts
     echo "[*] Adding user paths & scripts..."

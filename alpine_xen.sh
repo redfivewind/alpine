@@ -156,6 +156,8 @@ function fn_01 {
     chroot /mnt apk add efibootmgr grub grub-efi
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
     echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub
+    echo "GRUB_CMDLINE_XEN=\"console=vga guest_loglvl=all loglvl=all\"" >> /mnt/etc/default/grub
+    echo "GRUB_CMDLINE_XEN_DEFAULT=\"dom0_max_vcpus=1 dom0_vcpus_pin maxmem=512\"" >> /mnt/etc/default/grub
     tail /mnt/etc/default/grub
     sleep 2
 

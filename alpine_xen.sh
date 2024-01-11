@@ -233,7 +233,7 @@ function fn_01 {
     echo "[*] Adding user paths & scripts..."
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
-    chroot /mnt chown -R $USER_NAME:users /mnt/home/$USER_NAME/    
+    chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 
     # Synchronise & unmount everything
     sync

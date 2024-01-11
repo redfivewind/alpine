@@ -79,17 +79,20 @@ function fn_01 {
     # Configure Alpine Linux as Xen dom0
     echo "[*] Configuring Alpine Linux as Xen dom0..."
     setup-xen-dom0
+    sleep 2
 
     # User management
     echo "[*] Setting up a standard user..."
     setup-user -a -g users $USER_NAME
     echo -n "$USER_NAME:$USER_PASS" | chpasswd
     chroot /mnt adduser $USER_NAME plugdev
+    sleep 2
 
     # Setup desktop environment
     echo "[*] Installing Xfce..."
     setup-desktop xfce
     apk add pavucontrol xfce4-pulseaudio-plugin  
+    sleep 2
 
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."

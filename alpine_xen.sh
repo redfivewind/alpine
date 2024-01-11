@@ -85,7 +85,7 @@ function fn_01 {
     echo "[*] Setting up a standard user..."
     setup-user -a -g users $USER_NAME
     echo -n "$USER_NAME:$USER_PASS" | chpasswd
-    chroot /mnt adduser $USER_NAME plugdev
+    adduser $USER_NAME plugdev
     sleep 2
 
     # Setup desktop environment

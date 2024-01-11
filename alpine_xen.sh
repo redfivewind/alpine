@@ -39,6 +39,10 @@ function fn_01 {
         exit 1
     fi
 
+    # Setup a standard user
+    echo "[*] Setting up a standard user..."
+    setup-user -a -g users $USER_NAME
+
     # Set the hostname
     echo "[*] Setting the hostname..."
     setup-hostname workstation
@@ -74,23 +78,15 @@ function fn_01 {
         sgdisk \
         xen-qemu
 
+    # Setup desktop environment
+    echo "[*] Installing Xfce..."
+    setup-desktop xfce
+    apk add pavucontrol xfce4-pulseaudio-plugin  
+
     # Configure Alpine Linux as Xen dom0
     echo "[*] Configuring Alpine Linux as Xen dom0..."
     setup-xen-dom0
 
-    # Set udev as devd
-    echo "[*] Setting udev as devd..."
-    setup-devd -C udev
-
-    # Setup desktop environment
-    echo "[*] Installing Xfce..."
-    setup-desktop xfce
-    apk add pavucontrol xfce4-pulseaudio-plugin    
-
-    # Setup a standard user
-    echo "[*] Setting up a standard user..."
-    setup-user -a -g users $USER_NAME
-    
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."
     sgdisk --zap-all $DEV
@@ -113,22 +109,22 @@ function fn_01 {
     # Setup LVM within LUKS partition
     echo "[*] Setting up LVM..."
     pvcreate /dev/mapper/$LUKS_LVM
-    vgcreate $VG_LVM /dev/mapper/$LUKS_LVM
-    lvcreate -L 6144M $VG_LVM -n $LV_SWAP
-    lvcreate -l 100%FREE $VG_LVM -n $LV_ROOT
+    vgcreate $LVM_VG /dev/mapper/$LUKS_LVM
+    lvcreate -L 6144M $LVM_VG -n $LV_SWAP
+    lvcreate -l 100%FREE $LVM_VG -n $LV_ROOT
     sleep 2
     
     # Format logical volumes
     echo "[*] Formatting the partitions..."
     mkfs.vfat $PART_EFI
-    mkfs.ext4 /dev/mapper/$VG_LVM-$LV_ROOT
-    mkswap /dev/mapper/$VG_LVM-$LV_SWAP -L $LV_SWAP
-    swapon /dev/$VG_LVM/$LV_SWAP
+    mkfs.ext4 /dev/mapper/$LVM_VG-$LV_ROOT
+    mkswap /dev/mapper/$LVM_VG-$LV_SWAP -L $LV_SWAP
+    swapon /dev/$LVM_VG/$LV_SWAP
     sleep 2
     
     # Mount root, EFI and swap volume
     echo "[*] Mounting filesystems..."
-    mount -t ext4 /dev/$VG_LVM/$LV_ROOT /mnt
+    mount -t ext4 /dev/$LVM_VG/$LV_ROOT /mnt
     mkdir -p /mnt/boot/efi
     mount -t vfat $PART_EFI /mnt/boot/efi
     sleep 2
@@ -245,17 +241,17 @@ function fn_01 {
 
 # Global variables
 echo "[*] Initializing global variables..."
-DEV="$1" # Harddisk
-LUKS_PASS="" # LUKS FDE password
-LV_ROOT="root" # Label & name of the root partition
-LV_SWAP="swap" # Label & name of the swap partition
-LUKS_LVM="luks_lvm" # LUKS LVM
-PART_EFI="${DEV}p1" # EFI partition
-PART_LUKS="${DEV}p2" # LUKS partition
-SCRIPT=$(readlink -f "$0") # Absolute script path
-USER_NAME="user" # Username
-USER_PASS="" # Home user password
-VG_LVM="vg_lvm" # LUKS volume group
+DEV="$1"
+LUKS_PASS=""
+LV_ROOT="lv_root"
+LV_SWAP="lv_swap"
+LVM_VG="lvm_vg"
+LUKS_LVM="luks_lvm"
+PART_EFI="${DEV}p1"
+PART_LUKS="${DEV}p2"
+SCRIPT=$(readlink -f "$0")
+USER_NAME="user"
+USER_PASS=""
 
 # Interpreting the commandline arguments
 if [ "$#" -le 0 ]; then

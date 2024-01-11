@@ -182,6 +182,9 @@ function fn_01 {
 
     echo "[*] Setting the user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
+
+    echo "[*] Adding the user to the 'plugdev' group..."
+    chroot /mnt adduser $USER_NAME plugdev
     
     # Install base packages
     chroot /mnt apk add alsa-plugins-pulse \

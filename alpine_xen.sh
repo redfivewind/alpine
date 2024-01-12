@@ -1,3 +1,6 @@
+# German keyboard layout
+# Dark mode
+# Alpine wallpaper
 # libvirt
 # Secure Boot
 # Resume from hibernation

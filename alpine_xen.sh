@@ -213,7 +213,7 @@ function fn_01 {
     sleep 2
     
     # Configure services
-    echo "[*] Configuring services..."
+    echo "[*] Configuring required services..."
     '''chroot /mnt rc-update add iwd default
     chroot /mnt rc-update add networkmanager default
     chroot /mnt rc-update add tlp default
@@ -221,11 +221,12 @@ function fn_01 {
     sleep 2
 
     # Install virt-manager infrastructure
-    echo "[*] Installing virt-manager infrastructure..."
+    echo "[*] Installing the virt-manager infrastructure..."
     chroot /mnt apk add bridge-utils \
         dmidecode \
         ebtables \
         libvirt \
+        libvirt-daemon \
         netcat-openbsd \
         ovmf \
         seabios \
@@ -234,6 +235,12 @@ function fn_01 {
         #libguestfs (Edge)
         #vde2 (~libwolfssl.so)
     sleep 2
+
+    echo "[*] Configuring required services..."
+    chroot /mnt rc-update add libvirtd default
+
+    echo "[*] Adding the user to the 'libvirt' group..."
+    chroot /mnt adduser $USER_NAME libvirt    
 
     # User security
     echo "[*] Disabling the root account..."

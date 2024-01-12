@@ -1,4 +1,4 @@
-# Desktop Environment
+# libvirt
 # Secure Boot
 # Resume from hibernation
 # Hardening
@@ -83,7 +83,7 @@ function fn_01 {
 
     # User management
     echo "[*] Setting up a standard user..."
-    setup-user -a -g users $USER_NAME
+    setup-user -a -g users $USER_NAME -f $USER_NAME
     sleep 2
 
     # Setup udev as devd

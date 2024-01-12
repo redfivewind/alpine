@@ -219,7 +219,7 @@ function fn_01 {
 
     # Install virt-manager infrastructure
     echo "[*] Installing virt-manager infrastructure..."
-    '''chroot /mnt apk add bridge-utils \
+    chroot /mnt apk add bridge-utils \
         dmidecode \
         ebtables \
         libvirt \
@@ -227,7 +227,7 @@ function fn_01 {
         ovmf \
         seabios \
         virt-manager \
-        virt-viewer'''
+        virt-viewer
         #libguestfs (Edge)
         #vde2 (~libwolfssl.so)
     sleep 2

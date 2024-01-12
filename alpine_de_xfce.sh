@@ -11,6 +11,7 @@ doas setup-xorg-base adw-gtk3 \
     dbus \
 	dbus-x11 \
 	font-dejavu \
+ 	firefox \
     gvfs \
     lightdm \
 	lightdm-gtk-greeter \

@@ -186,7 +186,7 @@ function fn_01 {
     sleep 2
     
     # Install base packages
-    chroot /mnt apk add alsa-plugins-pulse \
+    '''chroot /mnt apk add alsa-plugins-pulse \
         amd-ucode \
         intel-ucode \
         iptables \
@@ -198,7 +198,7 @@ function fn_01 {
         p7zip \
         tlp \
         unzip \
-        zip    
+        zip'''
     #AUDIO: alsa-plugins-pulse pavucontrol(???) pulseaudio pulseaudio-alsa pulseaudio-bluez(???)
     #BASE: p7zip tlp unzip zip
     #CPU MICROCODE: amd-ucode intel-ucode
@@ -212,15 +212,15 @@ function fn_01 {
     
     # Configure services
     echo "[*] Configuring services..."
-    chroot /mnt rc-update add iwd default
+    '''chroot /mnt rc-update add iwd default
     chroot /mnt rc-update add networkmanager default
     chroot /mnt rc-update add tlp default
-    chroot /mnt rc-update del networking boot
+    chroot /mnt rc-update del networking boot'''
     sleep 2
 
     # Install virt-manager infrastructure
     echo "[*] Installing virt-manager infrastructure..."
-    chroot /mnt apk add bridge-utils \
+    '''chroot /mnt apk add bridge-utils \
         dmidecode \
         ebtables \
         libvirt \
@@ -230,7 +230,7 @@ function fn_01 {
         virt-manager \
         virt-viewer
         #libguestfs (Edge)
-        #vde2 (~libwolfssl.so)
+        #vde2 (~libwolfssl.so)'''
     sleep 2
 
     # User security

@@ -84,8 +84,6 @@ function fn_01 {
     # User management
     echo "[*] Setting up a standard user..."
     setup-user -a -g users $USER_NAME
-    echo -n "$USER_NAME:$USER_PASS" | chpasswd
-    adduser $USER_NAME plugdev
     sleep 2
 
     # Setup udev as devd
@@ -235,9 +233,15 @@ function fn_01 {
         #vde2 (~libwolfssl.so)
     sleep 2
 
-    # Disable root account
+    # User security
     echo "[*] Disabling the root account..."
     chroot /mnt passwd -l root
+
+    echo "[*] Setting the user password..."
+    echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
+
+    echo "[*] Adding the user to the 'plugdev' group..."
+    adduser $USER_NAME plugdev
     
     # Add user paths & scripts
     echo "[*] Adding user paths & scripts..."

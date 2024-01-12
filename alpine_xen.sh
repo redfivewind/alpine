@@ -42,6 +42,11 @@ function fn_01 {
         exit 1
     fi
 
+    # User management
+    echo "[*] Setting up a standard user..."
+    setup-user -a -f $USER_NAME -g users $USER_NAME
+    sleep 2
+
     # Set the hostname
     echo "[*] Setting the hostname..."
     setup-hostname workstation
@@ -53,6 +58,10 @@ function fn_01 {
     # Network time synchronisation
     echo "[*] Enabling network time synchronization..."
     setup-ntp busybox
+
+    # Setup udev as devd
+    echo "[*] Setting up udev as devd..."
+    setup-devd udev
 
     # Disable SSHD
     echo "[*] Disabling SSHD..."
@@ -83,15 +92,6 @@ function fn_01 {
     echo "[*] Configuring Alpine Linux as Xen dom0..."
     setup-xen-dom0
     sleep 2
-
-    # User management
-    echo "[*] Setting up a standard user..."
-    setup-user -a -g users $USER_NAME -f $USER_NAME
-    sleep 2
-
-    # Setup udev as devd
-    echo "[*] Setting up udev as devd..."
-    setup-devd udev
 
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."

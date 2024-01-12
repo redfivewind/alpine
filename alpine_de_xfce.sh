@@ -1,5 +1,3 @@
-#FIXME: xfconf-query -c xfce4-session -p /general/LockCommand -s "light-locker-command -l"
-
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."
 doas setup-keymap de de

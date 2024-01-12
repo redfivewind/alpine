@@ -228,9 +228,9 @@ function fn_01 {
         ovmf \
         seabios \
         virt-manager \
-        virt-viewer
+        virt-viewer'''
         #libguestfs (Edge)
-        #vde2 (~libwolfssl.so)'''
+        #vde2 (~libwolfssl.so)
     sleep 2
 
     # User security

@@ -241,7 +241,7 @@ function fn_01 {
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
 
     echo "[*] Adding the user to the 'plugdev' group..."
-    adduser $USER_NAME plugdev
+    chroot /mnt adduser $USER_NAME plugdev
     
     # Add user paths & scripts
     echo "[*] Adding user paths & scripts..."

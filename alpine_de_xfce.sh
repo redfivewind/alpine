@@ -4,7 +4,7 @@ doas setup-keymap de de
 
 # Setup the X.Org base
 echo "[*] Installing X.Org & Xfce..."
-doas setup-xorg-base adw-gtk3 consolekit2 dbus dbus-x11 font-dejavu firefox gvfs lightdm lightdm-gtk-greeter mousepad pavucontrol polkit ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin
+doas setup-xorg-base adw-gtk3 dbus dbus-x11 elogind font-dejavu firefox gvfs lightdm lightdm-gtk-greeter mousepad pavucontrol polkit polkit-elogind ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin
 #thunar-media-tags-plugin
 
 # Xfce keyboard layout
@@ -18,11 +18,13 @@ xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
 # Configure services
 echo "[*] Configuring services..."
 doas rc-update add dbus default
+doas rc-update add elogind default
 doas rc-update add lightdm default
 
 # Start services
 echo "[*] Starting services..."
 doas rc-service dbus start
+doas rc-service elogind start
 doas rc-service lightdm start
 
 

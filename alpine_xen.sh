@@ -90,14 +90,8 @@ function fn_01 {
     sleep 2
 
     # Setup udev as devd
-    #echo "[*] Setting up udev as devd..."
-    #setup-devd udev
-
-    # Setup desktop environment
-    echo "[*] Installing Xfce..."
-    setup-desktop xfce
-    apk add pavucontrol xfce4-pulseaudio-plugin  
-    sleep 2
+    echo "[*] Setting up udev as devd..."
+    setup-devd udev
 
     # GPT partitioning
     echo "[*] Partitioning the target disk using GPT partition layout..."
@@ -189,6 +183,7 @@ function fn_01 {
     sleep 2
     
     # Install base packages
+    echo "[*] Installing base packages..."
     chroot /mnt apk add alsa-plugins-pulse \
         iptables \
         iwd \
@@ -200,11 +195,10 @@ function fn_01 {
         tlp \
         unzip \
         zip
-    #ATTENTION: Never use amd-ucode / intel-ucode (Seems to brick the installation)
+    #ATTENTION: CPU microcode must be handled at Xen kernel level, not at dom0 level (amd-ucode / intel-ucode)
     #AUDIO: alsa-plugins-pulse pavucontrol(???) pulseaudio pulseaudio-alsa pulseaudio-bluez(???)
     #BASE: p7zip tlp unzip zip
-    #CPU MICROCODE: amd-ucode intel-ucode
-    #NETWORK: iptables iwd networkmanager networkmanager-applet networkmanager-tui networkmanager-wifi
+    #NETWORK: iptables iwd networkmanager networkmanager-tui networkmanager-wifi
     sleep 2
 
     # Remove unnecessary packages
@@ -214,10 +208,10 @@ function fn_01 {
     
     # Configure services
     echo "[*] Configuring required services..."
-    '''chroot /mnt rc-update add iwd default
+    chroot /mnt rc-update add iwd default
     chroot /mnt rc-update add networkmanager default
     chroot /mnt rc-update add tlp default
-    chroot /mnt rc-update del networking boot'''
+    chroot /mnt rc-update del networking boot
     sleep 2
 
     # Install virt-manager infrastructure
@@ -232,8 +226,7 @@ function fn_01 {
         seabios \
         virt-manager \
         virt-viewer
-        #libguestfs (Edge)
-        #vde2 (~libwolfssl.so)
+    #libguestfs (Edge), vde2 (~libwolfssl.so)
     sleep 2
 
     echo "[*] Configuring required services..."

@@ -87,13 +87,13 @@ function fn_01 {
     sleep 2
 
     # Setup udev as devd
-    echo "[*] Setting up udev as devd..."
-    setup-devd udev
+    #echo "[*] Setting up udev as devd..."
+    #setup-devd udev
 
     # Setup desktop environment
-    #echo "[*] Installing Xfce..."
-    #setup-desktop xfce
-    #apk add pavucontrol xfce4-pulseaudio-plugin  
+    echo "[*] Installing Xfce..."
+    setup-desktop xfce
+    apk add pavucontrol xfce4-pulseaudio-plugin  
     sleep 2
 
     # GPT partitioning

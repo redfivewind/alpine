@@ -4,7 +4,7 @@ doas setup-keymap de de
 
 # Xfce basic installation
 echo "[*] Installing Xfce..."
-doas setup-xorg-base adw-gtk3 \
+TOOLS="adw-gtk3 \
 	consolekit2 \
 	dbus \
 	dbus-x11 \
@@ -25,8 +25,12 @@ doas setup-xorg-base adw-gtk3 \
 	xfce4-screenshooter \
 	xfce4-taskmanager \
 	xfce4-terminal \
-	xfce4-whiskermenu-plugin
+	xfce4-whiskermenu-plugin"
 #thunar-media-tags-plugin
+
+for Tool in $TOOLS; do
+    doas apk add $Tool
+done
 
 # Xfce keyboard layout
 echo "[*] Setting the Xfce keyboard layout to German..."

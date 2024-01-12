@@ -7,27 +7,27 @@ doas setup-keymap de de
 # Xfce basic installation
 echo "[*] Installing Xfce..."
 doas setup-xorg-base adw-gtk3 \
-    consolekit2 \
-    dbus \
+	consolekit2 \
+	dbus \
 	dbus-x11 \
 	font-dejavu \
- 	firefox \
-    gvfs \
-    lightdm \
+	firefox \
+	gvfs \
+	lightdm \
 	lightdm-gtk-greeter \
-    mousepad \
-    pavucontrol \
-    polkit \
-    ristretto \
-    thunar-archive-plugin \
-    xarchiver \ 
-    xfce4-cpugraph-plugin \
-    xfce4-notifyd \
-    xfce4-pulseaudio-plugin \
-    xfce4-screenshooter \
-    xfce4-taskmanager \
-    xfce4-terminal \
-    xfce4-whiskermenu-plugin
+	mousepad \
+	pavucontrol \
+	polkit \
+	ristretto \
+	thunar-archive-plugin \
+	xarchiver \ 
+	xfce4-cpugraph-plugin \
+	xfce4-notifyd \
+	xfce4-pulseaudio-plugin \
+	xfce4-screenshooter \
+	xfce4-taskmanager \
+	xfce4-terminal \
+	xfce4-whiskermenu-plugin
 #thunar-media-tags-plugin
 
 # Xfce keyboard layout

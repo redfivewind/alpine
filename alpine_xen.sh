@@ -186,9 +186,7 @@ function fn_01 {
     sleep 2
     
     # Install base packages
-    '''chroot /mnt apk add alsa-plugins-pulse \
-        amd-ucode \
-        intel-ucode \
+    chroot /mnt apk add alsa-plugins-pulse \
         iptables \
         iwd \
         networkmanager \
@@ -198,7 +196,8 @@ function fn_01 {
         p7zip \
         tlp \
         unzip \
-        zip'''
+        zip
+    #ATTENTION: Never use amd-ucode / intel-ucode (Seems to brick the installation)
     #AUDIO: alsa-plugins-pulse pavucontrol(???) pulseaudio pulseaudio-alsa pulseaudio-bluez(???)
     #BASE: p7zip tlp unzip zip
     #CPU MICROCODE: amd-ucode intel-ucode

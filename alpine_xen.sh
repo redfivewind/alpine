@@ -237,6 +237,7 @@ function fn_01 {
     sleep 2
 
     echo "[*] Configuring required services..."
+    chroot /mnt rc-update add libvirt-guests default
     chroot /mnt rc-update add libvirtd default
 
     echo "[*] Adding the user to the 'libvirt' group..."

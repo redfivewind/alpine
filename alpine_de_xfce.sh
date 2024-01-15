@@ -19,10 +19,10 @@ doas apk del wpa_supplicant
 echo "[main]" | doas tee /etc/NetworkManager/NetworkManager.conf
 echo "dhcp=internal" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 echo "plugins=ifupdown,keyfile" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-echo "\n" | doas tee -a /etc/NetworkManager/NetworkManager.conf
+echo "" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 echo "[ifupdown]" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 echo "managed=true" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-echo "\n" | doas tee -a /etc/NetworkManager/NetworkManager.conf
+echo "" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 echo "[device]" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 echo "wifi.scan-rand-mac-address=yes" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 echo "wifi.backend=iwd" | doas tee -a /etc/NetworkManager/NetworkManager.conf
@@ -34,10 +34,10 @@ doas rc-update del networking boot
 echo "[*] Setting the Xfce keyboard layout to German..."
 doas mkdir -p /etc/X11/xorg.conf.d/
 echo "Section \"InputClass\"" | doas tee /etc/X11/xorg.conf.d/00-keyboard.conf
-echo "\tIdentifier \"system-keyboard\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-echo "\tMatchIsKeyboard \"on\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-echo "\tOption \"XkbLayout\" \"de\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-echo "\tOption \"XkbVariant\" \"nodeadkeys\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "  Identifier \"system-keyboard\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "  MatchIsKeyboard \"on\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "  Option \"XkbLayout\" \"de\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "  Option \"XkbVariant\" \"nodeadkeys\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
 echo "EndSection" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
 
 # Dark mode

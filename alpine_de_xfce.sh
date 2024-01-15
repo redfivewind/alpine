@@ -17,7 +17,13 @@ doas apk del wpa_supplicant
 
 # Xfce keyboard layout
 echo "[*] Setting the Xfce keyboard layout to German..."
-xfconf-query -c keyboard-layout -p /Default/XkbLayout -s de
+mkdir -p /etc/X11/xorg.conf.d/
+echo "Section \"InputClass\"" > /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "\tIdentifier \"system-keyboard\"" >> /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "\tMatchIsKeyboard \"on\"" >> /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "\tOption \"XkbLayout\" \"de\"" >> /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "\tOption \"XkbVariant\" \"nodeadkeys\"" >> /etc/X11/xorg.conf.d/00-keyboard.conf
+echo "EndSection" >> /etc/X11/xorg.conf.d/00-keyboard.conf
 
 # Dark mode
 echo "[*] Enabling dark mode..."

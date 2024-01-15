@@ -2,9 +2,13 @@
 echo "[*] Loading German keyboard layout..."
 doas setup-keymap de de
 
-# Setup the X.Org base
+# Install X.Org & Xfce
 echo "[*] Installing X.Org & Xfce..."
-doas setup-xorg-base adw-gtk3 consolekit2 firefox gvfs lightdm lightdm-gtk-greeter mousepad pavucontrol polkit ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin
+doas setup-desktop xfce
+
+# Install base packages
+echo "[*] Installing base packages..."
+doas apk add adw-gtk3 mousepad pavucontrol ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
 #thunar-media-tags-plugin
 
 # Xfce keyboard layout

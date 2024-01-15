@@ -1,4 +1,3 @@
-# Alpine wallpaper
 # Secure Boot
 # Resume from hibernation
 # Hardening

@@ -243,7 +243,8 @@ function fn_01 {
     echo "[*] Setting the user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
 
-    echo "[*] Adding the user to the 'plugdev' group..."
+    echo "[*] Adding the user to required groups..."
+    chroot /mnt adduser $USER_NAME network
     chroot /mnt adduser $USER_NAME plugdev
     
     # Add user paths & scripts

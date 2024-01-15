@@ -8,12 +8,27 @@ doas setup-desktop xfce
 
 # Install required packages
 echo "[*] Installing required packages..."
-doas apk add adw-gtk3 mousepad network-manager-applet networkmanager networkmanager-cli networkmanager-wifi pavucontrol ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
+doas apk add adw-gtk3 mousepad pavucontrol ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
 #thunar-media-tags-plugin
 
-# Remove unnecessary packages
-echo "[*] Removing unnecessary packages..."
+# Configure networking
+echo "[*] Configuring networking..."
+doas apk add iwd network-manager-applet networkmanager networkmanager-cli networkmanager-wifi
 doas apk del wpa_supplicant
+
+echo "[main]" > /etc/NetworkManager/NetworkManager.conf
+echo "dhcp=internal" >> /etc/NetworkManager/NetworkManager.conf
+echo "plugins=ifupdown,keyfile" >> /etc/NetworkManager/NetworkManager.conf
+echo "\n" >> /etc/NetworkManager/NetworkManager.conf
+echo "[ifupdown]" >> /etc/NetworkManager/NetworkManager.conf
+echo "managed=true" >> /etc/NetworkManager/NetworkManager.conf
+echo "\n" >> /etc/NetworkManager/NetworkManager.conf
+echo "[device]" >> /etc/NetworkManager/NetworkManager.conf
+echo "wifi.scan-rand-mac-address=yes" >> /etc/NetworkManager/NetworkManager.conf
+echo "wifi.backend=iwd" >> /etc/NetworkManager/NetworkManager.conf
+
+doas rc-update add networkmanager default
+doas rc-update del networking boot
 
 # Xfce keyboard layout
 echo "[*] Setting the Xfce keyboard layout to German..."
@@ -29,11 +44,9 @@ echo "EndSection" >> /etc/X11/xorg.conf.d/00-keyboard.conf
 echo "[*] Enabling dark mode..."
 xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
 
-# Configure services
-echo "[*] Configuring services..."
+# Enable LightDM
+echo "[*] Enabling LightDM..."
 doas rc-update add lightdm default
-doas rc-update del networking boot
-doas rc-update add networkmanager default
 
 # Stop message
 echo "[*] Installation finished. Please reboot manually."

@@ -20,8 +20,10 @@ echo "[*] Enabling dark mode..."
 xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
 
 # Configure services
-echo "[*] Configuring LightDM..."
+echo "[*] Enabling LightDM..."
 doas rc-update add lightdm default
-doas rc-service lightdm start
+
+# Stop message
+echo "[*] Installation finished. Please reboot manually."
 
 

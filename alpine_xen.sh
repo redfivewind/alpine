@@ -184,33 +184,18 @@ function fn_01 {
     chroot /mnt apk add alsa-plugins-pulse \
         iptables \
         iwd \
-        network-manager-applet \
-        networkmanager \
-        networkmanager-cli \
-        networkmanager-wifi \
         pulseaudio \
         pulseaudio-alsa \
         p7zip \
         tlp \
         unzip \
         zip
-    #ATTENTION: CPU microcode must be handled at Xen kernel level, not at dom0 level (amd-ucode / intel-ucode)
-    #AUDIO: alsa-plugins-pulse pavucontrol(???) pulseaudio pulseaudio-alsa pulseaudio-bluez(???)
-    #BASE: p7zip tlp unzip zip
-    #NETWORK: iptables iwd networkmanager networkmanager-tui networkmanager-wifi
-    sleep 2
-
-    # Remove unnecessary packages
-    echo "[*] Removing unnecessary packages..."
-    chroot /mnt apk del wpa_supplicant
     sleep 2
     
     # Configure services
     echo "[*] Configuring required services..."
-    chroot /mnt rc-update add iwd default
-    chroot /mnt rc-update add networkmanager default
+    chroot /mnt rc-update add iwd default    
     chroot /mnt rc-update add tlp default
-    chroot /mnt rc-update del networking boot
     sleep 2
 
     # Install virt-manager infrastructure

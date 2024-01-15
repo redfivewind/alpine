@@ -1,7 +1,4 @@
-# German keyboard layout
-# Dark mode
 # Alpine wallpaper
-# libvirt
 # Secure Boot
 # Resume from hibernation
 # Hardening
@@ -44,7 +41,7 @@ function fn_01 {
 
     # User management
     echo "[*] Setting up a standard user..."
-    setup-user -a -f $USER_NAME -g users $USER_NAME
+    setup-user -a -f $USER_NAME $USER_NAME
     sleep 2
 
     # Set the hostname
@@ -187,7 +184,9 @@ function fn_01 {
     chroot /mnt apk add alsa-plugins-pulse \
         iptables \
         iwd \
+        network-manager-applet \
         networkmanager \
+        networkmanager-cli \
         networkmanager-wifi \
         pulseaudio \
         pulseaudio-alsa \
@@ -243,8 +242,7 @@ function fn_01 {
     echo "[*] Setting the user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
 
-    echo "[*] Adding the user to required groups..."
-    chroot /mnt adduser $USER_NAME network
+    echo "[*] Adding the user to the 'plugdev' group..."
     chroot /mnt adduser $USER_NAME plugdev
     
     # Add user paths & scripts

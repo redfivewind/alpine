@@ -1,6 +1,6 @@
 # Secure Boot
 # Resume from hibernation
-# Hardening
+# Hardening (ash history, ...)
 
 function arg_err {
     echo "[X] ERROR: The target hard disk must be passed as the first and only argument."

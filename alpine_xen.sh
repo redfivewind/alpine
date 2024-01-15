@@ -41,7 +41,7 @@ function fn_01 {
 
     # User management
     echo "[*] Setting up a standard user..."
-    setup-user -a -f $USER_NAME $USER_NAME
+    setup-user -a -f "$USER_NAME" $USER_NAME
     sleep 2
 
     # Set the hostname

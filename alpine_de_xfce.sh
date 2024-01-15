@@ -1,3 +1,7 @@
+# Alpine Wallpaper
+# Lock Screen Wallpaper
+# Dark mode
+
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."
 doas setup-keymap de de

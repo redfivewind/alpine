@@ -1,5 +1,5 @@
 # TODO: Secure Boot
-# TODO: Resume from hibernation
+# TODO: Resume from sleep, hibernation
 # TODO: Hardening (ash history, ...)
 
 # Global variables

@@ -2,6 +2,10 @@
 # TODO: Resume from sleep, hibernation
 # TODO: Hardening (ash history, ...)
 
+# Warning message
+echo "[!] ALERT: Ensure that UEFI is in setup mode!"
+echo "[!] ALERT: This script will potentially wipe all of your data."
+
 # Global variables
 echo "[*] Initializing global variables..."
 DEV="$1"
@@ -198,7 +202,10 @@ sleep 2
 #chroot /mnt apk add sbctl
 #chroot /mnt sbctl status
 #chroot /mnt sbctl create-keys
-#chroot /mnt sbctl sign /boot/efi/Alpine/linux-lts.efi
+# FIXME: 'chattr -i <...>' for all immutable efivars
+#chroot /mnt sbctl sign /boot/efi/EFI/grub/grubx64.efi
+# FIXME: Sign everything that is required
+# FIXME: Restore the immutability of the evivars???
 #chroot /mnt sbctl enroll-keys -m
 sleep 2
 

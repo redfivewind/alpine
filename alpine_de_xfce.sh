@@ -1,6 +1,7 @@
-# Alpine Wallpaper
-# Lock Screen Wallpaper
-# Dark mode
+# TODO: (Auto-)Locking
+# TODO: Alpine Wallpaper
+# TODO: Lock Screen Wallpaper
+# TODO: Dark mode
 
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."
@@ -13,7 +14,6 @@ doas setup-desktop xfce
 # Install required packages
 echo "[*] Installing required packages..."
 doas apk add adw-gtk3 mousepad pavucontrol ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
-#thunar-media-tags-plugin
 
 # Configure networking
 echo "[*] Configuring networking..."

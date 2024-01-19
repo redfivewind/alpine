@@ -1,7 +1,6 @@
-# TODO: (Auto-)Locking
-# TODO: Alpine Wallpaper
-# TODO: Lock Screen Wallpaper
+# TODO: Wallpaper
 # TODO: Dark mode
+# TODO: Hardening (e.g., Locking, No suspend, etc.)
 
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."

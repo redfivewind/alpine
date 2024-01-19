@@ -20,6 +20,23 @@ USER_PASS=""
 echo "[*] Loading German keyboard layout..."
 setup-keymap de de
 
+# Retrieve the target disk
+echo "[*] Please enter the target disk: "
+read dev
+
+if [ -e "$dev" ]; then
+    echo "[*] Path '$dev' exists."
+
+    if [ -b "$dev" ]; then
+        echo "[*] '$dev' is a valid block device."
+    else
+        echo "[X] ERROR: '$dev' is not a valid block device."
+        exit 1
+    fi
+else
+    echo "[*] Path '$dev' does not exist."
+fi
+
 # Retrieve the LUKS & user password
 echo "[*] Please enter the LUKS password: "
 read -s luks_pass_a

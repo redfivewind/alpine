@@ -1,5 +1,7 @@
 # TODO: Wallpaper
 # TODO: Dark mode
+# TODO: Keyboard shutcut WIN for whiskersmenu
+# TODO: Keyboard shortcut WIN+L for locking
 # TODO: Hardening (e.g., Locking, Power-Sleep-Suspend, etc.)
 
 # German keyboard layout

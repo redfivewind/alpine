@@ -188,7 +188,7 @@ tail /mnt/etc/default/grub
 sleep 2
 
 echo "[*] Installing GRUB..."
-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
+chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi #--uefi-secure-boot
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 chroot /mnt chmod 700 /boot
 sleep 2

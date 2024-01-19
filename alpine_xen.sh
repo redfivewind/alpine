@@ -259,18 +259,6 @@ USER_NAME="user"
 USER_PASS=""
 
 # Interpreting the commandline arguments
-if [ "$#" -le 0 ]; then
-    arg_err
-elif [ "$#" -eq 1 ]; then
-    DEV="$1"
-    MODE=0
-elif [ "$#" -eq 2 ]; then
-    DEV="$1"
-    MODE=$2
-else
-    arg_err
-fi
-
 if [ -e $DEV ]; then
     if [ -b $DEV ]; then
         echo "[*] Target block device: '$DEV'."

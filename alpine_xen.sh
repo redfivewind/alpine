@@ -195,6 +195,7 @@ sleep 2
 echo "[*] Installing GRUB..."
 chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+chroot /mnt grub-set-default 1
 chroot /mnt chmod 700 /boot
 sleep 2
 

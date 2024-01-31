@@ -9,14 +9,14 @@ echo "[!] ALERT: This script will potentially wipe all of your data."
 
 # Global variables
 echo "[*] Initializing global variables..."
-DEV="/dev/nvme0n1"
+DEV=""
 LUKS_PASS=""
 LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
 LUKS_LVM="luks_lvm"
-PART_EFI="/dev/nvme0n1p1"
-PART_LUKS="/dev/nvme0n1p2"
+PART_EFI=""
+PART_LUKS=""
 SCRIPT=$(readlink -f "$0")
 USER_NAME="user"
 USER_PASS=""

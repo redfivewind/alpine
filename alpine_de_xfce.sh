@@ -1,9 +1,9 @@
 # TODO: Auto-Lock
-# TODO: Auto-Suspend / -Sleep
 # TODO: Wallpaper
 # TODO: Dark mode
 # TODO: WIN -> whiskersmenu
 # TODO: WIN + L -> Lock (Ctrl + Alt + L)
+# TODO: Auto-Suspend / -Sleep
 # TODO: Hardening
 
 # German keyboard layout

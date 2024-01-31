@@ -20,6 +20,7 @@ echo "[*] Configuring required services..."
 chroot /mnt rc-update add libvirt-guests default
 chroot /mnt rc-update add libvirtd default
 
+# Add user to the 'libvirt' group
 echo "[*] Adding the user to the 'libvirt' group..."
 chroot /mnt adduser $USER_NAME libvirt
 

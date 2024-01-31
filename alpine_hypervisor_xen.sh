@@ -1,5 +1,3 @@
-# TODO: Everything!
-
 # Install required packages
 echo "[*] Installing required packages..."
 apk add bridge \

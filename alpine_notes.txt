@@ -25,3 +25,12 @@ alpine_hypervisor_xen.sh
     - Xen dom0 preparation
     - Generate Xen unified kernel image (UKI)
     - Add/update Xen UEFI entry
+
+alpine_uefi_sb.sh
+    - Warning: Is System in SETUP MODE???
+    - Warning: Explain functionality
+    - Enroll new keys
+        - Handle chattr bug
+    - Detect relevant .EFI binaries
+    - Sign them
+    - Stop message with explanation

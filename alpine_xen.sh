@@ -15,8 +15,8 @@ LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
 LUKS_LVM="luks_lvm"
-PART_EFI="${DEV}p1"
-PART_LUKS="${DEV}p2"
+PART_EFI="/dev/nvme0n1p1"
+PART_LUKS="/dev/nvme0n1p2"
 SCRIPT=$(readlink -f "$0")
 USER_NAME="user"
 USER_PASS=""
@@ -34,6 +34,19 @@ if [ -e "$dev" ]; then
 
     if [ -b "$dev" ]; then
         echo "[*] '$dev' is a valid block device."
+        echo "[*] Setting the EFI-SP & LUKS partition..."
+
+        if [[ $string == "/dev/nvme"* ]]; then
+              echo "[*] Target disk seems to be a NVME disk."
+              PART_EFI="${DEV}p1"
+              PART_LUKS="${DEV}p2"
+        else
+              PART_EFI="${DEV}1"
+              PART_LUKS="${DEV}2"
+        fi
+
+        echo "[*] Target EFI partition: $PART_EFI."
+        echo "[*] Target LUKS partition: $PART_LUKS."
     else
         echo "[X] ERROR: '$dev' is not a valid block device."
         exit 1

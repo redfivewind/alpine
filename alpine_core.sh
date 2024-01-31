@@ -1,7 +1,3 @@
-# TODO: Outsource Xen
-# TODO: Resume from sleep, hibernation
-# TODO: Hardening (ash history, ...)
-
 # Warning message
 echo "[!] ALERT: This script will potentially wipe all of your data."
 

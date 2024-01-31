@@ -1,6 +1,4 @@
 # TODO: Outsource Xen
-# TODO: Xen as first boot option
-# TODO: Secure Boot
 # TODO: Resume from sleep, hibernation
 # TODO: Hardening (ash history, ...)
 

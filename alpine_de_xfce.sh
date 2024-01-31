@@ -1,10 +1,10 @@
 # TODO: Auto-Lock
-# TODO: Auto-Suspend???
+# TODO: Auto-Suspend / -Sleep
 # TODO: Wallpaper
 # TODO: Dark mode
-# TODO: Keyboard shutcut WIN for whiskersmenu
-# TODO: Keyboard shortcut WIN+L for locking
-# TODO: Hardening (e.g., Power)
+# TODO: WIN -> whiskersmenu
+# TODO: WIN + L -> Lock
+# TODO: Hardening
 
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."

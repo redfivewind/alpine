@@ -5,7 +5,6 @@
 # TODO: Hardening (ash history, ...)
 
 # Warning message
-echo "[!] ALERT: Ensure that UEFI is in setup mode!"
 echo "[!] ALERT: This script will potentially wipe all of your data."
 
 # Global variables

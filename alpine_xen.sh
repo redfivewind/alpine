@@ -33,10 +33,11 @@ if [ -e "$dev" ]; then
     echo "[*] Path '$dev' exists."
 
     if [ -b "$dev" ]; then
-        echo "[*] '$dev' is a valid block device."
+        echo "[*] '$dev' is a valid block device."        
         echo "[*] Setting the EFI-SP & LUKS partition..."
+        DEV=$dev
 
-        if [[ $string == "/dev/nvme"* ]]; then
+        if [[ $DEV == "/dev/nvme*" ]]; then
               echo "[*] Target disk seems to be a NVME disk."
               PART_EFI="${DEV}p1"
               PART_LUKS="${DEV}p2"

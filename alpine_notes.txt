@@ -1,6 +1,7 @@
 alpine_core.sh
     - Outsource Xen
     - Bootloader rEFIfind, GRUB, ... ?
+        - (((GRUB Timeout)))
     - Resume from sleep/hibernation
     - Hardening (e.g., ash history)
 

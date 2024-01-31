@@ -1,11 +1,3 @@
-# TODO: Auto-Lock
-# TODO: Wallpaper
-# TODO: Dark mode
-# TODO: WIN -> whiskersmenu
-# TODO: WIN + L -> Lock (Ctrl + Alt + L)
-# TODO: Auto-Suspend / -Sleep
-# TODO: Hardening
-
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."
 doas setup-keymap de de

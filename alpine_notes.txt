@@ -1,5 +1,6 @@
 alpine_core.sh
     - Outsource Xen
+    - Bootloader rEFIfind, GRUB, ... ?
     - Resume from sleep/hibernation
     - Hardening (e.g., ash history)
 
@@ -24,6 +25,11 @@ alpine_hypervisor_xen.sh
     - (((Compile Xen)))
     - Xen dom0 preparation
     - Generate Xen unified kernel image (UKI)
+        - Linux dom0 stuff
+        - XSM FLASK policy
+        - CPU microcode (intel-ucode, amd-ucode)
+        - Xen configuration
+        - Xen & dom0 kernel parameters
     - Add/update Xen UEFI entry
 
 alpine_uefi_sb.sh

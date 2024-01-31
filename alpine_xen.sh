@@ -9,7 +9,7 @@ echo "[!] ALERT: This script will potentially wipe all of your data."
 
 # Global variables
 echo "[*] Initializing global variables..."
-DEV="$1"
+DEV="/dev/nvme0n1"
 LUKS_PASS=""
 LV_ROOT="lv_root"
 LV_SWAP="lv_swap"

@@ -3,7 +3,7 @@
 # TODO: Wallpaper
 # TODO: Dark mode
 # TODO: WIN -> whiskersmenu
-# TODO: WIN + L -> Lock
+# TODO: WIN + L -> Lock (Ctrl + Alt + L)
 # TODO: Hardening
 
 # German keyboard layout

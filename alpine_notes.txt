@@ -1,0 +1,27 @@
+alpine_core.sh
+    - Outsource Xen
+    - Resume from sleep/hibernation
+    - Hardening (e.g., ash history)
+
+alpine_de_xfce.sh
+    - Autolock
+    - Dark mode
+    - Wallpaper
+    - KEYBOARD: WIN -> Whiskersmenu
+    - KEYBOARD: WIN+L -> Lock
+    - Autosuspend /-sleep
+    - Xfce Hardening
+
+alpine_hypervisor_kvm.sh
+    - EVERYTHING!!!
+    - Order
+    - Packages
+    - Nested virtualisation
+
+alpine_hypervisor_xen.sh
+    - EVERYTHING!!!
+    - Order
+    - (((Compile Xen)))
+    - Xen dom0 preparation
+    - Generate Xen unified kernel image (UKI)
+    - Add/update Xen UEFI entry

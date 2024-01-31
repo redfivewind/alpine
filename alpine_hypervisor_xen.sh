@@ -11,6 +11,7 @@ apk add bridge \
     seabios \
     virt-manager \
     virt-viewer \
+    xen \
     xen-hypervisor \
     xen-qemu
 sleep 2

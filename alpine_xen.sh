@@ -273,7 +273,9 @@ echo "[*] Setting the user password..."
 echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
 
 echo "[*] Adding the user to required groups..."
+chroot /mnt addgroup -S netdev
 chroot /mnt adduser $USER_NAME netdev
+chroot /mnt addgroup -S plugdev
 chroot /mnt adduser $USER_NAME plugdev
 
 # Add user paths & scripts

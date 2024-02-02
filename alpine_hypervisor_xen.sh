@@ -29,5 +29,8 @@ chroot /mnt rc-update add libvirtd default
 echo "[*] Adding the user to the 'libvirt' group..."
 chroot /mnt adduser $USER_NAME libvirt
 
+#echo "GRUB_CMDLINE_XEN=\"console=vga guest_loglvl=all loglvl=all nomodeset noreboot=true\"" >> /mnt/etc/default/grub
+#echo "GRUB_CMDLINE_XEN_DEFAULT=\"ucode=scan\"" >> /mnt/etc/default/grub #dom0_max_vcpus=1 dom0_vcpus_pin maxmem=512
+
 # Generate Xen unified kernel image (UKI)
 #FIXME

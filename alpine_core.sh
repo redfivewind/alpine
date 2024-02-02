@@ -115,6 +115,10 @@ apk add cryptsetup \
     sgdisk
 sleep 2
 
+# Setup udev as devd
+echo "[*] Setting up udev as devd..."
+setup-devd udev
+
 # GPT partitioning
 echo "[*] Partitioning the target disk using GPT partition layout..."
 sgdisk --zap-all $DEV
@@ -124,7 +128,7 @@ sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV
 sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
 sgdisk --print $DEV
 for i in $(seq 10)
-    do echo "[*] Populating the kernel partition tables ($i/10)..." && mdev -s && partprobe $DEV && sleep 1
+    do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DEV && sleep 1
 done        
 sleep 2
 

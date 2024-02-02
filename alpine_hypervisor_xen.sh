@@ -13,6 +13,7 @@ doas apk add bridge \
     virt-viewer \
     xen \
     xen-hypervisor \
+    xen-libs \
     xen-qemu
 sleep 2
 

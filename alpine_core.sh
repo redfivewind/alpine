@@ -133,7 +133,7 @@ done
 sleep 2
 
 # Setup LUKS partition
-echo "[*] Formatting the second partition as LUKS crypto partition..."
+echo "[*] Formatting the second partition as a LUKS crypto partition..."
 echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
 echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
 sleep 2

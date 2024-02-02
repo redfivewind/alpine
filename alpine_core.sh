@@ -106,8 +106,7 @@ setup-apkrepos -c -f
 
 # Install required packages
 echo "[*] Installing required packages..."
-apk add bridge \
-    cryptsetup \
+apk add cryptsetup \
     e2fsprogs \
     efibootmgr \
     file \
@@ -117,13 +116,7 @@ apk add bridge \
     lsblk \
     lvm2 \
     nano \
-    sgdisk \
-    xen-qemu
-sleep 2
-
-# Configure Alpine Linux as Xen dom0
-echo "[*] Configuring Alpine Linux as Xen dom0..."
-setup-xen-dom0
+    sgdisk
 sleep 2
 
 # GPT partitioning
@@ -195,28 +188,13 @@ echo "[*] Configuring GRUB for encrypted boot..."
 chroot /mnt apk add efibootmgr grub grub-efi
 echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
 echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub
-#echo "GRUB_CMDLINE_XEN=\"console=vga guest_loglvl=all loglvl=all nomodeset noreboot=true\"" >> /mnt/etc/default/grub
-echo "GRUB_CMDLINE_XEN_DEFAULT=\"ucode=scan\"" >> /mnt/etc/default/grub #dom0_max_vcpus=1 dom0_vcpus_pin maxmem=512
 tail /mnt/etc/default/grub
 sleep 2
 
 echo "[*] Installing GRUB..."
 chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-chroot /mnt grub-set-default 1
 chroot /mnt chmod 700 /boot
-sleep 2
-
-# Configure Secure Boot
-#echo "[*] Configuring Secure Boot..."
-#chroot /mnt apk add sbctl
-#chroot /mnt sbctl status
-#chroot /mnt sbctl create-keys
-# FIXME: 'chattr -i <...>' for all immutable efivars
-#chroot /mnt sbctl sign /boot/efi/EFI/grub/grubx64.efi
-# FIXME: Sign everything that is required
-# FIXME: Restore the immutability of the evivars???
-#chroot /mnt sbctl enroll-keys -m
 sleep 2
 
 # Install base packages
@@ -236,28 +214,7 @@ sleep 2
 echo "[*] Configuring required services..."
 chroot /mnt rc-update add iwd default    
 chroot /mnt rc-update add tlp default
-sleep 2
-
-# Install virt-manager infrastructure
-echo "[*] Installing the virt-manager infrastructure..."
-chroot /mnt apk add bridge-utils \
-    dmidecode \
-    ebtables \
-    libvirt \
-    libvirt-daemon \
-    netcat-openbsd \
-    ovmf \
-    seabios \
-    virt-manager \
-    virt-viewer
-sleep 2
-
-echo "[*] Configuring required services..."
-chroot /mnt rc-update add libvirt-guests default
-chroot /mnt rc-update add libvirtd default
-
-echo "[*] Adding the user to the 'libvirt' group..."
-chroot /mnt adduser $USER_NAME libvirt    
+sleep 2  
 
 # User security
 echo "[*] Disabling the root account..."
@@ -274,7 +231,7 @@ chroot /mnt adduser $USER_NAME plugdev
 
 # Add user paths & scripts
 echo "[*] Adding user paths & scripts..."
-mkdir -p /mnt/home/$USER_NAME/pictures
+mkdir -p /mnt/home/$USER_NAME/Pictures
 mkdir -p /mnt/home/$USER_NAME/tools
 mkdir -p /mnt/home/$USER_NAME/workspace
 chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    

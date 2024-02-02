@@ -92,10 +92,6 @@ setup-timezone Europe/Berlin
 echo "[*] Enabling network time synchronization..."
 setup-ntp busybox
 
-# Setup udev as devd
-echo "[*] Setting up udev as devd..."
-setup-devd udev
-
 # Disable SSHD
 echo "[*] Disabling SSHD..."
 setup-sshd none

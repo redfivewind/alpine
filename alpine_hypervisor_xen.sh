@@ -25,10 +25,12 @@ sleep 2
 echo "[*] Configuring required services..."
 doas rc-update add libvirt-guests default
 doas /mnt rc-update add libvirtd default
+sleep 2
 
 # Add user to the 'libvirt' group
 echo "[*] Adding the user to the 'libvirt' group..."
-doas adduser $USER_NAME libvirt
+doas adduser $(whoami) libvirt
+sleep 2
 
 # Generate Xen unified kernel image (UKI)
 #FIXME

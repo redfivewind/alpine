@@ -9,6 +9,7 @@ doas apk add bridge \
     netcat-openbsd \
     ovmf \
     seabios \
+    spice-vdagent \
     virt-manager \
     virt-viewer \
     xen \
@@ -26,6 +27,7 @@ echo "tun" | doas tee -a /etc/modules
 echo "[*] Configuring required services..."
 doas rc-update add libvirt-guests default
 doas rc-update add libvirtd default
+doas rc-update add spice-vdagentd default
 doas rc-update add xenconsoled default
 doas rc-update add xendomains default 
 doas rc-update add xenqemu default

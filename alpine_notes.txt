@@ -37,3 +37,11 @@ alpine_uefi_sb.sh
     - Detect relevant .EFI binaries
     - Sign them
     - Stop message with explanation
+
+win11_core.ps1
+    - Admin check
+    - Explorer
+    - Dark mode
+    - Chocolate
+    - Base packages
+    - Windows Updates

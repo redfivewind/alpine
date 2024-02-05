@@ -41,7 +41,6 @@ alpine_uefi_sb.sh
 win11_core.ps1
     - Admin check
     - Explorer
-    - Dark mode
     - Chocolate
     - Base packages
     - Windows Updates

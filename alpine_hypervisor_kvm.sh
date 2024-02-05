@@ -1,26 +1,30 @@
 # Install required packages
 echo "[*] Installing required packages..."
-apk add bridge \
+doas apk add bridge \
     bridge-utils \
     dmidecode \
     ebtables \
     libvirt \
     libvirt-daemon \
     netcat-openbsd \
-    ovmf \
-    seabios \
+    qemu-img \
+    qemu-modules \
+    qemu-system-x86_64 \
     virt-manager \
-    virt-viewer
+    virt-viewer 
 sleep 2
+
+# Enable modules
+echo "[*] Enabling modules..."
+echo "tun" | doas tee -a /etc/modules
 
 # Configure services
 echo "[*] Configuring required services..."
-chroot /mnt rc-update add libvirt-guests default
-chroot /mnt rc-update add libvirtd default
+doas rc-update add libvirt-guests default
+doas rc-update add libvirtd default
+sleep 2
 
 # Add user to the 'libvirt' group
 echo "[*] Adding the user to the 'libvirt' group..."
-chroot /mnt adduser $USER_NAME libvirt
-
-# KVM nested virtualisation
-#FIXME
+doas adduser $(whoami) libvirt
+sleep 2

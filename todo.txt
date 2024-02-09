@@ -10,24 +10,10 @@ alpine_de_xfce.sh
     - Autosuspend /-sleep
     - Xfce Hardening
 
-alpine_hypervisor_kvm.sh
-    - EVERYTHING!!!
-    - Order
-    - Packages
-    - Nested virtualisation
-
-alpine_hypervisor_xen.sh
-    - EVERYTHING!!!
-    - Order
+alpine_hv_xen.sh
     - (((Compile Xen)))
-    - Xen dom0 preparation
-    - Generate Xen unified kernel image (UKI)
-        - Linux dom0 stuff
-        - XSM FLASK policy
-        - CPU microcode (intel-ucode, amd-ucode)
-        - Xen configuration
-        - Xen & dom0 kernel parameters
-    - Add/update Xen UEFI entry
+    - Xen UKI (XSM FLASK, CPU microcode, xen.cfg, ...)
+    - Xen UEFI entry / Bootloader integration
 
 alpine_uefi_sb.sh
     - Warning: Is System in SETUP MODE???

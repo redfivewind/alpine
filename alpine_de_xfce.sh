@@ -41,6 +41,7 @@ echo "EndSection" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
 
 # Xfce customisation
 echo "[*] Customising Xfce..."
+export DISPLAY=:0
 export $(dbus-launch)
 xfconf-query -c xsettings -p /Net/ThemeName -s "adw-gtk3-dark"
 xfconf-query -c xfce4-keyboard-shortcuts -n -t 'string' -p '/commands/custom/<Super>L' -s xflock4

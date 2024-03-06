@@ -39,9 +39,12 @@ echo "  Option \"XkbLayout\" \"de\"" | doas tee -a /etc/X11/xorg.conf.d/00-keybo
 echo "  Option \"XkbVariant\" \"nodeadkeys\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
 echo "EndSection" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
 
-# Dark mode
-echo "[*] Enabling dark mode..."
-xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
+# Xfce customisation
+echo "[*] Customising Xfce..."
+export $(dbus-launch)
+xfconf-query -c xsettings -p /Net/ThemeName -s "adw-gtk3-dark"
+
+xfconf-query -c xfce4-keyboard-shortcuts -n -t 'string' -p '/commands/custom/<Super>L' -s xflock4
 
 # Enable LightDM
 echo "[*] Enabling LightDM..."

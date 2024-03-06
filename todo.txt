@@ -4,7 +4,6 @@ alpine_core.sh
 
 alpine_de_xfce.sh
     - Autolock
-    - Dark mode
     - Wallpaper
     - Add Keyboard shortcuts (WIN & WIN+L)
     - Remove Keyboard shortcuts (WIN+R & Ctrl+Alt+Del)
@@ -15,15 +14,6 @@ alpine_hv_xen.sh
     - (((Compile Xen)))
     - Xen UKI (XSM FLASK, CPU microcode, xen.cfg, ...)
     - Xen UEFI entry / Bootloader integration
-
-alpine_uefi_sb.sh
-    - Warning: Is System in SETUP MODE???
-    - Warning: Explain functionality
-    - Enroll new keys
-        - Handle chattr bug
-    - Detect relevant .EFI binaries
-    - Sign them
-    - Stop message with explanation
 
 win11_core.ps1
     - Admin check

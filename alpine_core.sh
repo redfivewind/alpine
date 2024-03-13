@@ -102,12 +102,14 @@ setup-apkrepos -c -f
 
 # Install required packages
 echo "[*] Installing required packages..."
-apk add cryptsetup \
+apk add amd-ucode \
+    cryptsetup \
     e2fsprogs \
     efibootmgr \
     file \
     grub \
     grub-efi \
+    intel-ucode \
     iwd \
     lsblk \
     lvm2 \

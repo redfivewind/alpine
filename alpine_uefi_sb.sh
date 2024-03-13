@@ -5,7 +5,7 @@ sleep 3
 
 # Install required packages
 echo "[*] Installing required packages..."
-doas apk add sbctl
+doas apk add gummiboot-efistub sbctl
 sleep 3
 
 # Initially show 'sbctl status'
@@ -31,7 +31,7 @@ doas sbctl bundle --amducode /boot/amd-ucode.img \
   --initramfs /boot/initramfs-lts \
   --intelucode /boot/intel-ucode.img \
   --kernel-img /boot/vmlinuz-lts \
-  --save
+  --save /boot/efi/EFI/alpine/alpine.efi
 sleep 3
 
 # Protect Xen with Secure Boot (if applicable)

@@ -20,7 +20,7 @@ doas sbctl status
 sleep 3
 
 echo "[*] Enrolling the signing keys using sbctl..."
-doas sbctl enroll-keys
+doas sbctl enroll-keys --microsoft
 doas sbctl status
 sleep 3
 

@@ -32,6 +32,7 @@ doas sbctl bundle --amducode /boot/amd-ucode.img \
   --intelucode /boot/intel-ucode.img \
   --kernel-img /boot/vmlinuz-lts \
   --save
+sleep 3
 
 # Protect Xen with Secure Boot (if applicable)
 echo "[*] Generating the UEFI Secure Boot bundle for Xen (if applicable)..."

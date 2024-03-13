@@ -39,6 +39,8 @@ sleep 3
 # Protect Xen with Secure Boot (if applicable)
 echo "[*] Generating the UEFI Secure Boot bundle for Xen (if applicable)..."
 #FIXME
+#doas sbctl list-bundles
+#sleep 3
 
 # Finally, show 'sbctl status again'
 echo "[*] Finally, verifying the UEFI Secure Boot status again..."

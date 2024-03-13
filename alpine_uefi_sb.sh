@@ -33,7 +33,7 @@ doas sbctl bundle --amducode /boot/amd-ucode.img \
   --intelucode /boot/intel-ucode.img \
   --kernel-img /boot/vmlinuz-lts \
   --os-release /etc/os-release \
-  --save 
+  --save \
   /boot/efi/EFI/alpine/alpine.efi
 doas sbctl list-bundles
 sleep 3

@@ -112,6 +112,7 @@ apk add cryptsetup \
     lsblk \
     lvm2 \
     nano \
+    sbctl \
     sgdisk
 sleep 2
 

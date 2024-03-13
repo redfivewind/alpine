@@ -25,11 +25,16 @@ doas sbctl status
 sleep 3
 
 # Protect Alpine Linux with Secure Boot
-echo "[*] Protection Alpine Linux using UEFI Secure Boot..."
-#FIXME
+echo "[*] Generating the UEFI Secure Boot bundle for Alpine Linux..."
+doas sbctl bundle --amducode /boot/amd-ucode.img \
+  --cmdline /proc/cmdline \
+  --initramfs /boot/initramfs-lts \
+  --intelucode /boot/intel-ucode.img \
+  --kernel-img /boot/vmlinuz-lts \
+  --save
 
 # Protect Xen with Secure Boot (if applicable)
-echo "[*] Protection Xen using UEFI Secure Boot (if applicable)..."
+echo "[*] Generating the UEFI Secure Boot bundle for Xen (if applicable)..."
 #FIXME
 
 # Finally, show 'sbctl status again'

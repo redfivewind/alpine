@@ -2,19 +2,15 @@ alpine_core.sh
     - Resume from sleep/hibernation
 
 alpine_de_xfce.sh
-    - Autolock
+    - Autolock, suspend & sleep
     - Add Keyboard shortcuts (WIN & WIN+L)
     - Remove Keyboard shortcuts (WIN+Alt+L)
-    - Autosuspend /-sleep
-    - Xfce Hardening
+    - <<<Xfce Hardening>>>
 
 alpine_hardening.sh
     - <<<Hardening>>>
     - Remove apk
     - Disable ash history
-
-alpine_hv_xen.sh
-    - (((Compile Xen with XSM-FLASK & SPICE???)))
 
 alpine_uefi_sb.sh
     - Alpine Workflow

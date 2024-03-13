@@ -1,17 +1,31 @@
 alpine_core.sh
     - Resume from sleep/hibernation
-    - Hardening (e.g., ash history)
 
 alpine_de_xfce.sh
     - Autolock
     - Add Keyboard shortcuts (WIN & WIN+L)
+    - Remove Keyboard shortcuts (WIN+Alt+L)
     - Autosuspend /-sleep
     - Xfce Hardening
 
+alpine_hardening.sh
+    - <<<Hardening>>>
+    - Remove apk
+    - Disable ash history
+
 alpine_hv_xen.sh
-    - (((Compile Xen)))
-    - Xen UKI (XSM FLASK, CPU microcode, xen.cfg, ...)
-    - Xen UEFI entry / Bootloader integration
+    - (((Compile Xen with XSM-FLASK & SPICE???)))
+
+alpine_uefi_sb.sh
+    - Alpine Workflow
+    - Xen Workflow (if applicable)
+        - Xen UKI (XSM FLASK, CPU microcode, xen.cfg, ...)
+    - ATTENTION: Workflow with updates
+
+alpine_update.sh
+    - Default update
+    - UEFI SB Alpine
+    - UEFI SB Xen
 
 win11_core.ps1
     - Admin check

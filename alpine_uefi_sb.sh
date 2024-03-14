@@ -37,18 +37,32 @@ doas sbctl bundle --amducode /boot/amd-ucode.img \
   --save \
   /boot/efi/EFI/alpine/alpine.efi
 doas sbctl list-bundles
+
+echo "[*] Generating an UEFI entry for Alpine Linux using efibootmgr..."
+#FIXME
+efibootmgr -v
 sleep 3
 
 # Protect Xen with Secure Boot (if applicable)
 echo "[*] Generating the UEFI Secure Boot bundle for Xen (if applicable)..."
-#FIXME
-#doas sbctl list-bundles
-#sleep 3
+
+if [[ #FIXME ]]; then
+    #FIXME
+    doas sbctl list-bundles
+    #sleep 3
+else
+    #FIXME
+fi
 
 # Finally, show 'sbctl status again'
 echo "[*] Finally, verifying the UEFI Secure Boot status again..."
 doas sbctl status
 sleep 3
+
+# Uninstall GRUB2
+echo "[*] Uninstalling GRUB2..."
+#FIXME
+#sleep 3
 
 # Stop message
 echo "[!] ALERT: Please enable & review the UEFI Secure Boot configuration manually! Press any key to continue..."

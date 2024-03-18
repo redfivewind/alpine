@@ -8,7 +8,7 @@ doas setup-desktop xfce
 
 # Install required packages
 echo "[*] Installing required packages..."
-doas apk add adw-gtk3 mousepad pavucontrol ristretto thunar-archive-plugin xarchiver xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
+doas apk add adw-gtk3 mousepad pavucontrol ristretto thunar-archive-plugin xarchiver xfce-polkit xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
 
 # Configure networking
 echo "[*] Configuring networking..."
@@ -47,9 +47,10 @@ xfconf-query -c xsettings -p '/Net/ThemeName' -s 'adw-gtk3-dark'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super><Alt>l' --reset
 xfconf-query -c xfce4-keyboard-shortcuts -n -t 'string' -p '/commands/custom/<Super>l' -s 'xflock4' --create
 
-# Enable LightDM
-echo "[*] Enabling LightDM..."
+# Configure services
+echo "[*] Configuring services..."
 doas rc-update add lightdm default
+doas rc-update add polkit default
 
 # Stop message
 echo "[*] Installation finished. Please reboot manually."

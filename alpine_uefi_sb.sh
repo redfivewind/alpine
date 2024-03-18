@@ -35,11 +35,11 @@ doas sbctl bundle --amducode /boot/amd-ucode.img \
   --kernel-img /boot/vmlinuz-lts \
   --os-release /etc/os-release \
   --save \
-  /boot/efi/EFI/alpine/alpine.efi
+  /boot/efi/EFI/alpine.efi
 doas sbctl list-bundles
 
 echo "[*] Generating an UEFI entry for Alpine Linux using efibootmgr..."
-efibootmgr --disk $DISK --part 1 --create --label 'alpine' --load /alpine.efi --verbose
+efibootmgr --disk $DISK --part 1 --create --label 'alpine' --load /EFI/alpine.efi --verbose
 efibootmgr -v
 sleep 3
 

@@ -11,6 +11,12 @@
 # TODO: DE Xfce: Add keyboard shortcut WIN+L
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
+grub_install_bios() {
+}
+
+grub_install_uefi() {
+}
+
 # Start message
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read

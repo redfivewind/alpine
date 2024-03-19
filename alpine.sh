@@ -90,8 +90,7 @@ setup-apkrepos -c -f
 
 # Install required packages
 echo "[*] Installing required packages..."
-apk add amd-ucode \
-    cryptsetup \
+apk add cryptsetup \
     e2fsprogs \
     file \    
     lsblk \

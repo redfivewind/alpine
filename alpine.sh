@@ -1,11 +1,19 @@
 # ARGUMENT: Platform (bios, uefi, uefi-sb)
-# ARGUMENT: Mode (none, hv_kvm, hv_xen, virt)
-# ARGUMENT: Switch (audio, ethernet, network, wireless)
-# ARGUMENT: Hardening
+# ARGUMENT: Disk
+# ARGUMENT: Mode (core, core_kvm, core_xen, core_virt)
 # ARGUMENT: Desktop Environment (none, xfce)
+
+# ARGUMENT: Audio
+# ARGUMENT: Bluetooth
+# ARGUMENT: Network (Broadband, Ethernet, General, WiFi, ...)
+
+# TODO: Core: Automatic sleep/hibernate & resume
+# TODO: Core: HARDENING!!!
+# TODO: DE: Xfce (Add keyboard shortcut WIN+L, Remove keyboard shortcut CTRL+ALT+L)
 
 # Start message
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
+read
 
 # Global variables
 echo "[*] Initializing global variables..."

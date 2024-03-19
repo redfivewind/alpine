@@ -1,6 +1,6 @@
 # ARGUMENT: Platform (bios, uefi, uefi-sb)
 # ARGUMENT: Disk
-# ARGUMENT: Mode (core, core_kvm, core_xen, core_virt)
+# ARGUMENT: Mode (core, core_kvm, core_xen, virt, virt_kvm, virt_xen)
 # ARGUMENT: Desktop Environment (none, xfce)
 # ARGUMENT: ---Audio---
 # ARGUMENT: ---Bluetooth---

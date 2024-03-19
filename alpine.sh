@@ -6,11 +6,10 @@
 # ARGUMENT: ---Bluetooth---
 # ARGUMENT: ---Network (Broadband, Ethernet, General, WiFi, ...)---
 
-# NOTES: Always with community repository?
-
-# TODO: Core: Automatic sleep/hibernate & resume
-# TODO: Core: HARDENING!!!
-# TODO: DE: Xfce (Add keyboard shortcut WIN+L, Remove keyboard shortcut CTRL+ALT+L)
+# TODO: Base: Hardening
+# TODO: DE Xfce: Automatic sleep/hibernate & resume
+# TODO: DE Xfce: Add keyboard shortcut WIN+L
+# TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
 # Start message
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
@@ -24,6 +23,7 @@ LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
 LUKS_LVM="luks_lvm"
+MODE=""
 PART_EFI=""
 PART_LUKS=""
 PLATFORM=""

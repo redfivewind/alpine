@@ -29,7 +29,7 @@ echo "[*] Generating the UEFI Secure Boot bundle for Alpine Linux..."
 doas sbctl bundle --amducode /boot/amd-ucode.img \
   --cmdline /proc/cmdline \
   --efi-stub /usr/lib/gummiboot/linuxx64.efi.stub \
-  --esp /boot/efi \
+  --esp /dev/sda1 \
   --initramfs /boot/initramfs-lts \
   --intelucode /boot/intel-ucode.img \
   --kernel-img /boot/vmlinuz-lts \

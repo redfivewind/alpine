@@ -19,15 +19,14 @@ read
 echo "[*] Initializing global variables..."
 DISK=""
 LUKS_PASS=""
+LUKS_LVM="luks_lvm"
 LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
-LUKS_LVM="luks_lvm"
 MODE=""
 PART_EFI=""
 PART_LUKS=""
 PLATFORM=""
-SCRIPT=$(readlink -f "$0")
 USER_NAME="user"
 USER_PASS=""
 
@@ -170,6 +169,20 @@ sleep 2
 
 echo "[*] Installing GRUB..."
 #FIXME: chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
+if [ $MODE == "bios" ];
+then
+    grub_install_bios
+elif [ $MODE == "uefi" ];
+then
+    grub_install_uefi
+elif [ $MODE == "uefi-sb" ];
+then
+    grub_install_uefi
+else
+    echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Returning..."
+    return
+fi
+
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 chroot /mnt chmod 700 /boot
 sleep 2

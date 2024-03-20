@@ -96,14 +96,17 @@ else
     then
         echo "[*] Platform: '$1'"
         DISK_GPT="0"
+        PART_EFI_EBALED="0"
     elif [ "$1" == "uefi" ];
     then
         echo "[*] Platform: '$1'"
         DISK_GPT="1"
+        PART_EFI_EBALED="1"
     elif [ "$1" == "uefi-sb" ];
     then
         echo "[*] Platform: '$1'"
         DISK_GPT="1"
+        PART_EFI_EBALED="1"
     else
         echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
         print_usage
@@ -178,9 +181,13 @@ else
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
-                  else
+                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  then
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${DISK}p1"
+                  else
+                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                      exit 1
                   fi
             elif [[ "$DISK" == "/dev/nvme*" ]]; 
             then
@@ -190,18 +197,26 @@ else
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
-                  else
+                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  then
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${DISK}p1"
+                  else
+                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                      exit 1
                   fi
             else
                   if [ "$PART_EFI_ENABLED" == "1" ];
                   then             
                       PART_EFI="${DISK}1"
                       PART_LUKS="${DISK}2"
-                  else
+                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  then
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${DISK}1"
+                  else
+                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                      exit 1
                   fi
             fi
     
@@ -300,7 +315,7 @@ then
     disk_layout_uefi
 else
     echo "[X] ERROR: Variable 'DISK_GPT' is '$DISK_GPT' but must be 0 or 1. This is unexpected behaviour. Exiting..."
-    exit
+    exit 1
 fi
 
 for i in $(seq 10)

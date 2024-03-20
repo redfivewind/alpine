@@ -25,9 +25,9 @@ disk_layout_uefi() {
 
     echo "[*] Partitioning the target disk using GPT partition layout..."
     parted $DISK mktable gpt
-    sudo parted $DISK mkpart primary ext4 1MiB 512MiB
+    sudo parted $DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
     sudo parted $DISK name 1 $EFI_LABEL
-    sudo parted $DISK mkpart primary ext4 513MiB 100%
+    sudo parted $DISK mkpart primary ext4 512MiB 100%
     sudo parted $DISK name 2 $LUKS_LABEL
 }
 

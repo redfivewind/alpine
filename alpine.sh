@@ -48,10 +48,12 @@ grub_install_uefi() {
 
 hv_kvm_install() {
     #FIXME
+    return
 }
 
 hv_xen_install() {
     #FIXME
+    return
 }
 
 print_usage() {

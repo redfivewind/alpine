@@ -371,13 +371,13 @@ tail /mnt/etc/default/grub
 sleep 2
 
 echo "[*] Installing GRUB..."
-if [ $MODE == "bios" ];
+if [ "$MODE" == "bios" ];
 then
     grub_install_bios
-elif [ $MODE == "uefi" ];
+elif [ "$MODE" == "uefi" ];
 then
     grub_install_uefi
-elif [ $MODE == "uefi-sb" ];
+elif [ "$MODE" == "uefi-sb" ];
 then
     grub_install_uefi
 else

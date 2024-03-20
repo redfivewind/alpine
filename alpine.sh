@@ -76,17 +76,21 @@ USER_NAME="user"
 USER_PASS=""
 
 # Argument parsing
-if [ $1 != "" ];
+if [ -z "$1" ];
 then
-    if [ $1 == "bios" ];
+    echo "[X] ERROR: The platform was not specified but must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
+    print_usage
+    exit 1
+else
+    if [ "$1" == "bios" ];
     then
         echo "Platform: '$1'"
         DISK_GPT=0
-    elif [ $1 == "uefi" ];
+    elif [ "$1" == "uefi" ];
     then
         echo "Platform: '$1'"
         DISK_GPT=1
-    elif [ $1 == "uefi-sb" ];
+    elif [ "$1" == "uefi-sb" ];
     then
         echo "Platform: '$1'"
         DISK_GPT=1
@@ -95,8 +99,6 @@ then
         print_usage
         exit 1
     fi
-else
-    echo "XYZ"
 fi
 
 if [ $2 == "core" ];
@@ -375,5 +377,5 @@ mkdir -p /mnt/home/$USER_NAME/workspace
 chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/   
 
 # Stop message
-echo "[*] Work done. Returning..."
-return
+echo "[*] Work done. Exiting..."
+exit 0

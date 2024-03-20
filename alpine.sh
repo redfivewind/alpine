@@ -10,7 +10,7 @@ arg_parsing() {
     # Retrieve all arguments
     for l_arg in "$@"; 
     do
-        elif [ "$l_arg" == "--disk=*" ];
+        if [ "$l_arg" == "--disk=*" ];
         then
             if [ -z "$ARG_DISK" ];
             then

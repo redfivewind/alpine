@@ -1,6 +1,6 @@
 # ARGUMENT: Platform (bios, uefi, uefi-sb)
-# ARGUMENT: Disk
 # ARGUMENT: Mode (core, core_kvm, core_xen, virt, virt_kvm, virt_xen)
+# ARGUMENT: Disk
 # ARGUMENT: Desktop Environment (none, xfce)
 # ARGUMENT: ---Audio---
 # ARGUMENT: ---Bluetooth---
@@ -39,6 +39,10 @@ grub_install_uefi() {
     chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $DISK
 }
 
+print_usage() {
+    echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Mode: host/virt> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
+}
+
 # Start message
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read
@@ -61,11 +65,50 @@ USER_NAME="user"
 USER_PASS=""
 
 # Argument parsing
-#FIXME
+if [ $0 == "bios" ];
+then
+    disk_layout_bios
+elif [ $0 == "uefi" ];
+then
+    disk_layout_uefi
+elif [ $0 == "uefi-sb" ];
+then
+    disk_layout_uefi
+else
+    echo "[X] ERROR: The passed platform is '$0' must be 'bios', 'uefi' oder 'uefi-sb'. Returning..."
+    print_usage
+    return
+fi
 
-# German keyboard layout
-echo "[*] Loading German keyboard layout..."
-setup-keymap de de
+if [ $1 == "core" ];
+then
+    echo "[*] MODE: '$1'"
+    #FIXME
+elif [ $1 == "core_kvm" ];
+then
+    echo "[*] MODE: '$1'"
+    #FIXME
+elif [ $1 == "core_xen" ];
+then
+    echo "[*] MODE: '$1'"
+    #FIXME
+elif [ $1 == "virt" ];
+then
+    echo "[*] MODE: '$1'"
+    #FIXME
+elif [ $1 == "virt_kvm" ];
+then
+    echo "[*] MODE: '$1'"
+    #FIXME
+elif [ $1 == "virt_xen" ];
+then
+    echo "[*] MODE: '$1'"
+    #FIXME
+else
+    echo "[X] ERROR: The passed mode is '$1' but must be 'core' or 'virt'."
+    print_usage
+    return
+fi
 
 # Retrieve the LUKS & user password
 echo "[*] Please enter the LUKS password: "

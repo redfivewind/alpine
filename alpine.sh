@@ -11,10 +11,32 @@
 # TODO: DE Xfce: Add keyboard shortcut WIN+L
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
+disk_layout_bios() {
+    echo "[*] Partitioning the target disk using MBR partition layout..."
+    parted $DISK mktable msdos
+    sudo parted $DISK mkpart primary ext4 0% 100%
+    sudo parted $DISK name 1 $LUKS_LABEL
+}
+
+disk_layout_uefi() {
+    echo "[*] Partitioning the target disk using GPT partition layout..."
+    sgdisk --zap-all $DISK
+    sgdisk --new=1:0:+512M $DISK
+    sgdisk --new=2:0:0 $DISK
+    sgdisk --typecode=1:ef00 --typecode=2:8309 $DISK
+    sgdisk --change-name=1:$EFI_LABEL --change-name=2:$LUKS_LABEL $DISK
+    sgdisk --print $DISK
+    for i in $(seq 10)
+        do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DISK && sleep 1
+    done
+}
+
 grub_install_bios() {
+    chroot /mnt grub-install --target=i386-pc $DISK
 }
 
 grub_install_uefi() {
+    chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $DISK
 }
 
 # Start message
@@ -24,8 +46,10 @@ read
 # Global variables
 echo "[*] Initializing global variables..."
 DISK=""
-LUKS_PASS=""
+EFI_LABEL="efi-sp"
+LUKS_LABEL="luks"
 LUKS_LVM="luks_lvm"
+LUKS_PASS=""
 LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
@@ -113,7 +137,19 @@ echo "[*] Setting up udev as devd..."
 setup-devd udev
 
 # Partitioning
-#FIXME
+if [ $MODE == "bios" ];
+then
+    disk_layout_bios
+elif [ $MODE == "uefi" ];
+then
+    disk_layout_uefi
+elif [ $MODE == "uefi-sb" ];
+then
+    disk_partitioning_uefi
+else
+    echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Returning..."
+    return
+fi
 
 # Setup LUKS partition
 echo "[*] Formatting the second partition as a LUKS crypto partition..."
@@ -174,7 +210,6 @@ tail /mnt/etc/default/grub
 sleep 2
 
 echo "[*] Installing GRUB..."
-#FIXME: chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
 if [ $MODE == "bios" ];
 then
     grub_install_bios

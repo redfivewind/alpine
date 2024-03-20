@@ -6,6 +6,11 @@
 # TODO: DE Xfce: Add keyboard shortcut WIN+L
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
+cpu_microcode_install() {
+    echo "[*] Installing CPU microcode updates for AMD and Intel processors..."
+    apk add amd-ucode intel-ucode
+}
+
 disk_layout_bios() {
     echo "[*] Partitioning the target disk using MBR partition layout..."
     parted $DISK mktable msdos
@@ -23,19 +28,13 @@ disk_layout_uefi() {
 }
 
 grub_install_bios() {
+    echo "[*] Installing GRUB for BIOS platform..."
     chroot /mnt grub-install --target=i386-pc $DISK
 }
 
 grub_install_uefi() {
+    echo "[*] Installing GRUB for UEFI platform..."
     chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $DISK
-}
-
-mode_core_check() {
-    #FIXME
-}
-
-mode_virt_check() {
-    #FIXME
 }
 
 print_usage() {
@@ -49,6 +48,7 @@ read
 # Global variables
 echo "[*] Initializing global variables..."
 DISK=""
+DISK_GPT=""
 LUKS_LVM="luks_lvm"
 LUKS_PASS=""
 LV_ROOT="lv_root"
@@ -67,13 +67,16 @@ USER_PASS=""
 # Argument parsing
 if [ $0 == "bios" ];
 then
-    disk_layout_bios
+    echo "Platform: '$0'"
+    DISK_GPT=0
 elif [ $0 == "uefi" ];
 then
-    disk_layout_uefi
+    echo "Platform: '$0'"
+    DISK_GPT=1
 elif [ $0 == "uefi-sb" ];
 then
-    disk_layout_uefi
+    echo "Platform: '$0'"
+    DISK_GPT=1
 else
     echo "[X] ERROR: The passed platform is '$0' must be 'bios', 'uefi' oder 'uefi-sb'. Returning..."
     print_usage
@@ -234,17 +237,14 @@ echo "[*] Setting up udev as devd..."
 setup-devd udev
 
 # Partitioning
-if [ $MODE == "bios" ];
+if [ $DISK_GPT == 0 ];
 then
     disk_layout_bios
-elif [ $MODE == "uefi" ];
+elif [ $DISK_GPT == 1 ];
 then
     disk_layout_uefi
-elif [ $MODE == "uefi-sb" ];
-then
-    disk_partitioning_uefi
 else
-    echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Returning..."
+    echo "[X] ERROR: Variable 'DISK_GPT' is '$DISK_GPT' but must be 0 or 1. This is unexpected behaviour. Returning..."
     return
 fi
 

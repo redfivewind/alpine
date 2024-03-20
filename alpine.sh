@@ -286,17 +286,7 @@ setup-apkrepos -c -f
 
 # Install required packages
 echo "[*] Installing required packages..."
-apk add cryptsetup \
-    e2fsprogs \
-    file \    
-    lsblk \
-    lvm2 \
-    nano \
-    parted \
-    p7zip \
-    tlp \
-    unzip \
-    zip
+apk add cryptsetup e2fsprogs file lsblk lvm2 nano parted p7zip tlp unzip zip
 cpu_microcode_install
 sleep 2
 

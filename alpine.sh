@@ -7,6 +7,7 @@
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
 arg_parsing() {
+    # Retrieve all arguments
     for l_arg in "$@"; 
     do
         elif [ "$l_arg" == "--disk=*" ];
@@ -19,6 +20,8 @@ arg_parsing() {
                 then
                     echo "[X] ERROR: The passed argument 'Disk' is empty. Exiting..."
                     exit 1
+                else
+                    disk_check
                 fi
             else
                 echo "[X] ERROR: The passed argument 'Disk' is already set. Exiting..."
@@ -51,12 +54,15 @@ arg_parsing() {
             if [ "$ARG_PLATFORM" == "bios" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
+                GPT_OVER_MBR=0
             elif [ "$ARG_PLATFORM" == "uefi" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
+                GPT_OVER_MBR=1
             elif [ "$ARG_PLATFORM" == "uefi-sb" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
+                GPT_OVER_MBR=1
             else
                 echo "[X] ERROR: The passed platform is '$ARG_PLATFORM' but must be 'bios', 'uefi' or 'uefi-sb'. Exiting..."
                 exit 1
@@ -64,9 +70,93 @@ arg_parsing() {
         else
             echo "[X] ERROR: Unknown argument '$l_arg'. Exiting..."
             exit 1
-        fi
-        
+        fi        
     done
+
+    # Verify, that all arguments were provided
+    if [ -z "$ARG_DISK" ];
+    then
+        echo "[X] ERROR: No disk was provided. Exiting..."
+        exit 1
+    fi
+
+    if [ -z "$ARG_HYPERVISOR" ];
+    then
+        echo "[X] ERROR: No hypervisor was provided. Exiting..."
+        exit 1
+    fi
+
+    if [ -z "$ARG_PLATFORM" ];
+    then
+        echo "[X] ERROR: No platform was provided. Exiting..."
+        exit 1
+    fi
+}
+
+disk_check() {
+    if [ -e "$ARG_DISK" ]; then
+        echo "[*] Path '$ARG_DISK' exists."
+    
+        if [ -b "$ARG_DISK" ]; then
+            echo "[*] '$ARG_DISK' is a valid block device." 
+    
+            if [[ $ARG_DISK == "/dev/mmc*" ]]; 
+            then
+                  echo "[*] Target disk seems to be a MMC disk."
+    
+                  if [ "$PART_EFI_ENABLED" == "1" ];
+                  then             
+                      PART_EFI="${ARG_DISK}p1"
+                      PART_LUKS="${ARG_DISK}p2"
+                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  then
+                      PART_EFI="- (BIOS installation)"
+                      PART_LUKS="${ARG_DISK}p1"
+                  else
+                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                      exit 1
+                  fi
+            elif [[ "$ARG_DISK" == "/dev/nvme*" ]]; 
+            then
+                  echo "[*] Target disk seems to be a NVME disk."
+    
+                  if [ "$PART_EFI_ENABLED" == "1" ];
+                  then             
+                      PART_EFI="${ARG_DISK}p1"
+                      PART_LUKS="${ARG_DISK}p2"
+                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  then
+                      PART_EFI="- (BIOS installation)"
+                      PART_LUKS="${ARG_DISK}p1"
+                  else
+                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                      exit 1
+                  fi
+            else
+                  if [ "$PART_EFI_ENABLED" == "1" ];
+                  then             
+                      PART_EFI="${ARG_DISK}1"
+                      PART_LUKS="${ARG_DISK}2"
+                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  then
+                      PART_EFI="- (BIOS installation)"
+                      PART_LUKS="${ARG_DISK}1"
+                  else
+                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                      exit 1
+                  fi
+            fi
+    
+            echo "[*] Target EFI partition: $PART_EFI."
+            echo "[*] Target LUKS partition: $PART_LUKS."
+        else
+            echo "[X] ERROR: '$4' is not a valid block device. Exiting..."
+            exit 1
+        fi
+    else
+        echo "[X] ERROR: Path '$4' does not exist. Exiting..."
+        exit 1
+    fi
 }
 
 disk_layout_bios() {
@@ -133,151 +223,8 @@ USER_NAME="user"
 USER_PASS=""
 
 # Argument parsing
-if [ -z "$1" ];
-then
-    echo "[X] ERROR: The platform was not specified but must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
-    print_usage
-    exit 1
-else
-    if [ "$1" == "bios" ];
-    then
-        echo "[*] Platform: '$1'"
-        GPT_OVER_MBR="0"
-        PART_EFI_ENABLED="0"
-    elif [ "$1" == "uefi" ];
-    then
-        echo "[*] Platform: '$1'"
-        GPT_OVER_MBR="1"
-        PART_EFI_ENABLED="1"
-    elif [ "$1" == "uefi-sb" ];
-    then
-        echo "[*] Platform: '$1'"
-        GPT_OVER_MBR="1"
-        PART_EFI_ENABLED="1"
-    else
-        echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
-        print_usage
-        exit 1
-    fi
-fi
+arg_parsing
 
-if [ -z "$2" ];
-then
-    echo "[X] ERROR: The mode was not specified but must be 'core' or 'virt'. Exiting..."
-    print_usage
-    exit 1
-else
-    if [ "$2" == "core" ];
-    then
-        echo "[*] Mode: '$2'"
-        CPU_MICROCODE="1"
-    elif [ "$2" == "virt" ];
-    then
-        echo "[*] Mode: '$2'"
-        CPU_MICROCODE="0"
-    else
-        echo "[X] ERROR: The passed mode is '$2' but must be 'core' or 'virt'. Exiting..."
-        print_usage
-        exit 1
-    fi
-fi
-
-if [ -z "$3" ];
-then
-    echo "[X] ERROR: The hypervisor was not specified but must be 'none', 'kvm' or 'xen'. Exiting..."
-    print_usage
-    exit 1
-else
-    if [ "$3" == "none" ];
-    then
-        echo "[*] Hypervisor: '$3'"
-        HYPERVISOR="$3"
-    elif [ "$3" == "kvm" ];
-    then
-        echo "[*] Hypervisor: '$3'"
-        HYPERVISOR="$3"
-    elif [ "$3" == "xen" ];
-    then
-        echo "[*] Hypervisor: '$3'"
-        HYPERVISOR="$3"
-    else
-        echo "[X] ERROR: The passed hypervisor is '$3' but must be 'none', 'kvm' or 'xen'. Exiting..."
-        print_usage
-        exit 1
-    fi
-fi
-
-if [ -z "$4" ];
-then
-    echo "[X] ERROR: The disk was not specified. Exiting..."
-    print_usage
-    exit 1
-else
-    if [ -e "$4" ]; then
-        echo "[*] Path '$4' exists."
-    
-        if [ -b "$4" ]; then
-            echo "[*] '$4' is a valid block device."     
-            DISK=$4
-    
-            if [[ $DISK == "/dev/mmc*" ]]; 
-            then
-                  echo "[*] Target disk seems to be a MMC disk."
-    
-                  if [ "$PART_EFI_ENABLED" == "1" ];
-                  then             
-                      PART_EFI="${DISK}p1"
-                      PART_LUKS="${DISK}p2"
-                  elif [ "$PART_EFI_ENABLED" == "0" ];
-                  then
-                      PART_EFI="- (BIOS installation)"
-                      PART_LUKS="${DISK}p1"
-                  else
-                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
-                      exit 1
-                  fi
-            elif [[ "$DISK" == "/dev/nvme*" ]]; 
-            then
-                  echo "[*] Target disk seems to be a NVME disk."
-    
-                  if [ "$PART_EFI_ENABLED" == "1" ];
-                  then             
-                      PART_EFI="${DISK}p1"
-                      PART_LUKS="${DISK}p2"
-                  elif [ "$PART_EFI_ENABLED" == "0" ];
-                  then
-                      PART_EFI="- (BIOS installation)"
-                      PART_LUKS="${DISK}p1"
-                  else
-                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
-                      exit 1
-                  fi
-            else
-                  if [ "$PART_EFI_ENABLED" == "1" ];
-                  then             
-                      PART_EFI="${DISK}1"
-                      PART_LUKS="${DISK}2"
-                  elif [ "$PART_EFI_ENABLED" == "0" ];
-                  then
-                      PART_EFI="- (BIOS installation)"
-                      PART_LUKS="${DISK}1"
-                  else
-                      echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
-                      exit 1
-                  fi
-            fi
-    
-            echo "[*] Target EFI partition: $PART_EFI."
-            echo "[*] Target LUKS partition: $PART_LUKS."
-        else
-            echo "[X] ERROR: '$4' is not a valid block device. Exiting..."
-            exit 1
-        fi
-    else
-        echo "[X] ERROR: Path '$4' does not exist. Exiting..."
-        exit 1
-    fi
-fi
 
 # Retrieve the LUKS & user password
 echo "[*] Please enter the LUKS password: "
@@ -358,6 +305,8 @@ fi
 for i in $(seq 10)
     do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DISK && sleep 1
 done
+
+parted $ARG_DISK print
 
 # Setup LUKS partition
 echo "[*] Formatting the second partition as a LUKS crypto partition..."

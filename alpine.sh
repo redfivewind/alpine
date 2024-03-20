@@ -101,89 +101,110 @@ else
     fi
 fi
 
-if [ $2 == "core" ];
+if [ -z "$2" ];
 then
-    echo "[*] Mode: '$2'"
-    CPU_MICROCODE=1
-elif [ $2 == "virt" ];
-then
-    echo "[*] Mode: '$2'"
-    CPU_MICROCODE=0
-else
-    echo "[X] ERROR: The passed mode is '$2' but must be 'core' or 'virt'. Exiting..."
+    echo "[X] ERROR: The mode was not specified but must be 'core' or 'virt'. Exiting..."
     print_usage
     exit 1
-fi
-
-if [ $3 == "none" ];
-then
-    echo "[*] Hypervisor: '$3'"
-    HYPERVISOR=$3
-elif [ $3 == "kvm" ];
-then
-    echo "[*] Hypervisor: '$3'"
-    HYPERVISOR=$3
-elif [ $3 == "xen" ];
-then
-    echo "[*] Hypervisor: '$3'"
-    HYPERVISOR=$3
 else
-    echo "[X] ERROR: The passed hypervisor is '$3' but must be 'none', 'kvm' or 'xen'. Exiting..."
-    print_usage
-    exit 1
-fi
-
-if [ -e "$4" ]; then
-    echo "[*] Path '$4' exists."
-
-    if [ -b "$4" ]; then
-        echo "[*] '$4' is a valid block device."     
-        DISK=$4
-
-        if [[ $DISK == "/dev/mmc*" ]]; 
-        then
-              echo "[*] Target disk seems to be a MMC disk."
-
-              if [ $PART_EFI_ENABLED == 1 ],
-              then             
-                  PART_EFI="${DISK}p1"
-                  PART_LUKS="${DISK}p2"
-              else
-                  PART_EFI="- (BIOS installation)"
-                  PART_LUKS="${DISK}p1"
-              fi
-        elif [[ $DISK == "/dev/nvme*" ]]; 
-        then
-              echo "[*] Target disk seems to be a NVME disk."
-
-              if [ $PART_EFI_ENABLED == 1 ],
-              then             
-                  PART_EFI="${DISK}p1"
-                  PART_LUKS="${DISK}p2"
-              else
-                  PART_EFI="- (BIOS installation)"
-                  PART_LUKS="${DISK}p1"
-              fi
-        else
-              if [ $PART_EFI_ENABLED == 1 ],
-              then             
-                  PART_EFI="${DISK}1"
-                  PART_LUKS="${DISK}2"
-              else
-                  PART_EFI="- (BIOS installation)"
-                  PART_LUKS="${DISK}1"
-              fi
-        fi
-
-        echo "[*] Target EFI partition: $PART_EFI."
-        echo "[*] Target LUKS partition: $PART_LUKS."
+    if [ "$2" == "core" ];
+    then
+        echo "[*] Mode: '$2'"
+        CPU_MICROCODE=1
+    elif [ "$2" == "virt" ];
+    then
+        echo "[*] Mode: '$2'"
+        CPU_MICROCODE=0
     else
-        echo "[X] ERROR: '$4' is not a valid block device. Exiting..."
+        echo "[X] ERROR: The passed mode is '$2' but must be 'core' or 'virt'. Exiting..."
+        print_usage
         exit 1
     fi
-else
-    echo "[X] ERROR: Path '$4' does not exist. Exiting..."
+fi
+
+if [ -z "$3" ];
+then
+    echo "[X] ERROR: The hypervisor was not specified but must be 'none', 'kvm' or 'xen'. Exiting..."
+    print_usage
     exit 1
+else
+    if [ "$3" == "none" ];
+    then
+        echo "[*] Hypervisor: '$3'"
+        HYPERVISOR=$3
+    elif [ "$3" == "kvm" ];
+    then
+        echo "[*] Hypervisor: '$3'"
+        HYPERVISOR=$3
+    elif [ "$3" == "xen" ];
+    then
+        echo "[*] Hypervisor: '$3'"
+        HYPERVISOR=$3
+    else
+        echo "[X] ERROR: The passed hypervisor is '$3' but must be 'none', 'kvm' or 'xen'. Exiting..."
+        print_usage
+        exit 1
+    fi
+fi
+
+if [ -z "$4" ];
+then
+    echo "[X] ERROR: The disk was not specified. Exiting..."
+    print_usage
+    exit 1
+else
+    if [ -e "$4" ]; then
+        echo "[*] Path '$4' exists."
+    
+        if [ -b "$4" ]; then
+            echo "[*] '$4' is a valid block device."     
+            DISK=$4
+    
+            if [[ $DISK == "/dev/mmc*" ]]; 
+            then
+                  echo "[*] Target disk seems to be a MMC disk."
+    
+                  if [ $PART_EFI_ENABLED == 1 ],
+                  then             
+                      PART_EFI="${DISK}p1"
+                      PART_LUKS="${DISK}p2"
+                  else
+                      PART_EFI="- (BIOS installation)"
+                      PART_LUKS="${DISK}p1"
+                  fi
+            elif [[ $DISK == "/dev/nvme*" ]]; 
+            then
+                  echo "[*] Target disk seems to be a NVME disk."
+    
+                  if [ $PART_EFI_ENABLED == 1 ],
+                  then             
+                      PART_EFI="${DISK}p1"
+                      PART_LUKS="${DISK}p2"
+                  else
+                      PART_EFI="- (BIOS installation)"
+                      PART_LUKS="${DISK}p1"
+                  fi
+            else
+                  if [ $PART_EFI_ENABLED == 1 ],
+                  then             
+                      PART_EFI="${DISK}1"
+                      PART_LUKS="${DISK}2"
+                  else
+                      PART_EFI="- (BIOS installation)"
+                      PART_LUKS="${DISK}1"
+                  fi
+            fi
+    
+            echo "[*] Target EFI partition: $PART_EFI."
+            echo "[*] Target LUKS partition: $PART_LUKS."
+        else
+            echo "[X] ERROR: '$4' is not a valid block device. Exiting..."
+            exit 1
+        fi
+    else
+        echo "[X] ERROR: Path '$4' does not exist. Exiting..."
+        exit 1
+    fi
 fi
 
 # Retrieve the LUKS & user password

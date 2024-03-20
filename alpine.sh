@@ -84,15 +84,15 @@ then
 else
     if [ "$1" == "bios" ];
     then
-        echo "Platform: '$1'"
+        echo "[*] Platform: '$1'"
         DISK_GPT=0
     elif [ "$1" == "uefi" ];
     then
-        echo "Platform: '$1'"
+        echo "[*] Platform: '$1'"
         DISK_GPT=1
     elif [ "$1" == "uefi-sb" ];
     then
-        echo "Platform: '$1'"
+        echo "[*] Platform: '$1'"
         DISK_GPT=1
     else
         echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."

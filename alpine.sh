@@ -47,7 +47,7 @@ grub_install_uefi() {
 }
 
 print_usage() {
-    echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Mode: host/virt> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
+    echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Mode: core/virt> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
 }
 
 # Start message

@@ -7,10 +7,10 @@
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
 cpu_microcode_install() {
-    if [ $CPU_MICROCODE == 0 ];
+    if [ "$CPU_MICROCODE" == "0" ];
     then
         echo "[*] Skipping CPU microcode updates for AMD and Intel processors..."
-    elif [ $CPU_MICROCODE == 1 ];
+    elif [ "$CPU_MICROCODE" == "1" ];
     then
         echo "[*] Installing CPU microcode updates for AMD and Intel processors..."
         apk add amd-ucode intel-ucode
@@ -95,15 +95,15 @@ else
     if [ "$1" == "bios" ];
     then
         echo "[*] Platform: '$1'"
-        DISK_GPT=0
+        DISK_GPT="0"
     elif [ "$1" == "uefi" ];
     then
         echo "[*] Platform: '$1'"
-        DISK_GPT=1
+        DISK_GPT="1"
     elif [ "$1" == "uefi-sb" ];
     then
         echo "[*] Platform: '$1'"
-        DISK_GPT=1
+        DISK_GPT="1"
     else
         echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
         print_usage
@@ -120,11 +120,11 @@ else
     if [ "$2" == "core" ];
     then
         echo "[*] Mode: '$2'"
-        CPU_MICROCODE=1
+        CPU_MICROCODE="1"
     elif [ "$2" == "virt" ];
     then
         echo "[*] Mode: '$2'"
-        CPU_MICROCODE=0
+        CPU_MICROCODE="0"
     else
         echo "[X] ERROR: The passed mode is '$2' but must be 'core' or 'virt'. Exiting..."
         print_usage
@@ -141,15 +141,15 @@ else
     if [ "$3" == "none" ];
     then
         echo "[*] Hypervisor: '$3'"
-        HYPERVISOR=$3
+        HYPERVISOR="$3"
     elif [ "$3" == "kvm" ];
     then
         echo "[*] Hypervisor: '$3'"
-        HYPERVISOR=$3
+        HYPERVISOR="$3"
     elif [ "$3" == "xen" ];
     then
         echo "[*] Hypervisor: '$3'"
-        HYPERVISOR=$3
+        HYPERVISOR="$3"
     else
         echo "[X] ERROR: The passed hypervisor is '$3' but must be 'none', 'kvm' or 'xen'. Exiting..."
         print_usage
@@ -174,7 +174,7 @@ else
             then
                   echo "[*] Target disk seems to be a MMC disk."
     
-                  if [ "$PART_EFI_ENABLED" == 1 ];
+                  if [ "$PART_EFI_ENABLED" == "1" ];
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
@@ -186,7 +186,7 @@ else
             then
                   echo "[*] Target disk seems to be a NVME disk."
     
-                  if [ "$PART_EFI_ENABLED" == 1 ];
+                  if [ "$PART_EFI_ENABLED" == "1" ];
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
@@ -195,7 +195,7 @@ else
                       PART_LUKS="${DISK}p1"
                   fi
             else
-                  if [ "$PART_EFI_ENABLED" == 1 ];
+                  if [ "$PART_EFI_ENABLED" == "1" ];
                   then             
                       PART_EFI="${DISK}1"
                       PART_LUKS="${DISK}2"

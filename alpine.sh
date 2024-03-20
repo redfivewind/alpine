@@ -188,6 +188,7 @@ apk add cryptsetup \
     lsblk \
     lvm2 \
     nano \
+    parted \
     p7zip \
     tlp \
     unzip \

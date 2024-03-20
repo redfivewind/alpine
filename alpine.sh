@@ -23,17 +23,17 @@ cpu_microcode_install() {
 disk_layout_bios() {
     echo "[*] Partitioning the target disk using MBR partition layout..."
     parted $DISK mktable msdos
-    sudo parted $DISK mkpart primary ext4 0% 100%
-    sudo parted $DISK name 1 $PART_LUKS_LABEL
+    parted $DISK mkpart primary ext4 0% 100%
+    parted $DISK name 1 $PART_LUKS_LABEL
 }
 
 disk_layout_uefi() {
     echo "[*] Partitioning the target disk using GPT partition layout..."
     parted $DISK mktable gpt
-    sudo parted $DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
-    sudo parted $DISK name 1 $PART_EFI_LABEL
-    sudo parted $DISK mkpart primary ext4 512MiB 100%
-    sudo parted $DISK name 2 $PART_LUKS_LABEL
+    parted $DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
+    parted $DISK name 1 $PART_EFI_LABEL
+    parted $DISK mkpart primary ext4 512MiB 100%
+    parted $DISK name 2 $PART_LUKS_LABEL
 }
 
 grub_install_bios() {

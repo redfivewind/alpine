@@ -16,6 +16,7 @@ cpu_microcode_install() {
         apk add amd-ucode intel-ucode
     else
         echo "[X] ERROR: Variable 'CPU_MICROCODE' is '$CPU_MICROCODE' but must be 0 or 1. Exiting..."
+        exit 1
     fi
 }
 
@@ -88,9 +89,9 @@ then
     echo "Platform: '$0'"
     DISK_GPT=1
 else
-    echo "[X] ERROR: The passed platform is '$0' must be 'bios', 'uefi' oder 'uefi-sb'. Returning..."
+    echo "[X] ERROR: The passed platform is '$0' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
     print_usage
-    return
+    exit 1
 fi
 
 if [ $1 == "core" ];
@@ -102,9 +103,9 @@ then
     echo "[*] Mode: '$1'"
     CPU_MICROCODE=0
 else
-    echo "[X] ERROR: The passed mode is '$1' but must be 'core' or 'virt'."
+    echo "[X] ERROR: The passed mode is '$1' but must be 'core' or 'virt'. Exiting..."
     print_usage
-    return
+    exit 1
 fi
 
 if [ $2 == "none" ];
@@ -120,9 +121,9 @@ then
     echo "[*] Hypervisor: '$2'"
     HYPERVISOR=$2
 else
-    echo "[X] ERROR: The passed hypervisor is '$2' but must be 'none', 'kvm' or 'xen'."
+    echo "[X] ERROR: The passed hypervisor is '$2' but must be 'none', 'kvm' or 'xen'. Exiting..."
     print_usage
-    return
+    exit 1
 fi
 
 if [ -e "$3" ]; then
@@ -170,12 +171,12 @@ if [ -e "$3" ]; then
         echo "[*] Target EFI partition: $PART_EFI."
         echo "[*] Target LUKS partition: $PART_LUKS."
     else
-        echo "[X] ERROR: '$3' is not a valid block device. Returning..."
-        return
+        echo "[X] ERROR: '$3' is not a valid block device. Exiting..."
+        exit 1
     fi
 else
-    echo "[X] ERROR: Path '$3' does not exist. Returning..."
-    return
+    echo "[X] ERROR: Path '$3' does not exist. Exiting..."
+    exit 1
 fi
 
 # Retrieve the LUKS & user password
@@ -256,8 +257,8 @@ elif [ $DISK_GPT == 1 ];
 then
     disk_layout_uefi
 else
-    echo "[X] ERROR: Variable 'DISK_GPT' is '$DISK_GPT' but must be 0 or 1. This is unexpected behaviour. Returning..."
-    return
+    echo "[X] ERROR: Variable 'DISK_GPT' is '$DISK_GPT' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+    exit
 fi
 
 for i in $(seq 10)
@@ -333,8 +334,8 @@ elif [ $MODE == "uefi-sb" ];
 then
     grub_install_uefi
 else
-    echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Returning..."
-    return
+    echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Exiting..."
+    exit
 fi
 
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg

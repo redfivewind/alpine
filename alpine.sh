@@ -76,62 +76,62 @@ USER_NAME="user"
 USER_PASS=""
 
 # Argument parsing
-if [ $0 == "bios" ];
+if [ $1 == "bios" ];
 then
-    echo "Platform: '$0'"
+    echo "Platform: '$1'"
     DISK_GPT=0
-elif [ $0 == "uefi" ];
+elif [ $1 == "uefi" ];
 then
-    echo "Platform: '$0'"
+    echo "Platform: '$1'"
     DISK_GPT=1
-elif [ $0 == "uefi-sb" ];
+elif [ $1 == "uefi-sb" ];
 then
-    echo "Platform: '$0'"
+    echo "Platform: '$1'"
     DISK_GPT=1
 else
-    echo "[X] ERROR: The passed platform is '$0' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
+    echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
     print_usage
     exit 1
 fi
 
-if [ $1 == "core" ];
+if [ $2 == "core" ];
 then
-    echo "[*] Mode: '$1'"
+    echo "[*] Mode: '$2'"
     CPU_MICROCODE=1
-elif [ $1 == "virt" ];
+elif [ $2 == "virt" ];
 then
-    echo "[*] Mode: '$1'"
+    echo "[*] Mode: '$2'"
     CPU_MICROCODE=0
 else
-    echo "[X] ERROR: The passed mode is '$1' but must be 'core' or 'virt'. Exiting..."
+    echo "[X] ERROR: The passed mode is '$2' but must be 'core' or 'virt'. Exiting..."
     print_usage
     exit 1
 fi
 
-if [ $2 == "none" ];
+if [ $3 == "none" ];
 then
-    echo "[*] Hypervisor: '$2'"
-    HYPERVISOR=$2
-elif [ $2 == "kvm" ];
+    echo "[*] Hypervisor: '$3'"
+    HYPERVISOR=$3
+elif [ $3 == "kvm" ];
 then
-    echo "[*] Hypervisor: '$2'"
-    HYPERVISOR=$2
-elif [ $2 == "xen" ];
+    echo "[*] Hypervisor: '$3'"
+    HYPERVISOR=$3
+elif [ $3 == "xen" ];
 then
-    echo "[*] Hypervisor: '$2'"
-    HYPERVISOR=$2
+    echo "[*] Hypervisor: '$3'"
+    HYPERVISOR=$3
 else
-    echo "[X] ERROR: The passed hypervisor is '$2' but must be 'none', 'kvm' or 'xen'. Exiting..."
+    echo "[X] ERROR: The passed hypervisor is '$3' but must be 'none', 'kvm' or 'xen'. Exiting..."
     print_usage
     exit 1
 fi
 
-if [ -e "$3" ]; then
-    echo "[*] Path '$3' exists."
+if [ -e "$4" ]; then
+    echo "[*] Path '$4' exists."
 
-    if [ -b "$3" ]; then
-        echo "[*] '$3' is a valid block device."     
-        DISK=$3
+    if [ -b "$4" ]; then
+        echo "[*] '$4' is a valid block device."     
+        DISK=$4
 
         if [[ $DISK == "/dev/mmc*" ]]; 
         then
@@ -171,11 +171,11 @@ if [ -e "$3" ]; then
         echo "[*] Target EFI partition: $PART_EFI."
         echo "[*] Target LUKS partition: $PART_LUKS."
     else
-        echo "[X] ERROR: '$3' is not a valid block device. Exiting..."
+        echo "[X] ERROR: '$4' is not a valid block device. Exiting..."
         exit 1
     fi
 else
-    echo "[X] ERROR: Path '$3' does not exist. Exiting..."
+    echo "[X] ERROR: Path '$4' does not exist. Exiting..."
     exit 1
 fi
 

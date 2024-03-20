@@ -250,6 +250,8 @@ echo "[*] Setting up udev as devd..."
 setup-devd udev
 
 # Partitioning
+echo "[*] Partitioning the disk..."
+
 if [ $DISK_GPT == 0 ];
 then
     disk_layout_bios

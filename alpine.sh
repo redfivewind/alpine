@@ -16,14 +16,6 @@ disk_layout_bios() {
 
 disk_layout_uefi() {
     echo "[*] Partitioning the target disk using GPT partition layout..."
-    sgdisk --zap-all $DISK
-    sgdisk --new=1:0:+512M $DISK
-    sgdisk --new=2:0:0 $DISK
-    sgdisk --typecode=1:ef00 --typecode=2:8309 $DISK
-    sgdisk --change-name=1:$EFI_LABEL --change-name=2:$LUKS_LABEL $DISK
-    sgdisk --print $DISK
-
-    echo "[*] Partitioning the target disk using GPT partition layout..."
     parted $DISK mktable gpt
     sudo parted $DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
     sudo parted $DISK name 1 $EFI_LABEL
@@ -197,7 +189,6 @@ apk add cryptsetup \
     lvm2 \
     nano \
     p7zip \
-    sgdisk \
     tlp \
     unzip \
     zip

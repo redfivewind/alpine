@@ -46,6 +46,14 @@ grub_install_uefi() {
     chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $DISK
 }
 
+hv_kvm_install() {
+    #FIXME
+}
+
+hv_xen_install() {
+    #FIXME
+}
+
 print_usage() {
     echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Mode: core/virt> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
 }

@@ -164,7 +164,7 @@ else
             then
                   echo "[*] Target disk seems to be a MMC disk."
     
-                  if [ $PART_EFI_ENABLED == 1 ],
+                  if [ $PART_EFI_ENABLED == 1 ];
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
@@ -176,7 +176,7 @@ else
             then
                   echo "[*] Target disk seems to be a NVME disk."
     
-                  if [ $PART_EFI_ENABLED == 1 ],
+                  if [ $PART_EFI_ENABLED == 1 ];
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
@@ -185,7 +185,7 @@ else
                       PART_LUKS="${DISK}p1"
                   fi
             else
-                  if [ $PART_EFI_ENABLED == 1 ],
+                  if [ $PART_EFI_ENABLED == 1 ];
                   then             
                       PART_EFI="${DISK}1"
                       PART_LUKS="${DISK}2"
@@ -213,7 +213,8 @@ read -s luks_pass_a
 echo "[*] Please reenter the LUKS password: "
 read -s luks_pass_b
 
-if [ "$luks_pass_a" == "$luks_pass_b" ]; then
+if [ "$luks_pass_a" == "$luks_pass_b" ]; 
+then
     LUKS_PASS=$luks_pass_a
 else
     echo "[X] ERROR: The LUKS passwords do not match."
@@ -225,7 +226,8 @@ read -s user_pass_a
 echo "[*] Please reenter the user password: "
 read -s user_pass_b
 
-if [ "$user_pass_a" == "$user_pass_b" ]; then
+if [ "$user_pass_a" == "$user_pass_b" ]; 
+then
     USER_PASS=$user_pass_a
 else
     echo "[X] ERROR: The user passwords do not match."

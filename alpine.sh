@@ -6,18 +6,67 @@
 # TODO: DE Xfce: Add keyboard shortcut WIN+L
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
-cpu_microcode_install() {
-    if [ "$CPU_MICROCODE" == "0" ];
-    then
-        echo "[*] Skipping CPU microcode updates for AMD and Intel processors..."
-    elif [ "$CPU_MICROCODE" == "1" ];
-    then
-        echo "[*] Installing CPU microcode updates for AMD and Intel processors..."
-        apk add amd-ucode intel-ucode
-    else
-        echo "[X] ERROR: Variable 'CPU_MICROCODE' is '$CPU_MICROCODE' but must be 0 or 1. Exiting..."
-        exit 1
-    fi
+arg_parsing() {
+    for l_arg in "$@"; 
+    do
+        elif [ "$l_arg" == "--disk=*" ];
+        then
+            if [ -z "$ARG_DISK" ];
+            then
+                ARG_DISK=${l_arg#"--disk="}
+
+                if [ -z "$ARG_DISK" ];
+                then
+                    echo "[X] ERROR: The passed argument 'Disk' is empty. Exiting..."
+                    exit 1
+                fi
+            else
+                echo "[X] ERROR: The passed argument 'Disk' is already set. Exiting..."
+                exit 1
+            fi
+        elif [ "$l_arg" == "--hypervisor=*" ];
+        then
+            if [ -z "$ARG_HYPERVISOR" ];
+            then
+                ARG_HYPERVISOR=${l_arg#"--hypervisor="}
+                
+                if [ "$ARG_HYPERVISOR" == "kvm" ];
+                then
+                    echo "[*] Hypervisor: '$ARG_HYPERVISOR'"
+                elif [ "$ARG_HYPERVISOR" == "xen" ];
+                then
+                    echo "[*] Hypervisor: '$ARG_HYPERVISOR'"
+                else
+                    echo "[X] ERROR: The passed hypervisor is '$ARG_HYPERVISOR' but must be 'kvm' or 'xen'. Exiting..."
+                    exit 1
+                fi
+            else
+                echo "[X] ERROR: The passed argument 'Hypervisor' is already set. Exiting..."
+                exit 1
+            fi
+        elif [ "$l_arg" == "--platform=*" ];
+        then
+            ARG_PLATFORM=${l_arg#"--platform="}
+                
+            if [ "$ARG_PLATFORM" == "bios" ];
+            then
+                echo "[*] Platform: '$ARG_PLATFORM'"
+            elif [ "$ARG_PLATFORM" == "uefi" ];
+            then
+                echo "[*] Platform: '$ARG_PLATFORM'"
+            elif [ "$ARG_PLATFORM" == "uefi-sb" ];
+            then
+                echo "[*] Platform: '$ARG_PLATFORM'"
+            else
+                echo "[X] ERROR: The passed platform is '$ARG_PLATFORM' but must be 'bios', 'uefi' or 'uefi-sb'. Exiting..."
+                exit 1
+            fi
+        else
+            echo "[X] ERROR: Unknown argument '$l_arg'. Exiting..."
+            exit 1
+        fi
+        
+    done
 }
 
 disk_layout_bios() {
@@ -57,7 +106,7 @@ hv_xen_install() {
 }
 
 print_usage() {
-    echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Mode: core/virt> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
+    echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
 }
 
 # Start message
@@ -66,22 +115,20 @@ read
 
 # Global variables
 echo "[*] Initializing global variables..."
-CPU_MICROCODE=""
-DISK=""
-DISK_GPT=""
-HYPERVISOR=""
+ARG_DISK=""
+ARG_HYPERVISOR=""
+ARG_PLATFORM=""
+GPT_OVER_MBR=""
 LUKS_LVM="luks_lvm"
 LUKS_PASS=""
 LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
-MODE=""
 PART_EFI=""
 PART_EFI_ENABLED=""
 PART_EFI_LABEL="efi-sp"
 PART_LUKS=""
 PART_LUKS_LABEL="luks"
-PLATFORM=""
 USER_NAME="user"
 USER_PASS=""
 
@@ -95,17 +142,17 @@ else
     if [ "$1" == "bios" ];
     then
         echo "[*] Platform: '$1'"
-        DISK_GPT="0"
+        GPT_OVER_MBR="0"
         PART_EFI_ENABLED="0"
     elif [ "$1" == "uefi" ];
     then
         echo "[*] Platform: '$1'"
-        DISK_GPT="1"
+        GPT_OVER_MBR="1"
         PART_EFI_ENABLED="1"
     elif [ "$1" == "uefi-sb" ];
     then
         echo "[*] Platform: '$1'"
-        DISK_GPT="1"
+        GPT_OVER_MBR="1"
         PART_EFI_ENABLED="1"
     else
         echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
@@ -286,7 +333,7 @@ setup-apkrepos -c -f
 
 # Install required packages
 echo "[*] Installing required packages..."
-apk add cryptsetup e2fsprogs file lsblk lvm2 nano parted p7zip tlp unzip zip
+apk add amd-ucode cryptsetup e2fsprogs file intel-ucode lsblk lvm2 nano parted p7zip tlp unzip zip
 cpu_microcode_install
 sleep 2
 
@@ -297,14 +344,14 @@ setup-devd udev
 # Partitioning
 echo "[*] Partitioning the disk..."
 
-if [ "$DISK_GPT" == 0 ];
+if [ "$GPT_OVER_MBR" == 0 ];
 then
     disk_layout_bios
-elif [ "$DISK_GPT" == 1 ];
+elif [ "$GPT_OVER_MBR" == 1 ];
 then
     disk_layout_uefi
 else
-    echo "[X] ERROR: Variable 'DISK_GPT' is '$DISK_GPT' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+    echo "[X] ERROR: Variable 'GPT_OVER_MBR' is '$GPT_OVER_MBR' but must be 0 or 1. This is unexpected behaviour. Exiting..."
     exit 1
 fi
 

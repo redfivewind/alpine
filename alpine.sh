@@ -7,8 +7,16 @@
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
 cpu_microcode_install() {
-    echo "[*] Installing CPU microcode updates for AMD and Intel processors..."
-    apk add amd-ucode intel-ucode
+    if [ $CPU_MICROCODE == 0 ];
+    then
+        echo "[*] Skipping CPU microcode updates for AMD and Intel processors..."
+    elif [ $CPU_MICROCODE == 1 ];
+    then
+        echo "[*] Installing CPU microcode updates for AMD and Intel processors..."
+        apk add amd-ucode intel-ucode
+    else
+        echo "[X] ERROR: Variable 'CPU_MICROCODE' is '$CPU_MICROCODE' but must be 0 or 1. Exiting..."
+    fi
 }
 
 disk_layout_bios() {
@@ -47,8 +55,10 @@ read
 
 # Global variables
 echo "[*] Initializing global variables..."
+CPU_MICROCODE=""
 DISK=""
 DISK_GPT=""
+HYPERVISOR=""
 LUKS_LVM="luks_lvm"
 LUKS_PASS=""
 LV_ROOT="lv_root"
@@ -86,11 +96,11 @@ fi
 if [ $1 == "core" ];
 then
     echo "[*] Mode: '$1'"
-    #FIXME
+    CPU_MICROCODE=1
 elif [ $1 == "virt" ];
 then
     echo "[*] Mode: '$1'"
-    #FIXME
+    CPU_MICROCODE=0
 else
     echo "[X] ERROR: The passed mode is '$1' but must be 'core' or 'virt'."
     print_usage
@@ -100,15 +110,15 @@ fi
 if [ $2 == "none" ];
 then
     echo "[*] Hypervisor: '$2'"
-    #FIXME
+    HYPERVISOR=$2
 elif [ $2 == "kvm" ];
 then
     echo "[*] Hypervisor: '$2'"
-    #FIXME
+    HYPERVISOR=$2
 elif [ $2 == "xen" ];
 then
     echo "[*] Hypervisor: '$2'"
-    #FIXME
+    HYPERVISOR=$2
 else
     echo "[X] ERROR: The passed hypervisor is '$2' but must be 'none', 'kvm' or 'xen'."
     print_usage
@@ -160,11 +170,12 @@ if [ -e "$3" ]; then
         echo "[*] Target EFI partition: $PART_EFI."
         echo "[*] Target LUKS partition: $PART_LUKS."
     else
-        echo "[X] ERROR: '$3' is not a valid block device."
-        exit 1
+        echo "[X] ERROR: '$3' is not a valid block device. Returning..."
+        return
     fi
 else
-    echo "[X] ERROR: Path '$3' does not exist."
+    echo "[X] ERROR: Path '$3' does not exist. Returning..."
+    return
 fi
 
 # Retrieve the LUKS & user password
@@ -230,6 +241,7 @@ apk add cryptsetup \
     tlp \
     unzip \
     zip
+cpu_microcode_install
 sleep 2
 
 # Setup udev as devd

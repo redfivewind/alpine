@@ -31,6 +31,14 @@ grub_install_uefi() {
     chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $DISK
 }
 
+mode_core_check() {
+    #FIXME
+}
+
+mode_virt_check() {
+    #FIXME
+}
+
 print_usage() {
     echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Mode: host/virt> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
 }
@@ -121,7 +129,7 @@ if [ -e "$3" ]; then
                   PART_EFI="${DISK}p1"
                   PART_LUKS="${DISK}p2"
               else
-                  PART_EFI="-"
+                  PART_EFI="- (BIOS installation)"
                   PART_LUKS="${DISK}p1"
               fi
         elif [[ $DISK == "/dev/nvme*" ]]; 
@@ -133,7 +141,7 @@ if [ -e "$3" ]; then
                   PART_EFI="${DISK}p1"
                   PART_LUKS="${DISK}p2"
               else
-                  PART_EFI="-"
+                  PART_EFI="- (BIOS installation)"
                   PART_LUKS="${DISK}p1"
               fi
         else
@@ -142,7 +150,7 @@ if [ -e "$3" ]; then
                   PART_EFI="${DISK}1"
                   PART_LUKS="${DISK}2"
               else
-                  PART_EFI="-"
+                  PART_EFI="- (BIOS installation)"
                   PART_LUKS="${DISK}1"
               fi
         fi

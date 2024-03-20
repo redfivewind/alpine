@@ -1,7 +1,3 @@
-# ARGUMENT: Platform (bios, uefi, uefi-sb)
-# ARGUMENT: Mode (core, core_kvm, core_xen, virt, virt_kvm, virt_xen)
-# ARGUMENT: Disk
-# ARGUMENT: Desktop Environment (none, xfce)
 # ARGUMENT: ---Audio---
 # ARGUMENT: ---Bluetooth---
 # ARGUMENT: ---Network (Broadband, Ethernet, General, WiFi, ...)---
@@ -26,9 +22,13 @@ disk_layout_uefi() {
     sgdisk --typecode=1:ef00 --typecode=2:8309 $DISK
     sgdisk --change-name=1:$EFI_LABEL --change-name=2:$LUKS_LABEL $DISK
     sgdisk --print $DISK
-    for i in $(seq 10)
-        do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DISK && sleep 1
-    done
+
+    echo "[*] Partitioning the target disk using GPT partition layout..."
+    parted $DISK mktable gpt
+    sudo parted $DISK mkpart primary ext4 1MiB 512MiB
+    sudo parted $DISK name 1 $EFI_LABEL
+    sudo parted $DISK mkpart primary ext4 513MiB 100%
+    sudo parted $DISK name 2 $LUKS_LABEL
 }
 
 grub_install_bios() {
@@ -82,32 +82,60 @@ fi
 
 if [ $1 == "core" ];
 then
-    echo "[*] MODE: '$1'"
-    #FIXME
-elif [ $1 == "core_kvm" ];
-then
-    echo "[*] MODE: '$1'"
-    #FIXME
-elif [ $1 == "core_xen" ];
-then
-    echo "[*] MODE: '$1'"
+    echo "[*] Mode: '$1'"
     #FIXME
 elif [ $1 == "virt" ];
 then
-    echo "[*] MODE: '$1'"
-    #FIXME
-elif [ $1 == "virt_kvm" ];
-then
-    echo "[*] MODE: '$1'"
-    #FIXME
-elif [ $1 == "virt_xen" ];
-then
-    echo "[*] MODE: '$1'"
+    echo "[*] Mode: '$1'"
     #FIXME
 else
     echo "[X] ERROR: The passed mode is '$1' but must be 'core' or 'virt'."
     print_usage
     return
+fi
+
+if [ $2 == "none" ];
+then
+    echo "[*] Hypervisor: '$2'"
+    #FIXME
+elif [ $2 == "kvm" ];
+then
+    echo "[*] Hypervisor: '$2'"
+    #FIXME
+elif [ $2 == "xen" ];
+then
+    echo "[*] Hypervisor: '$2'"
+    #FIXME
+else
+    echo "[X] ERROR: The passed hypervisor is '$2' but must be 'none', 'kvm' or 'xen'."
+    print_usage
+    return
+fi
+
+if [ -e "$3" ]; then
+    echo "[*] Path '$3' exists."
+
+    if [ -b "$3" ]; then
+        echo "[*] '$3' is a valid block device."     
+        DISK=$3
+
+        if [[ $DISK == "/dev/nvme*" ]]; then
+              echo "[*] Target disk seems to be a NVME disk."
+              PART_EFI="${DEV}p1"
+              PART_LUKS="${DEV}p2"
+        else
+              PART_EFI="${DEV}1"
+              PART_LUKS="${DEV}2"
+        fi
+
+        echo "[*] Target EFI partition: $PART_EFI."
+        echo "[*] Target LUKS partition: $PART_LUKS."
+    else
+        echo "[X] ERROR: '$3' is not a valid block device."
+        exit 1
+    fi
+else
+    echo "[X] ERROR: Path '$3' does not exist."
 fi
 
 # Retrieve the LUKS & user password
@@ -193,6 +221,10 @@ else
     echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Returning..."
     return
 fi
+
+for i in $(seq 10)
+    do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DISK && sleep 1
+done
 
 # Setup LUKS partition
 echo "[*] Formatting the second partition as a LUKS crypto partition..."

@@ -174,7 +174,7 @@ else
             then
                   echo "[*] Target disk seems to be a MMC disk."
     
-                  if [ $PART_EFI_ENABLED == 1 ];
+                  if [ "$PART_EFI_ENABLED" == 1 ];
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
@@ -182,11 +182,11 @@ else
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${DISK}p1"
                   fi
-            elif [[ $DISK == "/dev/nvme*" ]]; 
+            elif [[ "$DISK" == "/dev/nvme*" ]]; 
             then
                   echo "[*] Target disk seems to be a NVME disk."
     
-                  if [ $PART_EFI_ENABLED == 1 ];
+                  if [ "$PART_EFI_ENABLED" == 1 ];
                   then             
                       PART_EFI="${DISK}p1"
                       PART_LUKS="${DISK}p2"
@@ -195,7 +195,7 @@ else
                       PART_LUKS="${DISK}p1"
                   fi
             else
-                  if [ $PART_EFI_ENABLED == 1 ];
+                  if [ "$PART_EFI_ENABLED" == 1 ];
                   then             
                       PART_EFI="${DISK}1"
                       PART_LUKS="${DISK}2"
@@ -292,10 +292,10 @@ setup-devd udev
 # Partitioning
 echo "[*] Partitioning the disk..."
 
-if [ $DISK_GPT == 0 ];
+if [ "$DISK_GPT" == 0 ];
 then
     disk_layout_bios
-elif [ $DISK_GPT == 1 ];
+elif [ "$DISK_GPT" == 1 ];
 then
     disk_layout_uefi
 else

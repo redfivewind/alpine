@@ -11,16 +11,16 @@ disk_layout_bios() {
     echo "[*] Partitioning the target disk using MBR partition layout..."
     parted $DISK mktable msdos
     sudo parted $DISK mkpart primary ext4 0% 100%
-    sudo parted $DISK name 1 $LUKS_LABEL
+    sudo parted $DISK name 1 $PART_LUKS_LABEL
 }
 
 disk_layout_uefi() {
     echo "[*] Partitioning the target disk using GPT partition layout..."
     parted $DISK mktable gpt
     sudo parted $DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
-    sudo parted $DISK name 1 $EFI_LABEL
+    sudo parted $DISK name 1 $PART_EFI_LABEL
     sudo parted $DISK mkpart primary ext4 512MiB 100%
-    sudo parted $DISK name 2 $LUKS_LABEL
+    sudo parted $DISK name 2 $PART_LUKS_LABEL
 }
 
 grub_install_bios() {
@@ -42,8 +42,6 @@ read
 # Global variables
 echo "[*] Initializing global variables..."
 DISK=""
-EFI_LABEL="efi-sp"
-LUKS_LABEL="luks"
 LUKS_LVM="luks_lvm"
 LUKS_PASS=""
 LV_ROOT="lv_root"
@@ -51,7 +49,10 @@ LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
 MODE=""
 PART_EFI=""
+PART_EFI_ENABLED=""
+PART_EFI_LABEL="efi-sp"
 PART_LUKS=""
+PART_LUKS_LABEL="luks"
 PLATFORM=""
 USER_NAME="user"
 USER_PASS=""
@@ -111,13 +112,39 @@ if [ -e "$3" ]; then
         echo "[*] '$3' is a valid block device."     
         DISK=$3
 
-        if [[ $DISK == "/dev/nvme*" ]]; then
+        if [[ $DISK == "/dev/mmc*" ]]; 
+        then
+              echo "[*] Target disk seems to be a MMC disk."
+
+              if [ $PART_EFI_ENABLED == 1 ],
+              then             
+                  PART_EFI="${DISK}p1"
+                  PART_LUKS="${DISK}p2"
+              else
+                  PART_EFI="-"
+                  PART_LUKS="${DISK}p1"
+              fi
+        elif [[ $DISK == "/dev/nvme*" ]]; 
+        then
               echo "[*] Target disk seems to be a NVME disk."
-              PART_EFI="${DEV}p1"
-              PART_LUKS="${DEV}p2"
+
+              if [ $PART_EFI_ENABLED == 1 ],
+              then             
+                  PART_EFI="${DISK}p1"
+                  PART_LUKS="${DISK}p2"
+              else
+                  PART_EFI="-"
+                  PART_LUKS="${DISK}p1"
+              fi
         else
-              PART_EFI="${DEV}1"
-              PART_LUKS="${DEV}2"
+              if [ $PART_EFI_ENABLED == 1 ],
+              then             
+                  PART_EFI="${DISK}1"
+                  PART_LUKS="${DISK}2"
+              else
+                  PART_EFI="-"
+                  PART_LUKS="${DISK}1"
+              fi
         fi
 
         echo "[*] Target EFI partition: $PART_EFI."

@@ -1,7 +1,6 @@
 # ARGUMENT: ---Audio---
 # ARGUMENT: ---Bluetooth---
 # ARGUMENT: ---Network (Broadband, Ethernet, General, WiFi, ...)---
-
 # TODO: Base: Hardening
 # TODO: DE Xfce: Automatic sleep/hibernate & resume
 # TODO: DE Xfce: Add keyboard shortcut WIN+L

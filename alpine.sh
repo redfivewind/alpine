@@ -76,22 +76,27 @@ USER_NAME="user"
 USER_PASS=""
 
 # Argument parsing
-if [ $1 == "bios" ];
+if [ $1 != "" ];
 then
-    echo "Platform: '$1'"
-    DISK_GPT=0
-elif [ $1 == "uefi" ];
-then
-    echo "Platform: '$1'"
-    DISK_GPT=1
-elif [ $1 == "uefi-sb" ];
-then
-    echo "Platform: '$1'"
-    DISK_GPT=1
+    if [ $1 == "bios" ];
+    then
+        echo "Platform: '$1'"
+        DISK_GPT=0
+    elif [ $1 == "uefi" ];
+    then
+        echo "Platform: '$1'"
+        DISK_GPT=1
+    elif [ $1 == "uefi-sb" ];
+    then
+        echo "Platform: '$1'"
+        DISK_GPT=1
+    else
+        echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
+        print_usage
+        exit 1
+    fi
 else
-    echo "[X] ERROR: The passed platform is '$1' must be 'bios', 'uefi' oder 'uefi-sb'. Exiting..."
-    print_usage
-    exit 1
+    echo "XYZ"
 fi
 
 if [ $2 == "core" ];

@@ -94,6 +94,12 @@ arg_parsing() {
     done
 
     # Verify, that all arguments were provided
+    if [ -z "$ARG_DESKTOP" ];
+    then
+        echo "[X] ERROR: No desktop environment was provided. Exiting..."
+        exit 1
+    fi
+    
     if [ -z "$ARG_DISK" ];
     then
         echo "[X] ERROR: No disk was provided. Exiting..."

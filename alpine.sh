@@ -12,7 +12,24 @@ arg_parsing() {
     # Retrieve all arguments
     for l_arg in "$@"; 
     do
-        if [ "$l_arg" == "--disk=*" ];
+        if [ "$l_arg" == "--desktop=*" ];
+        then
+            if [ -z "$ARG_DESKTOP" ];
+            then
+                ARG_DESKTOP=${l_arg#"--desktop="}
+                
+                if [ "$ARG_DESKTOP" == "xfce" ];
+                then
+                    echo "[*] Desktop environment: '$ARG_DESKTOP'"
+                else
+                    echo "[X] ERROR: The passed desktop environment is '$ARG_DESKTOP' but must be 'xfce'. Exiting..."
+                    exit 1
+                fi
+            else
+                echo "[X] ERROR: The passed argument '--desktop' is already set. Exiting..."
+                exit 1
+            fi
+        elif [ "$l_arg" == "--disk=*" ];
         then
             if [ -z "$ARG_DISK" ];
             then
@@ -27,7 +44,7 @@ arg_parsing() {
                     disk_check
                 fi
             else
-                echo "[X] ERROR: The passed argument 'Disk' is already set. Exiting..."
+                echo "[X] ERROR: The passed argument '--disk' is already set. Exiting..."
                 exit 1
             fi
         elif [ "$l_arg" == "--hypervisor=*" ];
@@ -47,7 +64,7 @@ arg_parsing() {
                     exit 1
                 fi
             else
-                echo "[X] ERROR: The passed argument 'Hypervisor' is already set. Exiting..."
+                echo "[X] ERROR: The passed argument '--hypervisor' is already set. Exiting..."
                 exit 1
             fi
         elif [ "$l_arg" == "--platform=*" ];

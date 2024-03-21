@@ -7,6 +7,8 @@
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
 
 arg_parsing() {
+    echo "[*] Parsing arguments..."
+
     # Retrieve all arguments
     for l_arg in "$@"; 
     do

@@ -75,15 +75,15 @@ arg_parsing() {
             if [ "$ARG_PLATFORM" == "bios" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                PART_EFI_ENALED="0"
+                PART_EFI_ENABLED=0
             elif [ "$ARG_PLATFORM" == "uefi" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                PART_EFI_ENALED="1"
+                PART_EFI_ENABLED=1
             elif [ "$ARG_PLATFORM" == "uefi-sb" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                PART_EFI_ENALED="1"
+                PART_EFI_ENABLED=1
             else
                 echo "[X] ERROR: The passed platform is '$ARG_PLATFORM' but must be 'bios', 'uefi' or 'uefi-sb'. Exiting..."
                 exit 1
@@ -139,11 +139,11 @@ disk_check() {
             then
                   echo "[*] Target disk seems to be a MMC disk."
     
-                  if [ "$PART_EFI_ENABLED" == "1" ];
+                  if [ "$PART_EFI_ENABLED" == 1 ];
                   then             
                       PART_EFI="${ARG_DISK}p1"
                       PART_LUKS="${ARG_DISK}p2"
-                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  elif [ "$PART_EFI_ENABLED" == 0 ];
                   then
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${ARG_DISK}p1"
@@ -155,11 +155,11 @@ disk_check() {
             then
                   echo "[*] Target disk seems to be a NVME disk."
     
-                  if [ "$PART_EFI_ENABLED" == "1" ];
+                  if [ "$PART_EFI_ENABLED" == 1 ];
                   then             
                       PART_EFI="${ARG_DISK}p1"
                       PART_LUKS="${ARG_DISK}p2"
-                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  elif [ "$PART_EFI_ENABLED" == 0 ];
                   then
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${ARG_DISK}p1"
@@ -168,11 +168,11 @@ disk_check() {
                       exit 1
                   fi
             else
-                  if [ "$PART_EFI_ENABLED" == "1" ];
+                  if [ "$PART_EFI_ENABLED" == 1 ];
                   then             
                       PART_EFI="${ARG_DISK}1"
                       PART_LUKS="${ARG_DISK}2"
-                  elif [ "$PART_EFI_ENABLED" == "0" ];
+                  elif [ "$PART_EFI_ENABLED" == 0 ];
                   then
                       PART_EFI="- (BIOS installation)"
                       PART_LUKS="${ARG_DISK}1"

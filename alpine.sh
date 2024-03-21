@@ -96,6 +96,13 @@ arg_parsing() {
     fi
 }
 
+de_xfce_install() {
+    echo "[*] Installing desktop environment Xfce..."
+    #FIXME
+
+    return
+}
+
 disk_check() {
     if [ -e "$ARG_DISK" ]; then
         echo "[*] Path '$ARG_DISK' exists."

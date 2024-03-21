@@ -75,15 +75,15 @@ arg_parsing() {
             if [ "$ARG_PLATFORM" == "bios" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                PART_EFI_ENALED=0
+                PART_EFI_ENALED="0"
             elif [ "$ARG_PLATFORM" == "uefi" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                PART_EFI_ENALED=1
+                PART_EFI_ENALED="1"
             elif [ "$ARG_PLATFORM" == "uefi-sb" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                PART_EFI_ENALED=1
+                PART_EFI_ENALED="1"
             else
                 echo "[X] ERROR: The passed platform is '$ARG_PLATFORM' but must be 'bios', 'uefi' or 'uefi-sb'. Exiting..."
                 exit 1
@@ -128,11 +128,12 @@ de_xfce_install() {
 }
 
 disk_check() {
+    echo "$PART_EFI_ENABLED"
     if [ -e "$ARG_DISK" ]; then
         echo "[*] Path '$ARG_DISK' exists."
     
         if [ -b "$ARG_DISK" ]; then
-            echo "[*] '$ARG_DISK' is a valid block device." 
+            echo "[*] Path '$ARG_DISK' is a valid block device." 
     
             if [[ $ARG_DISK == "/dev/mmc*" ]]; 
             then

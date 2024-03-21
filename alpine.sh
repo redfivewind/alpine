@@ -74,15 +74,15 @@ arg_parsing() {
             if [ "$ARG_PLATFORM" == "bios" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                GPT_OVER_MBR=0
+                PART_EFI_ENALED=0
             elif [ "$ARG_PLATFORM" == "uefi" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                GPT_OVER_MBR=1
+                PART_EFI_ENALED=1
             elif [ "$ARG_PLATFORM" == "uefi-sb" ];
             then
                 echo "[*] Platform: '$ARG_PLATFORM'"
-                GPT_OVER_MBR=1
+                PART_EFI_ENALED=1
             else
                 echo "[X] ERROR: The passed platform is '$ARG_PLATFORM' but must be 'bios', 'uefi' or 'uefi-sb'. Exiting..."
                 exit 1
@@ -238,10 +238,10 @@ read
 
 # Global variables
 echo "[*] Initializing global variables..."
+ARG_DESKTOP=""
 ARG_DISK=""
 ARG_HYPERVISOR=""
 ARG_PLATFORM=""
-GPT_OVER_MBR=""
 LUKS_LVM="luks_lvm"
 LUKS_PASS=""
 LV_ROOT="lv_root"
@@ -324,14 +324,14 @@ setup-devd udev
 # Partitioning
 echo "[*] Partitioning the disk..."
 
-if [ "$GPT_OVER_MBR" == 0 ];
+if [ "$PART_EFI_ENALED" == 0 ];
 then
     disk_layout_bios
-elif [ "$GPT_OVER_MBR" == 1 ];
+elif [ "$PART_EFI_ENALED" == 1 ];
 then
     disk_layout_uefi
 else
-    echo "[X] ERROR: Variable 'GPT_OVER_MBR' is '$GPT_OVER_MBR' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+    echo "[X] ERROR: Variable 'PART_EFI_ENALED' is '$PART_EFI_ENALED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
     exit 1
 fi
 

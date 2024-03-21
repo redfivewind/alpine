@@ -406,23 +406,36 @@ tail /mnt/etc/default/grub
 sleep 2
 
 echo "[*] Installing GRUB..."
-if [ "$MODE" == "bios" ];
+if [ "$PART_EFI_ENABLED" == 0 ];
 then
     grub_install_bios
-elif [ "$MODE" == "uefi" ];
-then
-    grub_install_uefi
-elif [ "$MODE" == "uefi-sb" ];
+elif [ "$PART_EFI_ENABLED" == 1 ];
 then
     grub_install_uefi
 else
-    echo "[X] ERROR: Provided mode is '$MODE', but must be 'bios', 'uefi' or 'uefi-sb'. This is unexpected behaviour. Exiting..."
+    echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
     exit
 fi
 
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 chroot /mnt chmod 700 /boot
 sleep 2
+
+# Install the hypervisor (if applicable)
+if [ -z "$ARG_HYPERVISOR" ];
+then
+    echo "[*] No hypervisor was selected. Skipping..."
+else
+    if [ "$ARG_HYPERVISOR" == "kvm" ];
+    then
+        hv_kvm_install
+    elif [ "$ARG_HYPERVISOR" == "xen" ];
+    then
+        hv_xen_install
+    else
+        echo "[X] ERROR: Variable 'ARG_HYPERVISOR' is '$ARG_HYPERVISOR' but must be 'kvm' or 'xen'."
+    fi
+fi
 
 # Configure required services
 echo "[*] Configuring required services..."
@@ -448,22 +461,6 @@ mkdir -p /mnt/home/$USER_NAME/pictures
 mkdir -p /mnt/home/$USER_NAME/tools
 mkdir -p /mnt/home/$USER_NAME/workspace
 chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/
-
-# Install the hypervisor (if applicable)
-if [ -z "$ARG_HYPERVISOR" ];
-then
-    echo "[*] No hypervisor was selected. Skipping..."
-else
-    if [ "$ARG_HYPERVISOR" == "kvm" ];
-    then
-        hv_kvm_install
-    elif [ "$ARG_HYPERVISOR" == "xen" ];
-    then
-        hv_xen_install
-    else
-        echo "[X] ERROR: Variable 'ARG_HYPERVISOR' is '$ARG_HYPERVISOR' but must be 'kvm' or 'xen'."
-    fi
-fi
 
 # Install the desktop environment (if applicable)
 if [ -z "$ARG_DESKTOP" ];

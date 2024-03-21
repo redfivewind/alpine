@@ -128,7 +128,6 @@ de_xfce_install() {
 }
 
 disk_check() {
-    echo "$PART_EFI_ENABLED"
     if [ -e "$ARG_DISK" ]; then
         echo "[*] Path '$ARG_DISK' exists."
     

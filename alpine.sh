@@ -11,15 +11,13 @@ arg_parsing() {
     echo "[*] Parsing arguments..."
 
     # Retrieve all arguments
-    for l_arg in "$@"; 
+    for l_arg in "$ARG_ARRAY"; 
     do
         if [ "$l_arg" == "--desktop=*" ];
         then
             if [ -z "$ARG_DESKTOP" ];
             then
                 ARG_DESKTOP=${l_arg#"--desktop="}
-                echo "$l_arg"
-                echo "$ARG_DESKTOP"
                 
                 if [ "$ARG_DESKTOP" == "xfce" ];
                 then
@@ -241,6 +239,7 @@ read
 
 # Global variables
 echo "[*] Initializing global variables..."
+ARG_ARRAY="$@"
 ARG_DESKTOP=""
 ARG_DISK=""
 ARG_HYPERVISOR=""

@@ -200,6 +200,8 @@ disk_layout_bios() {
     parted $ARG_DISK mkpart primary ext4 0% 100%
     parted $ARG_DISK set 1 boot on
     parted $ARG_DISK name 1 $PART_LUKS_LABEL
+
+    sync
 }
 
 disk_layout_uefi() {
@@ -213,6 +215,8 @@ disk_layout_uefi() {
     
     parted $ARG_DISK mkpart primary ext4 512MiB 100%
     parted $ARG_DISK name 2 $PART_LUKS_LABEL
+
+    sync
 }
 
 grub_install_bios() {
@@ -226,13 +230,83 @@ grub_install_uefi() {
 }
 
 hv_kvm_install() {
-    #FIXME
-    return
+    echo "[*] Installing the KVM hypervisor infrastructure..."
+
+    # Install required packages
+    echo "[*] Installing required packages..."
+    doas apk add bridge \
+        bridge-utils \
+        dmidecode \
+        ebtables \
+        libvirt \
+        libvirt-daemon \
+        netcat-openbsd \
+        qemu-img \
+        qemu-modules \
+        qemu-system-x86_64 \
+        virt-manager \
+        virt-viewer 
+    sleep 2
+    
+    # Enable modules
+    echo "[*] Enabling modules..."
+    echo "tun" | doas tee -a /etc/modules
+    
+    # Configure services
+    echo "[*] Configuring required services..."
+    doas rc-update add libvirt-guests default
+    doas rc-update add libvirtd default
+    sleep 2
+    
+    # Add user to the 'libvirt' group
+    echo "[*] Adding the user to the 'libvirt' group..."
+    doas adduser $(whoami) libvirt
+    sleep 2
 }
 
 hv_xen_install() {
-    #FIXME
-    return
+    echo "[*] Installing the Xen hypervisor infrastructure..."
+
+    # Install required packages
+    echo "[*] Installing required packages..."
+    doas apk add bridge \
+        bridge-utils \
+        dmidecode \
+        ebtables \
+        libvirt \
+        libvirt-daemon \
+        netcat-openbsd \
+        ovmf \
+        seabios \
+        spice-vdagent \
+        virt-manager \
+        virt-viewer \
+        xen \
+        xen-hypervisor \
+        xen-qemu
+    sleep 2
+    
+    # Enable modules
+    echo "[*] Enabling modules..."
+    echo "xen-blkback" | doas tee -a /etc/modules
+    echo "xen-netback" | doas tee -a /etc/modules
+    echo "tun" | doas tee -a /etc/modules
+    
+    # Configure services
+    echo "[*] Configuring required services..."
+    doas rc-update add libvirt-guests default
+    doas rc-update add libvirtd default
+    doas rc-update add spice-vdagentd default
+    doas rc-update add xenconsoled default
+    doas rc-update add xendomains default 
+    doas rc-update add xenqemu default
+    doas rc-update add xenstored default
+    sleep 2
+    
+    # Add user to the 'libvirt' group
+    echo "[*] Adding the user to the 'libvirt' group..."
+    doas adduser $(whoami) libvirt
+    sleep 2
 }
 
 print_usage() {
@@ -341,6 +415,8 @@ else
     exit 1
 fi
 
+sync
+
 for i in $(seq 10)
     do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DISK && sleep 1
 done
@@ -353,7 +429,7 @@ echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xt
 echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
 sleep 2
 
-# Setup LVM within LUKS partition
+# Setup LVM within the LUKS partition
 echo "[*] Setting up LVM..."
 pvcreate /dev/mapper/$LUKS_LVM
 vgcreate $LVM_VG /dev/mapper/$LUKS_LVM

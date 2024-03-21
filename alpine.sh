@@ -195,28 +195,28 @@ disk_check() {
 
 disk_layout_bios() {
     echo "[*] Partitioning the target disk using MBR partition layout..."
-    parted $DISK mktable msdos
-    parted $DISK mkpart primary ext4 0% 100%
-    parted $DISK name 1 $PART_LUKS_LABEL
+    parted $ARG_DISK mktable msdos
+    parted $ARG_DISK mkpart primary ext4 0% 100%
+    parted $ARG_DISK name 1 $PART_LUKS_LABEL
 }
 
 disk_layout_uefi() {
     echo "[*] Partitioning the target disk using GPT partition layout..."
-    parted $DISK mktable gpt
-    parted $DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
-    parted $DISK name 1 $PART_EFI_LABEL
-    parted $DISK mkpart primary ext4 512MiB 100%
-    parted $DISK name 2 $PART_LUKS_LABEL
+    parted $ARG_DISK mktable gpt
+    parted $ARG_DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
+    parted $ARG_DISK name 1 $PART_EFI_LABEL
+    parted $ARG_DISK mkpart primary ext4 512MiB 100%
+    parted $ARG_DISK name 2 $PART_LUKS_LABEL
 }
 
 grub_install_bios() {
     echo "[*] Installing GRUB for BIOS platform..."
-    chroot /mnt grub-install --target=i386-pc $DISK
+    chroot /mnt grub-install --target=i386-pc $ARG_DISK
 }
 
 grub_install_uefi() {
     echo "[*] Installing GRUB for UEFI platform..."
-    chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $DISK
+    chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $ARG_DISK
 }
 
 hv_kvm_install() {

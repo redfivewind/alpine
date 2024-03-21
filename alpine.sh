@@ -196,15 +196,21 @@ disk_check() {
 disk_layout_bios() {
     echo "[*] Partitioning the target disk using MBR partition layout..."
     parted $ARG_DISK mktable msdos
+    
     parted $ARG_DISK mkpart primary ext4 0% 100%
+    parted $ARG_DISK set 1 boot on
     parted $ARG_DISK name 1 $PART_LUKS_LABEL
 }
 
 disk_layout_uefi() {
     echo "[*] Partitioning the target disk using GPT partition layout..."
     parted $ARG_DISK mktable gpt
-    parted $ARG_DISK mkpart primary fat32 1MiB 512MiB set 1 boot on set 1 esp on
+    
+    parted $ARG_DISK mkpart primary fat32 1MiB 512MiB 
+    parted $ARG_DISK set 1 boot on 
+    parted $ARG_DISKset 1 esp on
     parted $ARG_DISK name 1 $PART_EFI_LABEL
+    
     parted $ARG_DISK mkpart primary ext4 512MiB 100%
     parted $ARG_DISK name 2 $PART_LUKS_LABEL
 }

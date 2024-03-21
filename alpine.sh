@@ -371,13 +371,16 @@ sleep 2
 
 # Mount required partitions
 echo "[*] Mounting required partitions..."
+
+echo "[*] Mounting the target root partition..."
 mount -t ext4 /dev/$LVM_VG/$LV_ROOT /mnt
 
 if [ "$PART_EFI_ENABLED" == 0 ];
 then
-    ;
+    echo "[*] Skipping the UEFI partition..."
 elif [ "$PART_EFI_ENABLED" == 1 ];
 then
+    echo "[*] Mounting the UEFI partition..."
     mkdir -p /mnt/boot/efi
     mount -t vfat $PART_EFI /mnt/boot/efi
 else

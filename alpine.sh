@@ -11,7 +11,7 @@ arg_parsing() {
     echo "[*] Parsing arguments..."
 
     # Retrieve all arguments
-    for l_arg in "$ARG_ARRAY"; 
+    for l_arg in "$@"; 
     do
         if (echo "$l_arg" | grep -q "^--desktop=");
         then
@@ -239,7 +239,6 @@ read
 
 # Global variables
 echo "[*] Initializing global variables..."
-ARG_ARRAY="$@"
 ARG_DESKTOP=""
 ARG_DISK=""
 ARG_HYPERVISOR=""
@@ -258,7 +257,7 @@ USER_NAME="user"
 USER_PASS=""
 
 # Argument parsing
-arg_parsing
+arg_parsing "$@"
 
 
 # Retrieve the LUKS & user password

@@ -13,7 +13,7 @@ arg_parsing() {
     # Retrieve all arguments
     for l_arg in "$ARG_ARRAY"; 
     do
-        if [ "$l_arg" == "--desktop=*" ];
+        if [ "$l_arg" == "--desktop="* ];
         then
             if [ -z "$ARG_DESKTOP" ];
             then
@@ -30,7 +30,7 @@ arg_parsing() {
                 echo "[X] ERROR: The passed argument '--desktop' is already set. Exiting..."
                 exit 1
             fi
-        elif [ "$l_arg" == "--disk=*" ];
+        elif [ "$l_arg" == "--disk="* ];
         then
             if [ -z "$ARG_DISK" ];
             then
@@ -48,7 +48,7 @@ arg_parsing() {
                 echo "[X] ERROR: The passed argument '--disk' is already set. Exiting..."
                 exit 1
             fi
-        elif [ "$l_arg" == "--hypervisor=*" ];
+        elif [ "$l_arg" == "--hypervisor="* ];
         then
             if [ -z "$ARG_HYPERVISOR" ];
             then
@@ -68,7 +68,7 @@ arg_parsing() {
                 echo "[X] ERROR: The passed argument '--hypervisor' is already set. Exiting..."
                 exit 1
             fi
-        elif [ "$l_arg" == "--platform=*" ];
+        elif [ "$l_arg" == "--platform="* ];
         then
             ARG_PLATFORM=${l_arg#"--platform="}
                 

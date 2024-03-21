@@ -369,9 +369,21 @@ mkswap /dev/mapper/$LVM_VG-$LV_SWAP -L $LV_SWAP
 swapon /dev/$LVM_VG/$LV_SWAP
 sleep 2
 
-# Mount #FIXME
-echo "#FIXME"
-#FIXME
+# Mount root and, if applicable, the EFI partition
+echo "[*] Mounting the root, and, if applicable, the EFI partition..."
+mount -t ext4 /dev/$LVM_VG/$LV_ROOT /mnt
+
+if [ "$PART_EFI_ENABLED" == 0 ];
+then
+elif [ "$PART_EFI_ENABLED" == 1 ];
+then
+    mkdir -p /mnt/boot/efi
+    mount -t vfat $PART_EFI /mnt/boot/efi
+else
+    echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+    exit
+fi
+
 sleep 2
 
 # Install Alpine
@@ -414,7 +426,7 @@ then
     grub_install_uefi
 else
     echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
-    exit
+    exit 1
 fi
 
 chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg

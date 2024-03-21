@@ -418,7 +418,36 @@ echo "[*] Adding user paths & scripts..."
 mkdir -p /mnt/home/$USER_NAME/pictures
 mkdir -p /mnt/home/$USER_NAME/tools
 mkdir -p /mnt/home/$USER_NAME/workspace
-chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/   
+chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/
+
+# Install the hypervisor (if applicable)
+if [ -z "$ARG_HYPERVISOR" ];
+then
+    echo "[*] No hypervisor was selected. Skipping..."
+else
+    if [ "$ARG_HYPERVISOR" == "kvm" ];
+    then
+        hv_kvm_install
+    elif [ "$ARG_HYPERVISOR" == "xen" ];
+    then
+        hv_xen_install
+    else
+        echo "[X] ERROR: Variable 'ARG_HYPERVISOR' is '$ARG_HYPERVISOR' but must be 'kvm' or 'xen'."
+    fi
+fi
+
+# Install the desktop environment (if applicable)
+if [ -z "$ARG_DESKTOP" ];
+then
+    echo "[*] No desktop environment was selected. Skipping..."
+else
+    if [ "$ARG_DESKTOP" == "xfce" ];
+    then
+        de_xfce_install
+    else
+        echo "[X] ERROR: Variable 'ARG_DESKTOP' is '$ARG_DESKTOP' but must be 'xfce'."
+    fi
+fi
 
 # Stop message
 echo "[*] Work done. Exiting..."

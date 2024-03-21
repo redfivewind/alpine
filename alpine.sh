@@ -17,6 +17,8 @@ arg_parsing() {
             if [ -z "$ARG_DESKTOP" ];
             then
                 ARG_DESKTOP=${l_arg#"--desktop="}
+                echo "$l_arg"
+                echo "$ARG_DESKTOP"
                 
                 if [ "$ARG_DESKTOP" == "xfce" ];
                 then

@@ -48,7 +48,7 @@ arg_parsing() {
                 echo "[X] ERROR: The passed argument '--disk' is already set. Exiting..."
                 exit 1
             fi
-        elif (echo "$l_arg" | grep -q "^--hypervisor=");;
+        elif (echo "$l_arg" | grep -q "^--hypervisor=");
         then
             if [ -z "$ARG_HYPERVISOR" ];
             then

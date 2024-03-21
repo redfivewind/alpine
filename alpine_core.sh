@@ -130,6 +130,7 @@ sgdisk --new=2:0:0 $DEV
 sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV
 sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
 sgdisk --print $DEV
+sync
 for i in $(seq 10)
     do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DEV && sleep 1
 done        

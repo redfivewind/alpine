@@ -38,6 +38,3 @@ sleep 2
 echo "[*] Adding the user to the 'libvirt' group..."
 doas adduser $(whoami) libvirt
 sleep 2
-
-# Generate Xen unified kernel image (UKI)
-#FIXME

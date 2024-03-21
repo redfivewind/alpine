@@ -5,6 +5,7 @@
 # TODO: DE Xfce: Automatic sleep/hibernate & resume
 # TODO: DE Xfce: Add keyboard shortcut WIN+L
 # TODO: DE Xfce: Remove keyboard shortcut CTRL+ALT+L
+# TODO: DE ***: Firefox Deployment
 
 arg_parsing() {
     echo "[*] Parsing arguments..."

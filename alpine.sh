@@ -21,6 +21,7 @@ arg_parsing() {
                     echo "[X] ERROR: The passed argument 'Disk' is empty. Exiting..."
                     exit 1
                 else
+                    echo "[*] Disk: '$ARG_DISK'"
                     disk_check
                 fi
             else

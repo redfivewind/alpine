@@ -208,7 +208,7 @@ disk_layout_uefi() {
     
     parted $ARG_DISK mkpart primary fat32 1MiB 512MiB 
     parted $ARG_DISK set 1 boot on 
-    parted $ARG_DISKset 1 esp on
+    parted $ARG_DISK set 1 esp on
     parted $ARG_DISK name 1 $PART_EFI_LABEL
     
     parted $ARG_DISK mkpart primary ext4 512MiB 100%
@@ -369,12 +369,13 @@ mkswap /dev/mapper/$LVM_VG-$LV_SWAP -L $LV_SWAP
 swapon /dev/$LVM_VG/$LV_SWAP
 sleep 2
 
-# Mount root and, if applicable, the EFI partition
-echo "[*] Mounting the root, and, if applicable, the EFI partition..."
+# Mount required partitions
+echo "[*] Mounting required partitions..."
 mount -t ext4 /dev/$LVM_VG/$LV_ROOT /mnt
 
 if [ "$PART_EFI_ENABLED" == 0 ];
 then
+    ;
 elif [ "$PART_EFI_ENABLED" == 1 ];
 then
     mkdir -p /mnt/boot/efi

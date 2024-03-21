@@ -1,6 +1,5 @@
 # ARGUMENT: ---Audio (alsa-plugins-pulse, pavucontrol, pulseaudio, pulseaudio-alsa, xfce4-pulseaudio-plugin)---
 # ARGUMENT: ---Bluetooth---
-# ARGUMENT: ---Network (iwctl, )---
 # TODO: Base: Hardening
 # TODO: DE Xfce: Automatic sleep/hibernate & resume
 # TODO: DE Xfce: Add keyboard shortcut WIN+L
@@ -276,6 +275,12 @@ grub_install_uefi() {
     chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi $ARG_DISK
 }
 
+harden_system() {
+    # Disable ash history
+    # Remove apk
+    return
+}
+
 hv_kvm_install() {
     echo "[*] Installing the KVM hypervisor infrastructure..."
 
@@ -357,7 +362,7 @@ hv_xen_install() {
 }
 
 print_usage() {
-    echo "[*] Usage: ./alpine.sh <Platform: bios/uefi/uefi-sb> <Hypervisor: none/kvm/xen> <Disk> <Environment: none/xfce>"
+    echo "[*] Usage: ./alpine.sh --platform=<bios/uefi/uefi-sb> [--hypervisor=<kvm/xen>] [--desktop=<xfce>] --disk=<DISK>
 }
 
 # Start message

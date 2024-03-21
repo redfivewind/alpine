@@ -315,7 +315,6 @@ setup-apkrepos -c -f
 # Install required packages
 echo "[*] Installing required packages..."
 apk add amd-ucode cryptsetup e2fsprogs file intel-ucode lsblk lvm2 nano parted p7zip tlp unzip zip
-cpu_microcode_install
 sleep 2
 
 # Setup udev as devd
@@ -325,14 +324,14 @@ setup-devd udev
 # Partitioning
 echo "[*] Partitioning the disk..."
 
-if [ "$PART_EFI_ENALED" == 0 ];
+if [ "$PART_EFI_ENABLED" == 0 ];
 then
     disk_layout_bios
-elif [ "$PART_EFI_ENALED" == 1 ];
+elif [ "$PART_EFI_ENABLED" == 1 ];
 then
     disk_layout_uefi
 else
-    echo "[X] ERROR: Variable 'PART_EFI_ENALED' is '$PART_EFI_ENALED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+    echo "[X] ERROR: Variable 'PART_EFI_ENABLED' is '$PART_EFI_ENABLED' but must be 0 or 1. This is unexpected behaviour. Exiting..."
     exit 1
 fi
 

@@ -596,10 +596,10 @@ then
 else
     if [ "$ARG_HYPERVISOR" == "kvm" ];
     then
-        hv_kvm_install
+        chroot /mnt hv_kvm_install
     elif [ "$ARG_HYPERVISOR" == "xen" ];
     then
-        hv_xen_install
+        chroot /mnt hv_xen_install
     else
         echo "[X] ERROR: Variable 'ARG_HYPERVISOR' is '$ARG_HYPERVISOR' but must be 'kvm' or 'xen'."
     fi
@@ -637,7 +637,7 @@ then
 else
     if [ "$ARG_DESKTOP" == "xfce" ];
     then
-        de_xfce_install
+        chroot /mnt de_xfce_install
     else
         echo "[X] ERROR: Variable 'ARG_DESKTOP' is '$ARG_DESKTOP' but must be 'xfce'."
     fi

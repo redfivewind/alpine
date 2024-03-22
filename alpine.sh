@@ -294,7 +294,7 @@ hv_kvm_install() {
 
     # Install required packages
     echo "[*] Installing required packages..."
-    doas apk add bridge \
+    chroot /mnt apk add bridge \
         bridge-utils \
         dmidecode \
         ebtables \
@@ -310,17 +310,17 @@ hv_kvm_install() {
     
     # Enable modules
     echo "[*] Enabling modules..."
-    echo "tun" | doas tee -a /etc/modules
+    echo "tun" | tee -a /mnt/etc/modules
     
     # Configure services
     echo "[*] Configuring required services..."
-    doas rc-update add libvirt-guests default
-    doas rc-update add libvirtd default
+    chroot /mnt rc-update add libvirt-guests default
+    chroot /mnt rc-update add libvirtd default
     sleep 2
     
     # Add user to the 'libvirt' group
     echo "[*] Adding the user to the 'libvirt' group..."
-    doas adduser $(whoami) libvirt
+    chroot /mnt adduser $USER_NAME libvirt
     sleep 2
 }
 
@@ -329,7 +329,7 @@ hv_xen_install() {
 
     # Install required packages
     echo "[*] Installing required packages..."
-    doas apk add bridge \
+    chroot /mnt apk add bridge \
         bridge-utils \
         dmidecode \
         ebtables \
@@ -348,24 +348,24 @@ hv_xen_install() {
     
     # Enable modules
     echo "[*] Enabling modules..."
-    echo "xen-blkback" | doas tee -a /etc/modules
-    echo "xen-netback" | doas tee -a /etc/modules
-    echo "tun" | doas tee -a /etc/modules
+    echo "xen-blkback" | tee -a /mnt/etc/modules
+    echo "xen-netback" | tee -a /mnt/etc/modules
+    echo "tun" | tee -a /mnt/etc/modules
     
     # Configure services
     echo "[*] Configuring required services..."
-    doas rc-update add libvirt-guests default
-    doas rc-update add libvirtd default
-    doas rc-update add spice-vdagentd default
-    doas rc-update add xenconsoled default
-    doas rc-update add xendomains default 
-    doas rc-update add xenqemu default
-    doas rc-update add xenstored default
+    chroot /mnt rc-update add libvirt-guests default
+    chroot /mnt rc-update add libvirtd default
+    chroot /mnt rc-update add spice-vdagentd default
+    chroot /mnt rc-update add xenconsoled default
+    chroot /mnt rc-update add xendomains default 
+    chroot /mnt rc-update add xenqemu default
+    chroot /mnt rc-update add xenstored default
     sleep 2
     
     # Add user to the 'libvirt' group
     echo "[*] Adding the user to the 'libvirt' group..."
-    doas adduser $(whoami) libvirt
+    chroot /mnt adduser $USER_NAME libvirt
     sleep 2
 }
 

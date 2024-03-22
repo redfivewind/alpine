@@ -19,7 +19,7 @@ arg_parsing() {
                 echo "[*] Audio: Enabled"
                 ARG_AUDIO=1
             else
-                echo "[X] ERROR: The passed argument '--desktop' is already set. Exiting..."
+                echo "[X] ERROR: The passed argument '--audio' is already set. Exiting..."
                 exit 1
             fi
         elif (echo "$l_arg" | grep -q "^--desktop=");

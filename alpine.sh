@@ -94,22 +94,10 @@ arg_parsing() {
         fi        
     done
 
-    # Verify, that all arguments were provided
-    if [ -z "$ARG_DESKTOP" ];
-    then
-        echo "[X] ERROR: No desktop environment was provided. Exiting..."
-        exit 1
-    fi
-    
+    # Verify, that all mandatory arguments were provided    
     if [ -z "$ARG_DISK" ];
     then
         echo "[X] ERROR: No disk was provided. Exiting..."
-        exit 1
-    fi
-
-    if [ -z "$ARG_HYPERVISOR" ];
-    then
-        echo "[X] ERROR: No hypervisor was provided. Exiting..."
         exit 1
     fi
 

@@ -1,5 +1,3 @@
-# ARGUMENT: ---Audio (alsa-plugins-pulse, pavucontrol, pulseaudio, pulseaudio-alsa, xfce4-pulseaudio-plugin)---
-# ARGUMENT: ---Bluetooth---
 # TODO: Review paritioning
 # TODO: Base: Hardening
 # TODO: DE Xfce: Automatic sleep/hibernate & resume
@@ -13,7 +11,17 @@ arg_parsing() {
     # Retrieve all arguments
     for l_arg in "$@"; 
     do
-        if (echo "$l_arg" | grep -q "^--desktop=");
+        if [ "$l_arg" == "--audio" ];
+        then
+            if [ -z "$ARG_AUDIO" ];
+            then
+                echo "[*] Audio: Enabled"
+                ARG_AUDIO=1
+            else
+                echo "[X] ERROR: The passed argument '--desktop' is already set. Exiting..."
+                exit 1
+            fi
+        elif (echo "$l_arg" | grep -q "^--desktop=");
         then
             if [ -z "$ARG_DESKTOP" ];
             then
@@ -117,7 +125,19 @@ de_xfce_install() {
     
     # Install required packages
     echo "[*] Installing required packages..."
-    doas apk add adw-gtk3 mousepad pavucontrol ristretto thunar-archive-plugin xarchiver xfce-polkit xfce4-cpugraph-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
+    apk add adw-gtk3 mousepad ristretto thunar-archive-plugin xarchiver xfce-polkit xfce4-cpugraph-plugin xfce4-notifyd xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
+
+    if [ "$ARG_AUDIO" == 0 ];
+    then
+        echo "[*] Audio is disabled. Skipping audio packages..."
+    elif [ "$ARG_AUDIO" == 1 ];
+    then
+        echo "[*] Installing Audio packages..."
+        apk add pavucontrol xfce4-pulseaudio-plugin
+    else
+        echo "[X] ERROR: Variable 'ARG_AUDIO' is '$ARG_AUDIO' but must be 0 or 1. Exiting..."
+        exit 1
+    fi
     
     # Configure networking
     echo "[*] Configuring networking..."
@@ -360,6 +380,7 @@ read
 
 # Global variables
 echo "[*] Initializing global variables..."
+ARG_AUDIO=0
 ARG_DESKTOP=""
 ARG_DISK=""
 ARG_HYPERVISOR=""
@@ -436,6 +457,19 @@ setup-apkrepos -c -f
 # Install required packages
 echo "[*] Installing required packages..."
 apk add amd-ucode cryptsetup e2fsprogs file intel-ucode iwd lsblk lvm2 nano parted p7zip tlp unzip zip
+
+if [ "$ARG_AUDIO" == 0 ];
+    then
+        echo "[*] Audio is disabled. Skipping audio packages..."
+    elif [ "$ARG_AUDIO" == 1 ];
+    then
+        echo "[*] Installing Audio packages..."
+        apk add alsa-plugins-pulse pulseaudio pulseaudio-alsa
+    else
+        echo "[X] ERROR: Variable 'ARG_AUDIO' is '$ARG_AUDIO' but must be 0 or 1. Exiting..."
+        exit 1
+    fi
+
 sleep 2
 
 # Setup udev as devd

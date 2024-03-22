@@ -1,4 +1,5 @@
 # TODO: Review paritioning
+# TODO: Review networking
 # TODO: Base: Hardening
 # TODO: DE Xfce: Automatic sleep/hibernate & resume
 # TODO: DE Xfce: Add keyboard shortcut WIN+L

@@ -122,11 +122,11 @@ de_xfce_install() {
     
     # Install X.Org & Xfce
     echo "[*] Installing X.Org & Xfce..."
-    doas setup-desktop xfce
+    chroot /mnt setup-desktop xfce
     
     # Install required packages
     echo "[*] Installing required packages..."
-    apk add adw-gtk3 mousepad ristretto thunar-archive-plugin xarchiver xfce-polkit xfce4-cpugraph-plugin xfce4-notifyd xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
+    chroot /mnt apk add adw-gtk3 mousepad ristretto thunar-archive-plugin xarchiver xfce-polkit xfce4-cpugraph-plugin xfce4-notifyd xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-whiskermenu-plugin
 
     if [ "$ARG_AUDIO" == 0 ];
     then
@@ -134,7 +134,7 @@ de_xfce_install() {
     elif [ "$ARG_AUDIO" == 1 ];
     then
         echo "[*] Installing Audio packages..."
-        apk add pavucontrol xfce4-pulseaudio-plugin
+        chroot /mnt apk add pavucontrol xfce4-pulseaudio-plugin
     else
         echo "[X] ERROR: Variable 'ARG_AUDIO' is '$ARG_AUDIO' but must be 0 or 1. Exiting..."
         exit 1
@@ -142,45 +142,43 @@ de_xfce_install() {
     
     # Configure networking
     echo "[*] Configuring networking..."
-    doas apk add network-manager-applet networkmanager networkmanager-cli networkmanager-wifi
-    doas apk del wpa_supplicant
+    chroot /mnt apk add network-manager-applet networkmanager networkmanager-cli networkmanager-wifi
+    chroot /mnt apk del wpa_supplicant
     
-    echo "[main]" | doas tee /etc/NetworkManager/NetworkManager.conf
-    echo "dhcp=internal" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "plugins=ifupdown,keyfile" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "[ifupdown]" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "managed=true" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "[device]" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "wifi.scan-rand-mac-address=yes" | doas tee -a /etc/NetworkManager/NetworkManager.conf
-    echo "wifi.backend=iwd" | doas tee -a /etc/NetworkManager/NetworkManager.conf
+    echo "[main]" | tee /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "dhcp=internal" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "plugins=ifupdown,keyfile" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "[ifupdown]" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "managed=true" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "[device]" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "wifi.scan-rand-mac-address=yes" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
+    echo "wifi.backend=iwd" | tee -a /mnt/etc/NetworkManager/NetworkManager.conf
     
-    doas rc-update add networkmanager default
-    doas rc-update del networking boot
+    chroot /mnt rc-update add networkmanager default
+    chroot /mnt rc-update del networking boot
     
     # Xfce keyboard layout
     echo "[*] Setting the Xfce keyboard layout to German..."
-    doas mkdir -p /etc/X11/xorg.conf.d/
-    echo "Section \"InputClass\"" | doas tee /etc/X11/xorg.conf.d/00-keyboard.conf
-    echo "  Identifier \"system-keyboard\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-    echo "  MatchIsKeyboard \"on\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-    echo "  Option \"XkbLayout\" \"de\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-    echo "  Option \"XkbVariant\" \"nodeadkeys\"" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
-    echo "EndSection" | doas tee -a /etc/X11/xorg.conf.d/00-keyboard.conf
+    doas mkdir -p /mnt/etc/X11/xorg.conf.d/
+    echo "Section \"InputClass\"" | tee /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+    echo "  Identifier \"system-keyboard\"" | tee -a /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+    echo "  MatchIsKeyboard \"on\"" | tee -a /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+    echo "  Option \"XkbLayout\" \"de\"" | tee -a /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+    echo "  Option \"XkbVariant\" \"nodeadkeys\"" | tee -a /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+    echo "EndSection" | tee -a /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
     
     # Xfce customisation
     echo "[*] Customising Xfce..."
-    export DISPLAY=:0
-    export $(dbus-launch)
-    xfconf-query -c xsettings -p '/Net/ThemeName' -s 'adw-gtk3-dark'
-    xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super><Alt>l' --reset
-    xfconf-query -c xfce4-keyboard-shortcuts -n -t 'string' -p '/commands/custom/<Super>l' -s 'xflock4' --create
+    chroot /mnt export DISPLAY=:0 && export $(dbus-launch) && xfconf-query -c xsettings -p '/Net/ThemeName' -s 'adw-gtk3-dark'
+    chroot /mnt export DISPLAY=:0 && export $(dbus-launch) && xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super><Alt>l' --reset
+    chroot /mnt export DISPLAY=:0 && export $(dbus-launch) && xfconf-query -c xfce4-keyboard-shortcuts -n -t 'string' -p '/commands/custom/<Super>l' -s 'xflock4' --create
     
     # Configure services
     echo "[*] Configuring services..."
-    doas rc-update add lightdm default
-    doas rc-update add polkit default
+    chroot /mnt rc-update add lightdm default
+    chroot /mnt rc-update add polkit default
 }
 
 disk_check() {
@@ -599,7 +597,7 @@ else
         chroot /mnt hv_kvm_install
     elif [ "$ARG_HYPERVISOR" == "xen" ];
     then
-        chroot /mnt hv_xen_install
+        hv_xen_install
     else
         echo "[X] ERROR: Variable 'ARG_HYPERVISOR' is '$ARG_HYPERVISOR' but must be 'kvm' or 'xen'."
     fi
@@ -637,7 +635,7 @@ then
 else
     if [ "$ARG_DESKTOP" == "xfce" ];
     then
-        chroot /mnt de_xfce_install
+        de_xfce_install
     else
         echo "[X] ERROR: Variable 'ARG_DESKTOP' is '$ARG_DESKTOP' but must be 'xfce'."
     fi

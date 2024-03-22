@@ -492,7 +492,7 @@ fi
 sync
 
 for i in $(seq 10)
-    do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DISK && sleep 1
+    do echo "[*] Populating the kernel partition tables ($i/10)..." && sync && partprobe $DISK && sleep 1
 done
 
 parted $ARG_DISK print

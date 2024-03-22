@@ -371,7 +371,7 @@ hv_xen_install() {
 }
 
 print_usage() {
-    echo "[*] Usage: ./alpine.sh --platform=<bios/uefi/uefi-sb> [--hypervisor=<kvm/xen>] [--desktop=<xfce>] --disk=<DISK>"
+    echo "[*] Usage: ./alpine.sh [--audio] [--desktop=<xfce>] --disk=<DISK> [--hypervisor=<kvm/xen>] --platform=<bios/uefi/uefi-sb>"
 }
 
 # Start message

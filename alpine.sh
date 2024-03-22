@@ -1,5 +1,6 @@
 # ARGUMENT: ---Audio (alsa-plugins-pulse, pavucontrol, pulseaudio, pulseaudio-alsa, xfce4-pulseaudio-plugin)---
 # ARGUMENT: ---Bluetooth---
+# TODO: Review paritioning
 # TODO: Base: Hardening
 # TODO: DE Xfce: Automatic sleep/hibernate & resume
 # TODO: DE Xfce: Add keyboard shortcut WIN+L

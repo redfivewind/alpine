@@ -25,10 +25,6 @@ nixos.sh
 
 
 win11_core.ps1
-    - Admin check
-    - Dark Mode
     - Explorer
-    - Windows Updates
-    - Chocolate
-    - Base packages (7zip, LibreWolf, Ccleaner, VSCodium, VLC)
+    - Windows Updates: Special updates
     - HARDENING

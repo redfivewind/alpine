@@ -26,5 +26,4 @@ nixos.sh
 
 win11_core.ps1
     - Explorer
-    - Windows Updates: Special updates
     - HARDENING

@@ -31,8 +31,10 @@ Write-Output "[*] Installing base packages..."
 choco install 7zip ccleaner librewolf vlc vscodium --acceptlicence --confirm --ignoredetectedreboot
 
 # Windows Updates
+#Write-Output "[*] Enabling optional Windows updates..."
+#Set-GPRegistryValue -Name "LocalMachine" -Key "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\System" -ValueName "DisableCMD" -Type DWORD -Value 1
+
 Write-Output "[*] Installing Windows updates..."
-#FIXME: Special updates
 Install-Module -Name PSWindowsUpdate -Force
 Update-WUModule
 Get-WUList -MicrosoftUpdate

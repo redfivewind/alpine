@@ -1,30 +1,24 @@
-alpine.sh
-    - Resume from sleep/hibernation
-    - Autolock, suspend & sleep
-    - HARDENING
-        - Disable ash history
-        - Remove apk
-    - XFCE: Add Keyboard shortcuts (WIN & WIN+L)
-    - XFCE: Remove Keyboard shortcuts (WIN+Alt+L)
+AUDIO
+    - Pipewire?
+    - PulseAudio?
+
+DESKTOP: XFCE
+    - Add Keyboard shortcuts (WIN & WIN+L)
+    - Remove Keyboard shortcuts (WIN+Alt+L)
     - <<<XFCE HARDENING>>>
 
+GENERAL
+    - Autolock, suspend & sleep
+    - Resume from sleep/hibernation
 
-alpine_uefi_sb.sh
+HARDENING
+    - Disable ash history
+    - Remove apk
+
+UEFI SECURE BOOT: Alpine
     - Alpine Workflow
-    - Xen Workflow (if applicable)
-        - Xen UKI (XSM FLASK, CPU microcode, xen.cfg, ...)
-    - ATTENTION: Workflow & Updates
+    - Alpine UKI
 
-
-arch.sh
-    - BIOS vs. UEFI
-    - UEFI: Secure Boot
-    - HYPERVISOR: KVM or XEN
-    - DESKTOP: Hyprland
-    - HARDENING
-    - GPU: ATI and/or NVIDIA
-    - AUDIO: Pipewire
-
-win11_core.ps1
-    - Explorer
-    - HARDENING
+UEFI SECURE BOOT: Xen
+    - Xen Workflow
+    - Xen UKI (XSM FLASK, CPU microcode, xen.cfg, ...)

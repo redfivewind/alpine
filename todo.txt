@@ -17,12 +17,13 @@ alpine_uefi_sb.sh
 
 
 arch.sh
-    -
-
-
-nixos.sh
-    -
-
+    - BIOS vs. UEFI
+    - UEFI: Secure Boot
+    - HYPERVISOR: KVM or XEN
+    - DESKTOP: Hyprland
+    - HARDENING
+    - GPU: ATI and/or NVIDIA
+    - AUDIO: Pipewire
 
 win11_core.ps1
     - Explorer

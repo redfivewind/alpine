@@ -174,6 +174,10 @@ setup-sshd none
 echo "[*] Configuring apk & enabling the Alpine community repository..."
 setup-apkrepos -c -f
 
+# Setup udev as devd
+echo "[*] Setting up udev as devd..."
+setup-devd udev
+
 # Install required packages
 echo "[*] Installing required packages..."
 apk add amd-ucode \
@@ -187,10 +191,6 @@ apk add amd-ucode \
     nano \
     parted
 sleep 2
-
-# Setup udev as devd
-echo "[*] Setting up udev as devd..."
-setup-devd udev
 
 # Disk partitioning
 echo "[*] Partitioning the disk..."

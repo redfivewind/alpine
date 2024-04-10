@@ -45,7 +45,7 @@ fi
 # Select disk
 echo "[*] Retrieving available disks..."
 echo
-lsblk
+fdisk -l
 echo
 echo "[*] Please select the disk where Alpine Linux should be installed into: "
 read disk

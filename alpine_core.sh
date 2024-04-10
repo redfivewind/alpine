@@ -217,6 +217,7 @@ sleep 2
 
 # Configure services
 echo "[*] Configuring required services..."
+chroot /mnt rc-update add hwdrivers sysinit
 chroot /mnt rc-update add iwd default    
 chroot /mnt rc-update add tlp default
 sleep 2  

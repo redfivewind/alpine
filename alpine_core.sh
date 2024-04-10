@@ -223,7 +223,7 @@ then
     parted $DISK --script name 1 $PART_EFI_LABEL
 
     echo "[*] Formatting the EFI partition..."
-    mkfs.fat -F32 $PART_EFI
+    mkfs.vfat $PART_EFI
 
     echo "[*] Creating the LUKS partition..."
     parted $DISK --script mkpart primary ext4 512MiB 100%

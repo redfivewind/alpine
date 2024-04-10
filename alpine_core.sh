@@ -301,6 +301,7 @@ echo "[*] Setting up the boot environment..."
 
 echo "[*] Updating the kernel cmdline..."
 KERNEL_CMDLINE="cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LUKS_LVM root=/dev/$LVM_VG/$LV_ROOT rw"
+mkdir -p /mnt/etc/kernel
 echo "$KERNEL_CMDLINE" > /mnt/etc/kernel/cmdline
     
 if [ "$UEFI" == 0 ];

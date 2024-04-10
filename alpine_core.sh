@@ -4,6 +4,7 @@ echo "[!] ALERT: This script will potentially wipe all of your data."
 # Global variables
 echo "[*] Initializing global variables..."
 DEV=""
+EFI_UKI="/boot/efi/EFI/alpine.efi"
 LUKS_PASS=""
 LV_ROOT="lv_root"
 LV_SWAP="lv_swap"
@@ -240,6 +241,11 @@ echo "[*] Adding user paths & scripts..."
 mkdir -p /mnt/home/$USER_NAME/Pictures
 mkdir -p /mnt/home/$USER_NAME/tools
 mkdir -p /mnt/home/$USER_NAME/workspace
+
+echo "doas apk upgrade" > /mnt/home/$USER_NAME/tools/update.sh
+echo "doas sbctl generate-bundles" >> /mnt/home/$USER_NAME/tools/update.sh
+echo "doas sbctl sign $EFI_UKI" >> /mnt/home/$USER_NAME/tools/update.sh
+
 chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 
 # Synchronise & signal completion

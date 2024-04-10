@@ -3,6 +3,10 @@ echo "[*] This script installs the KVM virtualisation infrastructure on this Alp
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read
 
+# Global variables
+echo "[*] Initialising global variables..."
+USER_NAME=$(whoami)
+
 # Install required packages
 echo "[*] Installing required packages..."
 doas apk add bridge \
@@ -25,9 +29,9 @@ echo "tun" | doas tee -a /etc/modules
 
 # Add user to the 'libvirt' group
 echo "[*] Adding user '$USER_NAME' to required groups.."
-doas adduser $(whoami) kvm
-doas adduser $(whoami) libvirt
-doas adduser $(whoami) qemu
+doas adduser $USER_NAME kvm
+doas adduser $USER_NAME libvirt
+doas adduser $USER_NAME qemu
 sleep 2
 
 # Configure services

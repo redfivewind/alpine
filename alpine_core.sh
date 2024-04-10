@@ -2,7 +2,7 @@
 echo "[!] ALERT: This script will potentially wipe all of your data."
 
 # Global variables
-echo "[*] Initializing global variables..."
+echo "[*] Initializing global variables...x"
 DEV=""
 EFI_UKI="/boot/efi/EFI/alpine.efi"
 LUKS_PASS=""

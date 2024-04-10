@@ -20,7 +20,7 @@ doas apk add bridge \
 sleep 2
 
 # Enable modules
-echo "[*] Enabling modules..."
+echo "[*] Enabling required modules..."
 echo "tun" | doas tee -a /etc/modules
 
 # Add user to the 'libvirt' group

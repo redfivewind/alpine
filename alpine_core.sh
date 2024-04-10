@@ -1,3 +1,5 @@
+#TODO: Lowercase
+
 # Warning message
 echo "[!] ALERT: This script will potentially wipe all of your data."
 
@@ -25,7 +27,7 @@ setup-keymap de de
 # Select platform
 echo "[*] Please select the plaform ('bios' or 'uefi'): "
 read platform
-platform="${platform,,}"
+#platform="${platform,,}"
 
 if [ "$platform" == "bios" ];
 then

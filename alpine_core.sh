@@ -11,8 +11,10 @@ LV_SWAP="lv_swap"
 LVM_VG="lvm_vg"
 LUKS_LVM="luks_lvm"
 PART_EFI=""
+PART_EFI_LABEL="efi-sp"
 PART_LUKS=""
-SCRIPT=$(readlink -f "$0")
+PART_LUKS_LABEL="luks"
+UEFI=""
 USER_NAME="user"
 USER_PASS=""
 
@@ -20,35 +22,104 @@ USER_PASS=""
 echo "[*] Loading German keyboard layout..."
 setup-keymap de de
 
-# Retrieve the target disk
-echo "[*] Please enter the target disk: "
-read dev
+# Select platform
+echo "[*] Please select the plaform ('bios' or 'uefi'): "
+read platform
+platform="${platform,,}"
 
-if [ -e "$dev" ]; then
-    echo "[*] Path '$dev' exists."
+if [ "$platform" == "bios" ];
+then
+    echo "[*] Platform: '$platform'..."
+    UEFI=0
+elif [ "$platform" == "uefi" ];
+then
+    echo "[*] Platform: '$platform'..."
+    UEFI=1
+else
+    echo "[X] ERROR: Variable 'platform' is '$platform' but must be 'bios' or 'uefi'. Exiting..."
+    exit 1
+fi
 
-    if [ -b "$dev" ]; then
-        echo "[*] '$dev' is a valid block device."        
-        echo "[*] Setting the EFI-SP & LUKS partition..."
-        DEV=$dev
+# Select disk
+echo "[*] Retrieving available disks..."
+echo
+lsblk
+echo
+echo "[*] Please select the disk where Alpine Linux should be installed into: "
+read disk
 
-        if [[ $DEV == "/dev/nvme*" ]]; then
-              echo "[*] Target disk seems to be a NVME disk."
-              PART_EFI="${DEV}p1"
-              PART_LUKS="${DEV}p2"
+if [ -z "$disk" ];
+then
+    echo "[X] ERROR: No disk was selected. Exiting..."
+    exit 1
+else
+    DISK="$disk"
+    
+    if [ -e "$DISK" ]; 
+    then
+        echo "[*] Path '$DISK' exists."
+    
+        if [ -b "$DISK" ];
+        then
+            echo "[*] Path '$DISK' is a valid block device." 
+    
+            if (echo "$DISK" | grep -q "^/dev/mmc"); 
+            then
+                echo "[*] Target disk seems to be a MMC disk."
+
+                if [ "$UEFI" == 0 ];
+                then
+                    PART_EFI="- (BIOS installation)"
+                    PART_LUKS="${DISK}p1"
+                elif [ "$UEFI" == 1 ];
+                then
+                    PART_EFI="${DISK}p1"
+                    PART_LUKS="${DISK}p2"
+                else
+                    echo "[X] ERROR: Variable 'UEFI' is '$UEFI' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                    exit 1
+                fi
+            elif (echo "$DISK" | grep -q "^/dev/nvme"); 
+            then
+                echo "[*] Target disk seems to be a NVME disk."
+    
+                if [ "$UEFI" == 0 ];
+                then
+                    PART_EFI="- (BIOS installation)"
+                    PART_LUKS="${DISK}p1"
+                elif [ "$UEFI" == 1 ];
+                then
+                    PART_EFI="${DISK}p1"
+                    PART_LUKS="${DISK}p2"
+                else
+                    echo "[X] ERROR: Variable 'UEFI' is '$UEFI' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                    exit 1
+                fi
+            else
+                if [ "$UEFI" == 0 ];
+                then
+                    PART_EFI="- (BIOS installation)"
+                    PART_LUKS="${DISK}1"
+                elif [ "$UEFI" == 1 ];
+                then
+                    PART_EFI="${DISK}1"
+                    PART_LUKS="${DISK}2"
+                else
+                    echo "[X] ERROR: Variable 'UEFI' is '$UEFI' but must be 0 or 1. This is unexpected behaviour. Exiting..."
+                    exit 1
+                fi
+            fi
+    
+            echo "[*] Target EFI partition: $PART_EFI."
+            echo "[*] Target LUKS partition: $PART_LUKS."
         else
-              PART_EFI="${DEV}1"
-              PART_LUKS="${DEV}2"
+            echo "[X] ERROR: '$DISK' is not a valid block device. Exiting..."
+            exit 1
         fi
-
-        echo "[*] Target EFI partition: $PART_EFI."
-        echo "[*] Target LUKS partition: $PART_LUKS."
     else
-        echo "[X] ERROR: '$dev' is not a valid block device."
+        echo "[X] ERROR: Path '$DISK' does not exist. Exiting..."
         exit 1
     fi
-else
-    echo "[*] Path '$dev' does not exist."
 fi
 
 # Retrieve the LUKS & user password
@@ -106,42 +177,77 @@ echo "[*] Installing required packages..."
 apk add amd-ucode \
     cryptsetup \
     e2fsprogs \
-    efibootmgr \
     file \
-    grub \
-    grub-efi \
     intel-ucode \
     iwd \
     lsblk \
     lvm2 \
     nano \
-    sbctl \
-    sgdisk
+    parted
 sleep 2
 
 # Setup udev as devd
 echo "[*] Setting up udev as devd..."
 setup-devd udev
 
-# GPT partitioning
-echo "[*] Partitioning the target disk using GPT partition layout..."
-sgdisk --zap-all $DEV
-sgdisk --new=1:0:+512M $DEV
-sgdisk --new=2:0:0 $DEV
-sgdisk --typecode=1:ef00 --typecode=2:8309 $DEV
-sgdisk --change-name=1:efi-sp --change-name=2:luks $DEV
-sgdisk --print $DEV
-sync
-for i in $(seq 10)
-    do echo "[*] Populating the kernel partition tables ($i/10)..." && partprobe $DEV && sleep 1
-done        
-sleep 2
+# Disk partitioning
+echo "[*] Partitioning the disk..."
 
-# Setup LUKS partition
-echo "[*] Formatting the second partition as a LUKS crypto partition..."
-echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
-echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
-sleep 2
+if [ "$UEFI" == 0 ];
+then
+    echo "[*] Partitioning the target disk using MBR partition layout..."
+    parted $DISK --script mktable msdos
+
+    echo "[*] Creating the LUKS partition..."
+    parted $DISK --script mkpart primary ext4 0% 100%
+    parted $DISK --script set 1 boot on
+
+    echo "[*] Formatting the LUKS partition..."
+    echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks1 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
+    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
+    sleep 2
+
+    echo "[*] Synchronising..."
+    sync
+elif [ "$UEFI" == 1 ];
+then
+    echo "[*] Partitioning the target disk using GPT partition layout..."
+    parted $DISK --script mktable gpt
+
+    echo "[*] Creating the EFI partition..."
+    parted $DISK --script mkpart primary fat32 1MiB 512MiB 
+    parted $DISK --script set 1 boot on 
+    parted $DISK --script set 1 esp on
+    parted $DISK --script name 1 $PART_EFI_LABEL
+
+    echo "[*] Formatting the EFI partition..."
+    mkfs.fat -F32 $PART_EFI
+
+    echo "[*] Creating the LUKS partition..."
+    parted $DISK --script mkpart primary ext4 512MiB 100%
+    parted $DISK --script name 2 $PART_LUKS_LABEL
+
+    echo "[*] Formatting the LUKS partition..."
+    echo -n $LUKS_PASS | cryptsetup luksFormat $PART_LUKS --type luks2 -c twofish-xts-plain64 -h sha512 -s 512 --iter-time 10000 -
+    echo -n $LUKS_PASS | cryptsetup luksOpen $PART_LUKS $LUKS_LVM -
+    sleep 2
+
+    echo "[*] Synchronising..."
+    sync
+else
+    echo "[X] ERROR: Variable 'UEFI' is '$UEFI' but must be 0 or 1. Exiting..."
+    exit 1
+fi
+
+for i in $(seq 10)
+do 
+    echo "[*] Populating the kernel partition tables ($i/10)..."
+    partprobe $DISK
+    sync
+    sleep 1
+done
+
+parted $DISK print
 
 # Setup LVM within LUKS partition
 echo "[*] Setting up LVM..."
@@ -187,6 +293,64 @@ echo "[*] Setting 'noatime' within the fstab file..."
 sed -i 's/relatime/noatime/g' /mnt/etc/fstab
 cat /mnt/etc/fstab
 sleep 2
+
+# SETUP BOOT ENVIRONMENT
+echo "[*] Setting up the boot environment..."
+
+echo "[*] Updating the kernel cmdline..."
+KERNEL_CMDLINE="cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LUKS_LVM root=/dev/$LVM_VG/$LV_ROOT rw"
+echo "$KERNEL_CMDLINE" > /mnt/etc/kernel/cmdline
+    
+if [ "$UEFI" == 0 ];
+then    
+    echo "[*] Installing the GRUB2 package..."
+    chroot /mnt grub grub-efi
+
+    echo "[*] Preapring GRUB2 to support booting from the LUKS partition..."
+    echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
+    sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /mnt/etc/default/grub
+    #echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LUKS_LVM root=/dev/$LVM_VG/$LV_ROOT\"" >> /mnt/etc/default/grub
+    echo "GRUB_CMDLINE_LINUX=\"$KERNEL_CMDLINE\"" >> /mnt/etc/default/grub
+    echo "GRUB_PRELOAD_MODULES=\"cryptodisk part_msdos\"" >> /mnt/etc/default/grub
+    tail /mnt/etc/default/grub
+    sleep 2
+    
+    echo "[*] Installing GRUB2 to disk...\"
+    chroot /mnt grub-install $DISK
+    
+    echo "[*] Generating a GRUB2 configuration file..."
+    chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg"
+elif [ "$UEFI" == 1 ];
+then
+    echo "[*] Installing required packages..."
+    chroot /mnt apk add efibootmgr gummiboot sbctl
+
+    echo "[*] Generating signing keys for UEFI Secure Boot..."
+    chroot /mnt sbctl create-keys
+
+    echo '[*] Enrolling the signing keys for UEFI Secure Boot...'
+    chroot /mnt sbctl enroll-keys --ignore-immutable --microsoft
+    
+    echo '[*] Generating a unified kernel image for Alpine Linux...'
+    chroot /mnt sbctl bundle --amducode /boot/amd-ucode.img \
+        --cmdline /etc/kernel/cmdline \
+        --initramfs /boot/initramfs-lts \
+        --intelucode /boot/intel-ucode.img \
+        --kernel-img /boot/vmlinuz-lts \
+        --save \
+        $EFI_UKI
+
+    echo '[*] Signing the unified kernel image...'
+    chroot /mnt sbctl sign $EFI_UKI
+    
+    echo '[*] Creating a boot entry...'
+    chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine' --load '\EFI\alpine.efi' --unicode --verbose
+    chroot /mnt efibootmgr -v
+    sleep 3"
+else
+    echo "[X] ERROR: Variable 'UEFI' is "$UEFI" but must be 0 or 1. Exiting..."
+    exit 1
+fi
 
 # Setup GRUB
 echo "[*] Configuring GRUB for encrypted boot..."

@@ -503,10 +503,11 @@ _03_06_setup_boot_env() {
 
         echo '[*] Signing the unified kernel image...'
         chroot /mnt sbctl sign $UEFI_UKI
+        sleep 10
         
         echo '[*] Creating a boot entry...'
         chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine-linux' --load '\EFI\alpine-linux.efi' --unicode --verbose
-        chroot /mnt efibootmgr -v
+        #chroot /mnt efibootmgr -v
         sleep 3
 
         echo '[*] Removing GRUB2...'

@@ -1,3 +1,5 @@
+#FIXME: /etc/kernel/cmdline
+
 # Start message
 echo "[*] This script installs Alpine Linux on this system."
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
@@ -307,15 +309,14 @@ echo "$KERNEL_CMDLINE" > /mnt/etc/kernel/cmdline
     
 if [ "$UEFI" == 0 ];
 then    
-    echo "[*] Installing the GRUB2 package..."
-    chroot /mnt grub grub-efi
+    echo "[*] Installing GRUB2..."
+    chroot /mnt grub
 
-    echo "[*] Preapring GRUB2 to support booting from the LUKS partition..."
+    echo "[*] Configuring GRUB2 for encrypted boot..."
+    chroot /mnt apk add efibootmgr grub grub-efi
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
-    sed -i 's/GRUB_CMDLINE_LINUX=""/#GRUB_CMDLINE_LINUX=""/' /mnt/etc/default/grub
-    #echo "GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(cryptsetup luksUUID $PART_LUKS):$LUKS_LVM root=/dev/$LVM_VG/$LV_ROOT\"" >> /mnt/etc/default/grub
-    echo "GRUB_CMDLINE_LINUX=\"$KERNEL_CMDLINE\"" >> /mnt/etc/default/grub
-    echo "GRUB_PRELOAD_MODULES=\"cryptodisk part_msdos\"" >> /mnt/etc/default/grub
+    echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub
+    sed -i 's/GRUB_TIMEOUT=2/GRUB_TIMEOUT=10/' /mnt/etc/default/grub
     tail /mnt/etc/default/grub
     sleep 2
     
@@ -356,20 +357,6 @@ else
     exit 1
 fi
 
-# Setup GRUB
-echo "[*] Configuring GRUB for encrypted boot..."
-chroot /mnt apk add efibootmgr grub grub-efi
-echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
-echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub
-sed -i 's/GRUB_TIMEOUT=2/GRUB_TIMEOUT=10/' /mnt/etc/default/grub
-tail /mnt/etc/default/grub
-sleep 2
-
-echo "[*] Installing GRUB..."
-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-chroot /mnt chmod 700 /boot
-sleep 2
 
 # Install base packages
 echo "[*] Installing base packages..."

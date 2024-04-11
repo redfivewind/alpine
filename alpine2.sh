@@ -458,6 +458,7 @@ _03_06_setup_boot_env() {
     echo "[*] Updating the kernel cmdline..."
     KERNEL_CMDLINE=$(grep '^GRUB_CMDLINE_LINUX_DEFAULT=' /mnt/etc/default/grub | sed 's/GRUB_CMDLINE_LINUX_DEFAULT=//')
     KERNEL_CMDLINE=$(echo "$KERNEL_CMDLINE" | tr -d '"')
+    KERNEL_CMDLINE="$KERNEL_CMDLINE root=/dev/$LVM_VG/$LV_ROOT"
     mkdir -p /mnt/etc/kernel
     echo "$KERNEL_CMDLINE" > /mnt/etc/kernel/cmdline
     echo "$KERNEL_CMDLINE"

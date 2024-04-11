@@ -544,30 +544,25 @@ _03_08_02_services_enable() {
 
 _03_09_00_user() {
     echo "[*] User management..."
-    _03_09_01_user_root_lock
-    _03_09_02_user_add
-    _03_09_03_user_set_pass
-    _03_09_04_user_add_groups
-    _03_09_05_user_init_env
+    _03_09_01_user_add
+    _03_09_02_user_set_pass
+    _03_09_03_user_add_groups
+    _03_09_04_user_init_env
+    _03_09_05_user_root_lock
 }
 
-_03_09_01_user_root_lock() {
-    echo "[*] Locking the root account..."
-    chroot /mnt passwd -l root
-}
-
-_03_09_02_user_add() {
+_03_09_01_user_add() {
     echo "[*] Adding user *$USER_NAME'..."
     setup-user -a -f "$USER_NAME" $USER_NAME
     sleep 2
 }
 
-_03_09_03_user_set_pass() {
+_03_09_02_user_set_pass() {
     echo "[*] Setting the user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
 }
 
-_03_09_04_user_add_groups() {
+_03_09_03_user_add_groups() {
     echo "[*] Adding user '$USER_NAME' to required groups..."
     chroot /mnt addgroup -S netdev
     chroot /mnt adduser $USER_NAME netdev
@@ -575,7 +570,7 @@ _03_09_04_user_add_groups() {
     chroot /mnt adduser $USER_NAME plugdev
 }
 
-_03_09_05_user_init_env() {
+_03_09_04_user_init_env() {
     echo "[*] Initialising the user environment..."
     mkdir -p /mnt/home/$USER_NAME/Pictures
     mkdir -p /mnt/home/$USER_NAME/tools
@@ -586,6 +581,11 @@ _03_09_05_user_init_env() {
     echo "doas sbctl sign $EFI_UKI" >> /mnt/home/$USER_NAME/tools/update.sh
 
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
+}
+
+_03_09_05_user_root_lock() {
+    echo "[*] Locking the root account..."
+    chroot /mnt passwd -l root
 }
 
 _03_10_unmount_fs() {

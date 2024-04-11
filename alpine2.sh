@@ -427,9 +427,9 @@ _03_04_00_ramdisk() {
 
 _03_05_00_region() {
     echo "[*] Setting up the region..."
-    03_05_01_region_setup_keymap
-    03_05_02_region_setup_locale
-    03_05_03_00_region_setup_time
+    _03_05_01_region_setup_keymap
+    _03_05_02_region_setup_locale
+    _03_05_03_00_region_setup_time
 }
 
 _03_05_01_region_setup_keymap() {

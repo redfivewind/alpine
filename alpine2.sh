@@ -178,22 +178,27 @@ _01_03_04_prompt_user_pass_user() {
 
 _01_03_05_prompt_user_audio() {
     #FIXME
+    return
 }
 
 _01_03_06_prompt_user_gpu() {
     #FIXME
+    return
 }
 
 _01_03_07_prompt_user_keymap() {
     #FIXME
+    return
 }
 
 _01_03_08_prompt_user_locale() {
     #FIXME
+    return
 }
 
 _01_03_09_prompt_user_timezone() {
     #FIXME
+    return
 }
 
 _01_04_00_prep() {

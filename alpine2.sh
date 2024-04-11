@@ -347,7 +347,7 @@ _01_07_mount_partitions() {
 
 _02_00() {
     echo "[*] --------- STAGE: 02 - MAIN INSTALLATION ---------"
-    02_01_install_sys
+    _02_01_install_sys
 }
 
 _02_01_install_sys() {
@@ -380,9 +380,9 @@ _03_01_mount_fs() {
 
 _03_02_00_net() {
     echo "[*] Enabling networking within the new system..."
-    03_02_01_net_enable_dns_resolution
-    03_02_02_net_set_hostname
-    03_02_03_net_populate_hostsfile
+    _03_02_01_net_enable_dns_resolution
+    _03_02_02_net_set_hostname
+    _03_02_03_net_populate_hostsfile
 }
 
 _03_02_01_net_enable_dns_resolution() {
@@ -400,8 +400,8 @@ _03_02_03_net_populate_hostsfile() {
 
 _03_03_00_kernel() {
     echo "[*] Adjusting kernel configuration files..."
-    03_03_01_kernel_cfg_crypttab
-    03_03_02_kernel_cfg_fstab
+    _03_03_01_kernel_cfg_crypttab
+    _03_03_02_kernel_cfg_fstab
 }
 
 _03_03_01_kernel_cfg_crypttab() {
@@ -524,8 +524,8 @@ _03_07_install_pkgs() {
 
 _03_08_00_services() {
     echo "[*] Configuring services..."
-    03_08_01_services_disable
-    03_08_02_services_enable
+    _03_08_01_services_disable
+    _03_08_02_services_enable
 }
 
 _03_08_01_services_disable() {

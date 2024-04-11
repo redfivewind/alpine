@@ -299,7 +299,7 @@ _01_05_part_disk() {
     parted $DISK print
 }
 
-_01_06_00_setup_lvm() {
+_01_06_setup_lvm() {
     echo "[*] Setting up LVM..."
 
     echo "[*] Creating physical device '$LUKS_LVM'..."

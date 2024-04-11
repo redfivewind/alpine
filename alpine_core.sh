@@ -351,7 +351,7 @@ then
     echo '[*] Creating a boot entry...'
     chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine' --load '\EFI\alpine.efi' --unicode --verbose
     chroot /mnt efibootmgr -v
-    sleep 3"
+    sleep 3
 else
     echo "[X] ERROR: Variable 'UEFI' is "$UEFI" but must be 0 or 1. Exiting..."
     exit 1

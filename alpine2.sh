@@ -427,16 +427,16 @@ _01_03_01_prompt_user_platform() {
     03_05_03_00_region_setup_time
 }
 
-03_05_01_region_setup_keymap() {
+_03_05_01_region_setup_keymap() {
     echo "[*] Loading German keyboard layout..."
     chroot /mnt setup-keymap de de
 }
 
-03_05_02_region_setup_locale() {
+_03_05_02_region_setup_locale() {
     echo "[*] Skipping setting up the locale, because the locale is automatically set by Alpine Linux..."
 }
 
-03_05_03_00_region_setup_time() {
+_03_05_03_00_region_setup_time() {
     echo "[*] Setting the hardware clock to UTC..."
     chroot /mnt hwclock --systohc --utc
 
@@ -444,7 +444,7 @@ _01_03_01_prompt_user_platform() {
     chroot /mnt setup-timezone Europe/Berlin    
 }
 
-03_06_setup_boot_env() {
+_03_06_setup_boot_env() {
     echo "[*] Setting up the boot environment..."
 
     echo "[*] Updating the kernel cmdline..."
@@ -503,7 +503,7 @@ _01_03_01_prompt_user_platform() {
     fi
 }
 
-03_07_install_pkgs() {
+_03_07_install_pkgs() {
     echo "[*] Installing packages..."
     chroot /mnt apk add alsa-plugins-pulse \
         iptables \
@@ -517,18 +517,18 @@ _01_03_01_prompt_user_platform() {
     sleep 2
 }
 
-03_08_00_services() {
+_03_08_00_services() {
     echo "[*] Configuring services..."
     03_08_01_services_disable
     03_08_02_services_enable
 }
 
-03_08_01_services_disable() {
+_03_08_01_services_disable() {
     echo "[*] Disabling not required services..."
     chroot /mnt setup-sshd none
 }
 
-03_08_02_services_enable() {
+_03_08_02_services_enable() {
     echo "[*] Enabling required services..."
     chroot /mnt rc-update add hwdrivers sysinit
     chroot /mnt rc-update add iwd default    
@@ -537,27 +537,27 @@ _01_03_01_prompt_user_platform() {
     sleep 2 
 }
 
-03_09_00_user() {
+_03_09_00_user() {
     echo "[*] User management..."
 }
 
-03_09_01_user_root_lock() {
+_03_09_01_user_root_lock() {
     echo "[*] Locking the root account..."
     chroot /mnt passwd -l root
 }
 
-03_09_02_user_add() {
+_03_09_02_user_add() {
     echo "[*] Adding user *$USER_NAME'..."
     setup-user -a -f "$USER_NAME" $USER_NAME
     sleep 2
 }
 
-03_09_03_user_set_pass() {
+_03_09_03_user_set_pass() {
     echo "[*] Setting the user password..."
     echo -n "$USER_NAME:$USER_PASS" | chpasswd -R /mnt
 }
 
-03_09_04_user_add_groups() {
+_03_09_04_user_add_groups() {
     echo "[*] Adding user '$USER_NAME' to required groups..."
     chroot /mnt addgroup -S netdev
     chroot /mnt adduser $USER_NAME netdev
@@ -565,7 +565,7 @@ _01_03_01_prompt_user_platform() {
     chroot /mnt adduser $USER_NAME plugdev
 }
 
-03_09_05_user_init_env() {
+_03_09_05_user_init_env() {
     echo "[*] Initialising the user environment..."
     mkdir -p /mnt/home/$USER_NAME/Pictures
     mkdir -p /mnt/home/$USER_NAME/tools
@@ -578,12 +578,12 @@ _01_03_01_prompt_user_platform() {
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 }
 
-03_10_unmount_fs() {
+_03_10_unmount_fs() {
     echo "[*] You may unmount filesystems manually now if required..."
     sync
 }
 
-03_11_stop_msg() {
+_03_11_stop_msg() {
     echo "[*] Installation of Alpine Linux completed. You may reboot now."
     echo "[*] Work done. Exiting..."
     sync
@@ -592,13 +592,13 @@ _01_03_01_prompt_user_platform() {
 
 main() {
     # Stage 1: Pre installation
-    01_00
+    _01_00
 
     # Stage 2: Main installation
-    02_00
+    _02_00
 
     # Stage 3: Post installation
-    03_00
+    _03_00
 }
 
 main

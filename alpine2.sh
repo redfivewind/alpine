@@ -1,3 +1,5 @@
+#FIXME: Remove GRUB2
+
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
     _01_01_start_msg
@@ -29,6 +31,7 @@ _01_02_init_global_vars() {
     PART_LUKS=""
     PART_LUKS_LABEL="luks"
     UEFI=""
+    UEFI_UKI="/boot/efi/EFI/alpine-linux.efi"
     USER_NAME="user"
     USER_PASS=""
 }
@@ -493,15 +496,19 @@ _03_06_setup_boot_env() {
             --intelucode /boot/intel-ucode.img \
             --kernel-img /boot/vmlinuz-lts \
             --save \
-            $EFI_UKI
+            $UEFI_UKI
 
         echo '[*] Signing the unified kernel image...'
-        chroot /mnt sbctl sign $EFI_UKI
+        chroot /mnt sbctl sign $UEFI_UKI
         
         echo '[*] Creating a boot entry...'
-        chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine' --load '\EFI\alpine.efi' --unicode --verbose
+        chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine-linux' --load '\EFI\alpine-linux.efi' --unicode --verbose
         chroot /mnt efibootmgr -v
         sleep 3
+
+        echo '[*] Removing GRUB2...'
+        chroot /mnt apk del grub grub-efi
+        rm -f -r /mnt/boot/efi/alpine.efi
     else
         echo "[X] ERROR: Variable 'UEFI' is "$UEFI" but must be 0 or 1. Exiting..."
         exit 1
@@ -578,7 +585,7 @@ _03_09_04_user_init_env() {
 
     echo "doas apk upgrade" > /mnt/home/$USER_NAME/tools/update.sh
     echo "doas sbctl generate-bundles" >> /mnt/home/$USER_NAME/tools/update.sh
-    echo "doas sbctl sign $EFI_UKI" >> /mnt/home/$USER_NAME/tools/update.sh
+    echo "doas sbctl sign $UEFI_UKI" >> /mnt/home/$USER_NAME/tools/update.sh
 
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 }

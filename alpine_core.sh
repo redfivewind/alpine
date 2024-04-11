@@ -404,7 +404,7 @@ echo "doas sbctl sign $EFI_UKI" >> /mnt/home/$USER_NAME/tools/update.sh
 chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 
 # Stop message
-sync
 echo "[*] Installation of Alpine Linux completed. You may reboot now."
 echo "[*] Work done. Exiting..."
+sync
 exit 0

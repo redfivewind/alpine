@@ -552,7 +552,7 @@ _03_09_00_user() {
 }
 
 _03_09_01_user_add() {
-    echo "[*] Adding user *$USER_NAME'..."
+    echo "[*] Adding user '$USER_NAME'..."
     setup-user -a -f "$USER_NAME" $USER_NAME
     sleep 2
 }

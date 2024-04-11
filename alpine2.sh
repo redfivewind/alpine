@@ -492,9 +492,12 @@ _03_06_setup_boot_env() {
         echo '[*] Generating a unified kernel image for Alpine Linux...'
         chroot /mnt sbctl bundle --amducode /boot/amd-ucode.img \
             --cmdline /etc/kernel/cmdline \
+            --efi-stub /usr/lib/gummiboot/linuxx64.efi.stub \
+            --esp /boot/efi \
             --initramfs /boot/initramfs-lts \
             --intelucode /boot/intel-ucode.img \
             --kernel-img /boot/vmlinuz-lts \
+            --os-release /etc/os-release \
             --save \
             $UEFI_UKI
 

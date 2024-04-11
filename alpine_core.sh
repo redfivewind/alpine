@@ -124,7 +124,7 @@ else
     fi
 fi
 
-# Retrieve the LUKS & user password
+# LUKS password
 echo "[*] Please enter the LUKS password: "
 read -s luks_pass_a
 echo "[*] Please reenter the LUKS password: "
@@ -137,6 +137,7 @@ else
     exit 1
 fi
 
+# User password
 echo "[*] Please enter the user password: "
 read -s user_pass_a
 echo "[*] Please reenter the user password: "

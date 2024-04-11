@@ -27,7 +27,7 @@ setup-keymap de de
 # Select platform
 echo "[*] Please select the plaform ('bios' or 'uefi'): "
 read platform
-#platform="${platform,,}"
+platform=$(echo "$platform" | tr '[:upper:]' '[:lower:]')
 
 if [ "$platform" == "bios" ];
 then

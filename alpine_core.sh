@@ -1,10 +1,10 @@
-#TODO: Lowercase
-
-# Warning message
-echo "[!] ALERT: This script will potentially wipe all of your data."
+# Start message
+echo "[*] This script installs Alpine Linux on this system."
+echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
+read
 
 # Global variables
-echo "[*] Initializing global variables..."
+echo "[*] Initialising global variables..."
 DEV=""
 EFI_UKI="/boot/efi/EFI/alpine.efi"
 LUKS_PASS=""

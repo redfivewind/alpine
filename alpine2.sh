@@ -329,7 +329,7 @@ _01_07_mount_partitions() {
     if [ "$UEFI" == 0 ];
     then
         echo "[*] Skipping the EFI partition because the selected platform is BIOS...."
-    elif [ "$UEFI" == 0 ];
+    elif [ "$UEFI" == 1 ];
     then
         echo "[*] Mounting the EFI partition..."
         mkdir -p /mnt/boot/efi

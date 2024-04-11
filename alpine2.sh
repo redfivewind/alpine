@@ -1,5 +1,5 @@
 _01_00() {
-    echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
+    echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------x"
     01_01_start_msg
     01_02_init_global_vars
     01_03_00_prompt_user

@@ -1,12 +1,12 @@
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
-    01_01_start_msg
-    01_02_init_global_vars
-    01_03_00_prompt_user
-    01_04_00_prep
-    01_05_part_disk
-    01_06_setup_lvm
-    01_07_mount_partitions
+    _01_01_start_msg
+    _01_02_init_global_vars
+    _01_03_00_prompt_user
+    _01_04_00_prep
+    _01_05_part_disk
+    _01_06_setup_lvm
+    _01_07_mount_partitions
 }
 
 _01_01_start_msg() {

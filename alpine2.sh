@@ -1,4 +1,4 @@
-01_00() {
+_01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
     01_01_start_msg
     01_02_init_global_vars
@@ -9,13 +9,13 @@
     01_07_mount_partitions
 }
 
-01_01_start_msg() {
+_01_01_start_msg() {
     echo "[*] This script installs Alpine Linux on this system."
     echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
     read
 }
 
-01_02_init_global_vars() {
+_01_02_init_global_vars() {
     echo "[*] Initialising global variables..."
     DISK=""
     HOSTNAME="MacBookAirM1"
@@ -33,20 +33,20 @@
     USER_PASS=""
 }
 
-01_03_00_prompt_user() {
+_01_03_00_prompt_user() {
     echo "[*] Querying user input..."
-    01_03_01_prompt_user_platform
-    01_03_02_prompt_user_disk
-    01_03_03_prompt_user_pass_luks
-    01_03_04_prompt_user_pass_user
-    #01_03_05_prompt_user_audio
-    #01_03_06_prompt_user_gpu
-    #01_03_07_prompt_user_keymap
-    #01_03_08_prompt_user_locale
-    #01_03_09_prompt_user_timezone
+    _01_03_01_prompt_user_platform
+    _01_03_02_prompt_user_disk
+    _01_03_03_prompt_user_pass_luks
+    _01_03_04_prompt_user_pass_user
+    #_01_03_05_prompt_user_audio
+    #_01_03_06_prompt_user_gpu
+    #_01_03_07_prompt_user_keymap
+    #_01_03_08_prompt_user_locale
+    #_01_03_09_prompt_user_timezone
 }
 
-01_03_01_prompt_user_platform() {
+_01_03_01_prompt_user_platform() {
     echo "[*] Please select the plaform ('bios' or 'uefi'): "
     read platform
     platform=$(echo "$platform" | tr '[:upper:]' '[:lower:]')

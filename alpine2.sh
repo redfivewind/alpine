@@ -544,6 +544,11 @@ _03_08_02_services_enable() {
 
 _03_09_00_user() {
     echo "[*] User management..."
+    _03_09_01_user_root_lock
+    _03_09_02_user_add
+    _03_09_03_user_set_pass
+    _03_09_04_user_add_groups
+    _03_09_05_user_init_env
 }
 
 _03_09_01_user_root_lock() {

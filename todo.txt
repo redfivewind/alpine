@@ -1,6 +1,4 @@
-AUDIO
-    - Pipewire?
-    - PulseAudio?
+
 
 DESKTOP: XFCE
     - Add Keyboard shortcuts (WIN & WIN+L)
@@ -15,9 +13,7 @@ HARDENING
     - Disable ash history
     - Remove apk
 
-UEFI SECURE BOOT: Alpine
-    - Alpine Workflow
-    - Alpine UKI
+
 
 UEFI SECURE BOOT: Xen
     - Xen Workflow

@@ -513,9 +513,11 @@ _03_06_setup_boot_env() {
         #chroot /mnt efibootmgr -v
         sleep 3
 
-        #echo '[*] Removing GRUB2...'
-        #chroot /mnt apk del grub grub-efi
-        #rm -f -r /mnt/boot/efi/alpine.efi
+        echo '[*] Removing GRUB2...'
+        chroot /mnt apk del grub grub-efi
+        shred -f -z -u /mnt/boot/efi/EFI/alpine/
+        shred -f -z -u /mnt/boot/efi/EFI/boot/
+        shred -f -z -u /mnt/boot/grub
     else
         echo "[X] ERROR: Variable 'UEFI' is "$UEFI" but must be 0 or 1. Exiting..."
         exit 1

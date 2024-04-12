@@ -47,7 +47,7 @@ read delete_script
 if [ "$delete_script" == "yes" ];
 then
     echo "[*] Deleting the script..."
-    shred --force --remove=wipesync --verbose --zero $(readlink -f $0)
+    shred -f -z -u $(readlink -f $0)
 elif [ "$delete_script" == "no" ];
 then
     echo "[*] Skipping script deletion..."

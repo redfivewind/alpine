@@ -1,3 +1,3 @@
-# Update packages via apk
-echo "[*] Updating packages via apk..."
+doas apk update
 doas apk upgrade
+doas sbctl generate-bundles --sign

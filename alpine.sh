@@ -1,5 +1,3 @@
-#FIXME: Remove GRUB2
-
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
     _01_01_start_msg

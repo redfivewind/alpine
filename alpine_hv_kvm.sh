@@ -40,6 +40,12 @@ doas rc-update add libvirt-guests default
 doas rc-update add libvirtd default
 sleep 2
 
+# Start services
+echo "[*] Starting required services..."
+doas rc-service libvirt-guests start
+doas rc-service libvirtd start
+sleep 2
+
 # Cleanup
 echo "[*] Should this script be deleted? (yes/no)"
 read delete_script

@@ -16,9 +16,11 @@ doas apk add bridge \
     libvirt \
     libvirt-daemon \
     netcat-openbsd \
+    ovmf \
     qemu-img \
     qemu-modules \
     qemu-system-x86_64 \
+    seabios \
     virt-manager \
     virt-viewer 
 sleep 2

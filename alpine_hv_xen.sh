@@ -4,7 +4,7 @@ echo "[!] ALERT: This script is potentially destructive. Use it on your own risk
 read
 
 # Global variables
-echo "[*] Initialising global variables...x"
+echo "[*] Initialising global variables..."
 TMP_XEN_CFG="/tmp/xen.cfg"
 TMP_XEN_EFI="/tmp/xen.efi"
 USER_NAME=$(whoami)

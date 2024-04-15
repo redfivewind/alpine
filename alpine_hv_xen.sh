@@ -45,9 +45,6 @@ echo "unix_sock_rw_perms = \"0770\"" | doas tee -a /etc/libvirt/libvirtd.conf
 echo "[*] Adding user '$USER_NAME' to the 'libvirt' group..."
 doas adduser $(whoami) libvirt
 
-echo "[*] Enabling the 'libvirtd' service..."
-doas systemctl enable libvirtd.service
-
 # Configure services
 echo "[*] Configuring required services..."
 doas rc-update add libvirt-guests default
@@ -81,7 +78,7 @@ SECTION_NAME=".config"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .pad)
 set -- $OBJDUMP
-VMA=$(printf "%X" $((((0x${OBJDUMP[3]} + 0x${OBJDUMP[4]} + 4096 - 1) / 4096) * 4096)))
+VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 SECTION_PATH="/boot/initramfs-linux-hardened.img"
@@ -89,7 +86,7 @@ SECTION_NAME=".initramfs"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .config)
 set -- $OBJDUMP
-VMA=$(printf "%X" $((((0x${OBJDUMP[3]} + 0x${OBJDUMP[4]} + 4096 - 1) / 4096) * 4096)))
+VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 SECTION_PATH="/boot/vmlinuz-linux-hardened"
@@ -97,7 +94,7 @@ SECTION_NAME=".kernel"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .initramfs)
 set -- $OBJDUMP
-VMA=$(printf "%X" $((((0x${OBJDUMP[3]} + 0x${OBJDUMP[4]} + 4096 - 1) / 4096) * 4096)))
+VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 #SECTION_PATH="/boot/xsm.cfg"
@@ -105,7 +102,7 @@ objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA
 #echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 #OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .kernel)
 #set -- $OBJDUMP
-#VMA=$(printf "%X" $((((0x${OBJDUMP[3]} + 0x${OBJDUMP[4]} + 4096 - 1) / 4096) * 4096)))
+#VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 #objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 #SECTION_PATH=
@@ -113,7 +110,7 @@ objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA
 #echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 #OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .pad)
 #set -- $OBJDUMP
-#VMA=$(printf "%X" $((((0x${OBJDUMP[3]} + 0x${OBJDUMP[4]} + 4096 - 1) / 4096) * 4096)))
+#VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 #objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 objdump -h $TMP_XEN_EFI

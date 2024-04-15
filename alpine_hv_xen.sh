@@ -60,6 +60,7 @@ sleep 2
 # Generate Xen configuration file
 echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."
 
+rm -f -r $TMP_XEN_CFG
 echo '[global]' | doas tee $TMP_XEN_CFG
 echo 'default=alpine-linux' | doas tee -a $TMP_XEN_CFG
 echo '' | doas tee -a $TMP_XEN_CFG

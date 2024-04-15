@@ -141,8 +141,8 @@ doas efibootmgr -v
 echo "[*] Cleaning up..."
 
 echo "[*] Removing temporary files..."
-doas shred --force --remove=wipesync --verbose --zero $TMP_XEN_CFG
-doas shred --force --remove=wipesync --verbose --zero $TMP_XEN_EFI
+doas shred -f -z -u $TMP_XEN_CFG
+doas shred -f -z -u $TMP_XEN_EFI
 
 echo "[*] Should this script be deleted? (yes/no)"
 read delete_script
@@ -150,7 +150,7 @@ read delete_script
 if [ "$delete_script" == "yes" ];
 then
     echo "[*] Deleting the script..."
-    shred --force --remove=wipesync --verbose --zero $(readlink -f $0)
+    shred -f -z -u $(readlink -f $0)
 elif [ "$delete_script" == "no" ];
 then
     echo "[*] Skipping script deletion..."

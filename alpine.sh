@@ -18,6 +18,7 @@ _01_01_start_msg() {
 _01_02_init_global_vars() {
     echo "[*] Initialising global variables..."
     DISK=""
+    GROUPS="audio netdev plugdev video"
     HOSTNAME="MacBookAirM1"
     LUKS_LVM="luks_lvm"
     LUKS_PASS=""
@@ -579,10 +580,12 @@ _03_09_02_user_set_pass() {
 
 _03_09_03_user_add_groups() {
     echo "[*] Adding user '$USER_NAME' to required groups..."
-    chroot /mnt addgroup -S netdev
-    chroot /mnt adduser $USER_NAME netdev
-    chroot /mnt addgroup -S plugdev
-    chroot /mnt adduser $USER_NAME plugdev
+
+    for group in $GROUPS;
+    do        
+        chroot /mnt addgroup -S $group
+        chroot /mnt adduser $USER_NAME $group
+    done
 }
 
 _03_09_04_user_init_env() {

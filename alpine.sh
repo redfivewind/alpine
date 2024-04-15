@@ -229,7 +229,6 @@ _01_04_03_prep_install_pkgs() {
         file \
         intel-ucode \
         iwd \
-        linux-firmware \
         lsblk \
         lvm2 \
         nano \
@@ -529,6 +528,7 @@ _03_07_install_pkgs() {
     chroot /mnt apk add alsa-plugins-pulse \
         iptables \
         iwd \
+        linux-firmware \
         pulseaudio \
         pulseaudio-alsa \
         p7zip \

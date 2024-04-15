@@ -65,7 +65,7 @@ echo '[global]' | doas tee $TMP_XEN_CFG
 echo 'default=alpine-linux' | doas tee -a $TMP_XEN_CFG
 echo '' | doas tee -a $TMP_XEN_CFG
 echo "[alpine-linux]" | doas tee -a $TMP_XEN_CFG
-echo "options=console=vga flask=disabled iommu=verbose loglvl=all ucode=scan" | doas tee -a $TMP_XEN_CFG
+echo "options=console=vga flask=disabled iommu=dom0-passthrough loglvl=all" | doas tee -a $TMP_XEN_CFG
 echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline)" | doas tee -a $TMP_XEN_CFG
 echo "ramdisk=initramfs-lts" | doas tee -a $TMP_XEN_CFG
 sleep 3

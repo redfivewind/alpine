@@ -7,6 +7,7 @@ read
 echo "[*] Initialising global variables..."
 TMP_XEN_CFG="/tmp/xen.cfg"
 TMP_XEN_EFI="/tmp/xen.efi"
+TMP_XSM_CFG="/tmp/xsm.cfg"
 USER_NAME=$(whoami)
 XEN_EFI="/boot/efi/EFI/xen.efi"
 
@@ -69,6 +70,13 @@ echo "ramdisk=initramfs-lts" | doas tee -a $TMP_XEN_CFG
 cat $TMP_XEN_CFG
 sleep 3
 
+# Generate Xen XSM configuration file
+echo "[*] Generating the Xen XSM configuration file '$TMP_XSM_CFG'..."
+
+echo '' | doas tee $TMP_XSM_CFG #FIXME
+cat $TMP_XSM_CFG
+sleep 3
+
 # Generate Xen UKI
 echo "[*] Generating a unified kernel image (UKI) of the Xen kernel..."
 doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
@@ -81,7 +89,7 @@ set -- $OBJDUMP
 VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
-SECTION_PATH="/boot/initramfs-linux-hardened.img"
+SECTION_PATH="/boot/initramfs-lts"
 SECTION_NAME=".initramfs"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .config)
@@ -89,7 +97,7 @@ set -- $OBJDUMP
 VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
-SECTION_PATH="/boot/vmlinuz-linux-hardened"
+SECTION_PATH="/boot/vmlinuz-lts"
 SECTION_NAME=".kernel"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .initramfs)
@@ -97,7 +105,7 @@ set -- $OBJDUMP
 VMA=$(printf "%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
-#SECTION_PATH="/boot/xsm.cfg"
+#SECTION_PATH="$TMP_XSM_CFG"
 #SECTION_NAME=".xsm"
 #echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 #OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep .kernel)

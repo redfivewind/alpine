@@ -68,7 +68,6 @@ echo "[alpine-linux]" | doas tee -a $TMP_XEN_CFG
 echo "options=console=vga flask=disabled iommu=verbose loglvl=all ucode=scan" | doas tee -a $TMP_XEN_CFG
 echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline)" | doas tee -a $TMP_XEN_CFG
 echo "ramdisk=initramfs-lts" | doas tee -a $TMP_XEN_CFG
-cat $TMP_XEN_CFG
 sleep 3
 
 # Generate Xen XSM configuration file
@@ -88,7 +87,7 @@ echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
 set -- $OBJDUMP
 VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 SECTION_PATH="/boot/initramfs-lts"
 SECTION_NAME=".initramfs"
@@ -96,7 +95,7 @@ echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .config)
 set -- $OBJDUMP
 VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 SECTION_PATH="/boot/vmlinuz-lts"
 SECTION_NAME=".kernel"
@@ -104,7 +103,7 @@ echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .initramfs)
 set -- $OBJDUMP
 VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 #SECTION_PATH="$TMP_XSM_CFG"
 #SECTION_NAME=".xsm"
@@ -112,7 +111,7 @@ doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config=
 #OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .kernel)
 #set -- $OBJDUMP
 #VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-#doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+#doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 #SECTION_PATH=
 #SECTION_NAME=".ucode"

@@ -225,6 +225,7 @@ _01_04_03_prep_install_pkgs() {
     echo "[*] Installing required packages..."
     apk add amd-ucode \
         cryptsetup \
+        dosfstools \
         e2fsprogs \
         file \
         intel-ucode \

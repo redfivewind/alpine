@@ -87,7 +87,7 @@ echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
 set -- $OBJDUMP
 VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 SECTION_PATH="/boot/initramfs-lts"
 SECTION_NAME=".initramfs"
@@ -95,7 +95,7 @@ echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .config)
 set -- $OBJDUMP
 VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 SECTION_PATH="/boot/vmlinuz-lts"
 SECTION_NAME=".kernel"
@@ -103,7 +103,7 @@ echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .initramfs)
 set -- $OBJDUMP
 VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 #SECTION_PATH="$TMP_XSM_CFG"
 #SECTION_NAME=".xsm"
@@ -111,7 +111,7 @@ doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTIO
 #OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .kernel)
 #set -- $OBJDUMP
 #VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-#doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+#doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 #SECTION_PATH=
 #SECTION_NAME=".ucode"
@@ -119,7 +119,7 @@ doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma "$SECTIO
 #OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
 #set -- $OBJDUMP
 #VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-#doas objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+#doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
 doas objdump -h $TMP_XEN_EFI
 sleep 10

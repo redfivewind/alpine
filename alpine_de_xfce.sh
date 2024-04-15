@@ -52,5 +52,23 @@ echo "[*] Configuring services..."
 doas rc-update add lightdm default
 doas rc-update add polkit default
 
+# Clean up
+echo "[*] Cleaning up..."
+
+echo "[*] Should this script be deleted? (yes/no)"
+read delete_script
+
+if [ "$delete_script" == "yes" ];
+then
+    echo "[*] Deleting the script..."
+    shred -f -z -u $(readlink -f $0)
+elif [ "$delete_script" == "no" ];
+then
+    echo "[*] Skipping script deletion..."
+else
+    echo "[!] ALERT: Variable 'delete_script' is '$delete_script' but must be 'yes' or 'no'."
+fi
+
 # Stop message
-echo "[*] Installation finished. Please reboot manually."
+echo "[*] Work done. Exiting..."
+exit 0

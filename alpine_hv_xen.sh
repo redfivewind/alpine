@@ -5,9 +5,10 @@ read
 
 # Global variables
 echo "[*] Initialising global variables..."
+TMP_XEN_CFG="/tmp/xen.cfg"
+TMP_XEN_EFI="/tmp/xen.efi"
 USER_NAME=$(whoami)
-XEN_CFG="/boot/xen.cfg"
-XEN_EFI="/boot/xen.efi"
+XEN_EFI="/boot/efi/EFI/xen.efi"
 
 # Install required packages
 echo "[*] Installing required packages..."
@@ -45,7 +46,7 @@ echo "[*] Adding user '$USER_NAME' to the 'libvirt' group..."
 doas adduser $(whoami) libvirt
 
 echo "[*] Enabling the 'libvirtd' service..."
-sudo systemctl enable libvirtd.service
+doas systemctl enable libvirtd.service
 
 # Configure services
 echo "[*] Configuring required services..."
@@ -58,11 +59,80 @@ doas rc-update add xenqemu default
 doas rc-update add xenstored default
 sleep 2
 
+# Generate Xen configuration file
+echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."
+
+echo '[global]' | doas tee $TMP_XEN_CFG
+echo 'default=alpine-linux' | doas tee -a $TMP_XEN_CFG
+echo '' | doas tee -a $TMP_XEN_CFG
+echo '[alpine-linux]' | doas tee -a $TMP_XEN_CFG
+echo 'options=console=vga flask=disabled iommu=verbose loglvl=all ucode=scan' | doas tee -a $TMP_XEN_CFG
+echo 'kernel=vmlinuz-lts $(cat /etc/kernel/cmdline)' | doas tee -a $TMP_XEN_CFG
+echo 'ramdisk=initramfs-lts' | doas tee -a $TMP_XEN_CFG
+cat $TMP_XEN_CFG
+sleep 3
+
+# Generate Xen UKI
+echo "[*] Generating a unified kernel image (UKI) of the Xen kernel..."
+doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
+
+SECTION_PATH="$TMP_XEN_CFG"
+SECTION_NAME=".config"
+echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
+read -r -a OBJDUMP <<< $(objdump -h $TMP_XEN_EFI | grep .pad)
+VMA=$(printf "%X" $((((0x${OBJDUMP[2]} + 0x${OBJDUMP[3]} + 4096 - 1) / 4096) * 4096)))
+objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+
+SECTION_PATH="/boot/initramfs-linux-hardened.img"
+SECTION_NAME=".initramfs"
+echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
+read -r -a OBJDUMP <<< $(objdump -h $TMP_XEN_EFI | grep .config)
+VMA=$(printf "%X" $((((0x${OBJDUMP[2]} + 0x${OBJDUMP[3]} + 4096 - 1) / 4096) * 4096)))
+objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+
+SECTION_PATH="/boot/vmlinuz-linux-hardened"
+SECTION_NAME=".kernel"
+echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
+read -r -a OBJDUMP <<< $(objdump -h $TMP_XEN_EFI | grep .initramfs)
+VMA=$(printf "%X" $((((0x${OBJDUMP[2]} + 0x${OBJDUMP[3]} + 4096 - 1) / 4096) * 4096)))
+objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+
+#SECTION_PATH="/boot/xsm.cfg"
+#SECTION_NAME=".xsm"
+#echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
+#read -r -a OBJDUMP <<< $(objdump -h $TMP_XEN_EFI | grep .kernel)
+#VMA=$(printf "%X" $((((0x${OBJDUMP[2]} + 0x${OBJDUMP[3]} + 4096 - 1) / 4096) * 4096)))
+#objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+
+#SECTION_PATH=
+#SECTION_NAME=".ucode"
+#echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
+#read -r -a OBJDUMP <<< $(objdump -h $TMP_XEN_EFI | grep .pad)
+#VMA=$(printf "%X" $((((0x${OBJDUMP[2]} + 0x${OBJDUMP[3]} + 4096 - 1) / 4096) * 4096)))
+#objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+
+objdump -h $TMP_XEN_EFI
+sleep 10
+
+# Copy Xen UKI to EFI partition
+echo "[*] Copying the Xen UKI to the EFI partition..."
+doas cp $TMP_XEN_EFI $XEN_EFI
+
+# Sign Xen UKI using sbctl
+echo "[*] Signing the Xen UKI using sbctl..."
+doas sbctl sign $XEN_EFI
+
+# Create a UEFI boot entry
+echo "[*] Creating a UEFI boot entry for Xen..."
+doas efibootmgr --disk $DISK --part 1 --create --label 'xen' --load '\EFI\xen.efi' --unicode --verbose
+doas efibootmgr -v
+
 # Clean up
 echo "[*] Cleaning up..."
 
-echo "[*] Removing the temporary Xen UKI..."
-sudo shred --force --remove=wipesync --verbose --zero /tmp/xen.efi
+echo "[*] Removing temporary files..."
+doas shred --force --remove=wipesync --verbose --zero $TMP_XEN_CFG
+doas shred --force --remove=wipesync --verbose --zero $TMP_XEN_EFI
 
 echo "[*] Should this script be deleted? (yes/no)"
 read delete_script

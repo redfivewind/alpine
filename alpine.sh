@@ -228,6 +228,7 @@ _01_04_03_prep_install_pkgs() {
         file \
         intel-ucode \
         iwd \
+        linux-firmware \
         lsblk \
         lvm2 \
         nano \

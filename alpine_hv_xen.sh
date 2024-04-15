@@ -65,10 +65,10 @@ echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."
 echo '[global]' | doas tee $TMP_XEN_CFG
 echo 'default=alpine-linux' | doas tee -a $TMP_XEN_CFG
 echo '' | doas tee -a $TMP_XEN_CFG
-echo '[alpine-linux]' | doas tee -a $TMP_XEN_CFG
-echo 'options=console=vga flask=disabled iommu=verbose loglvl=all ucode=scan' | doas tee -a $TMP_XEN_CFG
-echo 'kernel=vmlinuz-lts $(cat /etc/kernel/cmdline)' | doas tee -a $TMP_XEN_CFG
-echo 'ramdisk=initramfs-lts' | doas tee -a $TMP_XEN_CFG
+echo "[alpine-linux]" | doas tee -a $TMP_XEN_CFG
+echo "options=console=vga flask=disabled iommu=verbose loglvl=all ucode=scan" | doas tee -a $TMP_XEN_CFG
+echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline)" | doas tee -a $TMP_XEN_CFG
+echo "ramdisk=initramfs-lts" | doas tee -a $TMP_XEN_CFG
 cat $TMP_XEN_CFG
 sleep 3
 
@@ -79,7 +79,7 @@ doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 SECTION_PATH="$TMP_XEN_CFG"
 SECTION_NAME=".config"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
-read -r -a OBJDUMP <<< $(objdump -h $TMP_XEN_EFI | grep .pad)
+read -r -a OBJDUMP <<< $(objdump -h "$TMP_XEN_EFI" | grep .pad)
 VMA=$(printf "%X" $((((0x${OBJDUMP[2]} + 0x${OBJDUMP[3]} + 4096 - 1) / 4096) * 4096)))
 objcopy --add-section .config="$SECTION_PATH" --change-section-vma .config="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 

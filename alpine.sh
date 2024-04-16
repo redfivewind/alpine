@@ -422,7 +422,7 @@ _03_04_00_ramdisk() {
     echo "[*] Configuring the initial ramdisk..."
     
     echo "[*] Adding LVM and crypto modules to mkinitfs..."
-    echo "features=\"ata base cryptkey cryptsetup ext4 ide keymap lvm nvme resume scsi usb virtio\"" | tee /mnt/etc/mkinitfs/mkinitfs.conf
+    echo "features=\"ata base cryptkey cryptsetup ext4 ide keymap kms lvm nvme resume scsi usb virtio\"" | tee /mnt/etc/mkinitfs/mkinitfs.conf
 
     echo "[*] Rebuilding the initial ramdisk..."
     mkinitfs -c /mnt/etc/mkinitfs/mkinitfs.conf -b /mnt/ $(ls /mnt/lib/modules/)

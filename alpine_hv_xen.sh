@@ -134,7 +134,7 @@ doas sbctl sign $XEN_EFI
 
 # Create a UEFI boot entry
 echo "[*] Creating a UEFI boot entry for Xen..."
-doas efibootmgr --disk $DISK --part 1 --create --label 'xen' --load '\EFI\xen.efi' --unicode --verbose
+doas efibootmgr --disk /dev/vda --part 1 --create --label 'xen' --load '\EFI\xen.efi' --unicode --verbose
 doas efibootmgr -v
 
 # Clean up

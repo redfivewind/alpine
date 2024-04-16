@@ -68,7 +68,7 @@ echo "[alpine-linux]" | doas tee -a $TMP_XEN_CFG
 echo "options=com1=115200,8n1 conring_size=2097152 console=com1,vga flask=disabled guest_loglvl=all iommu=no-igfx loglvl=all noreboot" | doas tee -a $TMP_XEN_CFG
 #console=none efi=attr=uc,rs=0 smt=false vga=current
 echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline) acpi=off console=hvc0 console=tty0 earlyprintk=xen iommu=no-igfx nomodeset" | doas tee -a $TMP_XEN_CFG
-#i915.alpha-support=1 mapbs=1 modprobe.blaclist=nouveau noexitboot=1 nouveau.blacklist=1 nouveau.modeset=0 rd.driver.blacklist=nouveau
+#i915.alpha-support=1 mapbs=1 modprobe.blacklist=nouveau noexitboot=1 nouveau.blacklist=1 nouveau.modeset=0 rd.driver.blacklist=nouveau
 echo "ramdisk=initramfs-lts" | doas tee -a $TMP_XEN_CFG
 sleep 3
 

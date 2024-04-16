@@ -509,8 +509,7 @@ _03_06_setup_boot_env() {
         sleep 10
         
         echo '[*] Creating a boot entry...'
-        chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine-linux' --load '\EFI\alpine-linux.efi' --unicode --verbose
-        #chroot /mnt efibootmgr -v
+        chroot /mnt efibootmgr --disk $DISK --part 1 --create --label 'alpine-linux' --load '\EFI\alpine-linux.efi' --unicode
         sleep 3
 
         echo '[*] Removing GRUB2...'

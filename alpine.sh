@@ -1,4 +1,4 @@
-#FIXME: doas (wheel persist, power)
+#echo "permit persist keepenv :wheel" | tee /mnt/etc/doas.conf
 
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"

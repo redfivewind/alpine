@@ -1,3 +1,5 @@
+#FIXME: Allow halt, poweroff, shutdown
+
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
     _01_01_start_msg

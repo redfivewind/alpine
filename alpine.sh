@@ -1,4 +1,4 @@
-#FIXME: Allow halt, poweroff, shutdown
+#FIXME: doas (wheel persist, power)
 
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"

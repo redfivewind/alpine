@@ -1,3 +1,7 @@
+#FIXME: Background
+#FIXME: Keyboard shortcuts (WIN, WIN+L)
+#FIXME: Whiskermenu
+
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."
 doas setup-keymap de de

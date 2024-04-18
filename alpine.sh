@@ -1,4 +1,6 @@
-#echo "permit persist keepenv :wheel" | tee /mnt/etc/doas.conf
+#FIXME: DoAs configuration
+#FIXME: Domain???
+#FIXME: Hostname
 
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"

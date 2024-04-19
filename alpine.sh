@@ -1,6 +1,4 @@
 #FIXME: DoAs configuration
-#FIXME: Domain???
-#FIXME: Hostname
 
 _01_00() {
     echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
@@ -398,7 +396,7 @@ _03_02_01_net_enable_dns_resolution() {
 
 _03_02_02_net_set_hostname() {
     echo "[*] Setting the hostname..."
-    setup-hostname "$HOSTNAME"
+    echo "$HOSTNAME" > /mnt/etc/hostname
 }
 
 _03_02_03_net_populate_hostsfile() {

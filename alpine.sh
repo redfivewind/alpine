@@ -22,7 +22,7 @@ _01_01_start_msg() {
 _01_02_init_global_vars() {
     echo "[*] Initialising global variables..."
     DISK=""
-    GROUPS="audio netdev plugdev video"
+    GROUPS="audio netdev plugdev video wheel"
     HOSTNAME="MacBookAirM1"
     LUKS_LVM="luks_lvm"
     LUKS_PASS=""
@@ -572,8 +572,9 @@ _03_09_00_user() {
     _03_09_01_user_add
     _03_09_02_user_set_pass
     _03_09_03_user_add_groups
-    _03_09_04_user_init_env
-    _03_09_05_user_root_lock
+    _03_09_04_user_set_permissions
+    _03_09_05_user_init_env
+    _03_09_06_user_root_lock
 }
 
 _03_09_01_user_add() {
@@ -597,7 +598,14 @@ _03_09_03_user_add_groups() {
     done
 }
 
-_03_09_04_user_init_env() {
+_03_09_04_user_set_permissions {
+    echo "[*] Setting permissions for user '$USER_NAME'..."
+    echo "---------FIXME---------"
+    echo "---------FIXME---------"
+    echo "---------FIXME---------"
+}
+
+_03_09_05_user_init_env() {
     echo "[*] Initialising the user environment..."
     mkdir -p /mnt/home/$USER_NAME/Pictures
     mkdir -p /mnt/home/$USER_NAME/tools
@@ -610,7 +618,7 @@ _03_09_04_user_init_env() {
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 }
 
-_03_09_05_user_root_lock() {
+_03_09_06_user_root_lock() {
     echo "[*] Locking the root account..."
     chroot /mnt passwd -l root
 }

@@ -83,11 +83,10 @@ sleep 3
 echo "[*] Generating the Xen XSM configuration file '$TMP_XSM_CFG'..."
 
 echo '' | doas tee $TMP_XSM_CFG #FIXME
-cat $TMP_XSM_CFG
 sleep 3
 
-# Generate Xen UKI
-echo "[*] Generating a unified kernel image (UKI) of the Xen kernel..."
+# Generate unified Xen kernel image
+echo "[*] Generating the unified Xen kernel image (UKI)..."
 doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 
 while [ -n "$XEN_SECT_PATH" ];
@@ -102,13 +101,14 @@ do
 
     # Add new section
     echo "[*] Writing '$SECT_PATH' to the new $SECT_NAME_CURRENT section..."
-    OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
+    OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep "$SECT_NAME_PREVIOUS")
     set -- $OBJDUMP
     VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
     doas objcopy --add-section "$SECT_NAME_CURRENT"="$SECT_PATH" --change-section-vma "$SECT_NAME_CURRENT"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
     # Update the section name & path array
-    
+    XEN_SECT_NAME_ARRAY=$(echo "$XEN_SECT_NAME_ARRAY" | sed 's/^[^ ]* *//')
+    XEN_SECT_PATH_ARRAY=$(echo "$XEN_SECT_PATH_ARRAY" | sed 's/^[^ ]* *//')
 done
 
 '''SECTION_PATH="$TMP_XEN_CFG"

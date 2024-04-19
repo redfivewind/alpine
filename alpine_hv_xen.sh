@@ -1,11 +1,12 @@
 #FIXME: Snapshots
 #FIXME: UKI generation
 #FIXME: Update script
+#FIXME: Xen commandline options
 #FIXME: Xen CPU microcode
 #FIXME: Xen XSM policy
 
 # Start message
-echo "[*] This script installs the Xen virtualisation infrastructure on Arch Linux."
+echo "[*] This script installs the Xen virtualisation infrastructure on Alpine Linux."
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read
 
@@ -72,7 +73,6 @@ echo 'default=alpine-linux' | doas tee -a $TMP_XEN_CFG
 echo '' | doas tee -a $TMP_XEN_CFG
 echo "[alpine-linux]" | doas tee -a $TMP_XEN_CFG
 echo "options=com1=115200,8n1 console=com1,vga flask=disabled guest_loglvl=all iommu=debug,force,verbose loglvl=all noreboot vga=current,keep" | doas tee -a $TMP_XEN_CFG
-#efi=attr=uc,rs=0 smt=false
 echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline) console=hvc0 console=tty0 earlyprintk=xen nomodeset" | doas tee -a $TMP_XEN_CFG
 echo "ramdisk=initramfs-lts" | doas tee -a $TMP_XEN_CFG
 sleep 3

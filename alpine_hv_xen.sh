@@ -1,6 +1,8 @@
 #FIXME: Snapshots
 #FIXME: UKI generation
 #FIXME: Update script
+#FIXME: Xen CPU microcode
+#FIXME: Xen XSM policy
 
 # Start message
 echo "[*] This script installs the Xen virtualisation infrastructure on Arch Linux."

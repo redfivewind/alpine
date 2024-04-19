@@ -17,6 +17,8 @@ TMP_XEN_EFI="/tmp/xen.efi"
 TMP_XSM_CFG="/tmp/xsm.cfg"
 USER_NAME=$(whoami)
 XEN_EFI="/boot/efi/EFI/xen.efi"
+XEN_SECT_NAME_ARRAY=".pad .config .ramdisk .kernel .xsm .kernel"
+XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/initramfs-lts /boot/vmlinuz-lts $TMP_XSM_CFG /boot/intel-ucode.img"
 
 # Install required packages
 echo "[*] Installing required packages..."
@@ -88,7 +90,28 @@ sleep 3
 echo "[*] Generating a unified kernel image (UKI) of the Xen kernel..."
 doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 
-SECTION_PATH="$TMP_XEN_CFG"
+while [ -n "$XEN_SECT_PATH" ];
+do
+    # Retrieve parameters
+    set -- $XEN_SECT_NAME
+    SECT_NAME_CURRENT=$2
+    SECT_NAME_PREVIOUS=$1
+
+    set -- $XEN_SECT_PATH
+    SECT_PATH=$1
+
+    # Add new section
+    echo "[*] Writing '$SECT_PATH' to the new $SECT_NAME_CURRENT section..."
+    OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
+    set -- $OBJDUMP
+    VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
+    doas objcopy --add-section "$SECT_NAME_CURRENT"="$SECT_PATH" --change-section-vma "$SECT_NAME_CURRENT"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+
+    # Update the section name & path array
+    
+done
+
+'''SECTION_PATH="$TMP_XEN_CFG"
 SECTION_NAME=".config"
 echo "[*] Writing '$SECTION_PATH' to the new $SECTION_NAME section..."
 OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
@@ -126,10 +149,10 @@ doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma 
 #OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep .pad)
 #set -- $OBJDUMP
 #VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-#doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+#doas objcopy --add-section "$SECTION_NAME"="$SECTION_PATH" --change-section-vma "$SECTION_NAME"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI'''
 
 doas objdump -h $TMP_XEN_EFI
-sleep 10
+sleep 3
 
 # Copy Xen UKI to EFI partition
 echo "[*] Copying the Xen UKI to the EFI partition..."

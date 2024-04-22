@@ -24,12 +24,12 @@ fi
 
 # Update packages
 echo "[*] Updating packages..."
-doas apk update
-doas apk upgrade
+apk update
+apk upgrade
 
 # Generate UEFI Secure Boot bundles
 echo "[*] Generating UEFI Secure Boot bundles using sbctl..."
-doas sbctl generate-bundles --sign
+sbctl generate-bundles --sign
 
 # Generate unified Xen kernel image
 echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."

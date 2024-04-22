@@ -3,7 +3,7 @@
 #FIXME: Update script
 #FIXME: Xen commandline options
 #FIXME: Xen CPU microcode
-#FIXME: Xen XSM policy
+#FIXME: XSM FLASK
 
 # Start message
 echo "[*] This script installs the Xen virtualisation infrastructure on Alpine Linux."

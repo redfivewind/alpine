@@ -32,7 +32,6 @@ echo "[*] Generating UEFI Secure Boot bundles using sbctl..."
 doas sbctl generate-bundles --sign
 
 # Generate unified Xen kernel image
-# Generate Xen configuration file
 echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."
 
 shred -f -z -u $TMP_XEN_CFG

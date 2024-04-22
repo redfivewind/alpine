@@ -22,7 +22,7 @@ XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/initramfs-lts /boot/vmlinuz-lts"
 #$TMP_XSM_CFG /boot/intel-ucode.img
 
 # Check user rights
-if [ $(id --user) == "0" ];
+if [ $(id -u) == "0" ];
 then
     echo "[*] User has elevated rights. Continuing..."
 else

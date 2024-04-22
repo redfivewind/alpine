@@ -91,7 +91,7 @@ sleep 3
 echo "[*] Generating the unified Xen kernel image (UKI)..."
 doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 
-while [ -n "$XEN_SECT_PATH" ];
+while [ -n "$XEN_SECT_PATH_ARRAY" ];
 do
     # Retrieve parameters
     set -- $XEN_SECT_NAME

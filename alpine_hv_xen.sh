@@ -82,7 +82,7 @@ echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."
 shred -f -z -u $TMP_XEN_CFG
 echo '[global]' | tee $TMP_XEN_CFG
 echo 'default=alpine-linux' | tee -a $TMP_XEN_CFG
-echo '' | doas tee -a $TMP_XEN_CFG
+echo '' | tee -a $TMP_XEN_CFG
 echo "[alpine-linux]" | tee -a $TMP_XEN_CFG
 echo "options=com1=115200,8n1 console=com1,vga flask=disabled guest_loglvl=all iommu=debug,force,verbose loglvl=all noreboot vga=current,keep" | tee -a $TMP_XEN_CFG
 echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline) console=hvc0 console=tty0 earlyprintk=xen nomodeset" | tee -a $TMP_XEN_CFG
@@ -111,10 +111,10 @@ do
 
     # Add new section
     echo "[*] Writing '$SECT_PATH' to the new $SECT_NAME_CURRENT section..."
-    OBJDUMP=$(doas objdump -h "$TMP_XEN_EFI" | grep "$SECT_NAME_PREVIOUS")
+    OBJDUMP=$(objdump -h "$TMP_XEN_EFI" | grep "$SECT_NAME_PREVIOUS")
     set -- $OBJDUMP
     VMA=$(printf "0x%X" $((((0x$3 + 0x$4 + 4096 - 1) / 4096) * 4096)))
-    doas objcopy --add-section "$SECT_NAME_CURRENT"="$SECT_PATH" --change-section-vma "$SECT_NAME_CURRENT"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
+    objcopy --add-section "$SECT_NAME_CURRENT"="$SECT_PATH" --change-section-vma "$SECT_NAME_CURRENT"="$VMA" $TMP_XEN_EFI $TMP_XEN_EFI
 
     # Update the section name & path array
     XEN_SECT_NAME_ARRAY=$(echo "$XEN_SECT_NAME_ARRAY" | sed 's/^[^ ]* *//')

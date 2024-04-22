@@ -32,7 +32,7 @@ fi
 
 # Install required packages
 echo "[*] Installing required packages..."
-doas apk add bridge \
+apk add bridge \
     bridge-utils \
     dmidecode \
     ebtables \
@@ -79,7 +79,7 @@ sleep 2
 # Generate Xen configuration file
 echo "[*] Generating the Xen configuration file '$TMP_XEN_CFG'..."
 
-rm -f -r $TMP_XEN_CFG
+shred -f -z -u $TMP_XEN_CFG
 echo '[global]' | tee $TMP_XEN_CFG
 echo 'default=alpine-linux' | tee -a $TMP_XEN_CFG
 echo '' | doas tee -a $TMP_XEN_CFG

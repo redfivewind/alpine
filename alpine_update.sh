@@ -1,5 +1,5 @@
 # Start message
-echo "[*] Updating Alpine Linux..."
+echo "[*] Updating Alpine Linux...x"
 
 # Global variables
 echo "[*] Initialising global variables..."

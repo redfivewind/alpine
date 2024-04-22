@@ -63,17 +63,17 @@ echo "unix_sock_group = \"libvirt\"" | tee -a /etc/libvirt/libvirtd.conf
 echo "unix_sock_rw_perms = \"0770\"" | tee -a /etc/libvirt/libvirtd.conf
 
 echo "[*] Adding user '$USER_NAME' to the 'libvirt' group..."
-doas adduser $(whoami) libvirt
+adduser $USER_NAME libvirt
 
 # Configure services
 echo "[*] Configuring required services..."
-doas rc-update add libvirt-guests default
-doas rc-update add libvirtd default
-doas rc-update add spice-vdagentd default
-doas rc-update add xenconsoled default
-doas rc-update add xendomains default 
-doas rc-update add xenqemu default
-doas rc-update add xenstored default
+rc-update add libvirt-guests default
+rc-update add libvirtd default
+rc-update add spice-vdagentd default
+rc-update add xenconsoled default
+rc-update add xendomains default 
+rc-update add xenqemu default
+rc-update add xenstored default
 sleep 2
 
 # Generate Xen configuration file

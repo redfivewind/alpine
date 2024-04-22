@@ -94,11 +94,11 @@ doas cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 while [ -n "$XEN_SECT_PATH_ARRAY" ];
 do
     # Retrieve parameters
-    set -- $XEN_SECT_NAME
+    set -- $XEN_SECT_NAME_ARRAY
     SECT_NAME_CURRENT=$2
     SECT_NAME_PREVIOUS=$1
 
-    set -- $XEN_SECT_PATH
+    set -- $XEN_SECT_PATH_ARRAY
     SECT_PATH=$1
 
     # Add new section
@@ -173,8 +173,8 @@ doas efibootmgr --disk /dev/sda --part 1 --create --label 'xen' --load '\EFI\xen
 echo "[*] Cleaning up..."
 
 echo "[*] Removing temporary files..."
-doas shred -f -z -u $TMP_XEN_CFG
-doas shred -f -z -u $TMP_XEN_EFI
+shred -f -z -u $TMP_XEN_CFG
+shred -f -z -u $TMP_XEN_EFI
 
 echo "[*] Should this script be deleted? (yes/no)"
 read delete_script

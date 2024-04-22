@@ -112,6 +112,7 @@ do
     XEN_SECT_NAME_ARRAY=$(echo "$XEN_SECT_NAME_ARRAY" | sed 's/^[^ ]* *//')
     XEN_SECT_PATH_ARRAY=$(echo "$XEN_SECT_PATH_ARRAY" | sed 's/^[^ ]* *//')
 done
+sleep 10
 
 '''SECTION_PATH="$TMP_XEN_CFG"
 SECTION_NAME=".config"

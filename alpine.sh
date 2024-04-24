@@ -479,7 +479,7 @@ _03_06_setup_boot_env() {
         sleep 2
         
         echo "[*] Installing GRUB2 to disk..."
-        chroot /mnt grub-install $DISK
+        chroot /mnt grub-install --target=i386-pc $DISK
         sleep 3
         
         echo "[*] Generating a GRUB2 configuration file..."

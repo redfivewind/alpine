@@ -462,7 +462,7 @@ _03_06_setup_boot_env() {
     mkdir -p /mnt/etc/kernel
     echo "$KERNEL_CMDLINE" > /mnt/etc/kernel/cmdline
     echo "$KERNEL_CMDLINE"
-    sleep 10
+    sleep 3
         
     if [ "$UEFI" == 0 ];
     then
@@ -480,9 +480,11 @@ _03_06_setup_boot_env() {
         
         echo "[*] Installing GRUB2 to disk...\"
         chroot /mnt grub-install $DISK
+        sleep 3
         
         echo "[*] Generating a GRUB2 configuration file..."
         chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg"
+        sleep 3
     elif [ "$UEFI" == 1 ];
     then
         echo "[*] Installing required packages..."

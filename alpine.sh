@@ -1,7 +1,7 @@
 #FIXME: DoAs configuration
 
 _01_00() {
-    echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------"
+    echo "[*] --------- STAGE: 01 - PRE INSTALLATION ---------x"
     _01_01_start_msg
     _01_02_init_global_vars
     _01_03_00_prompt_user

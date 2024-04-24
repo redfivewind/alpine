@@ -458,7 +458,7 @@ _03_06_setup_boot_env() {
     echo "[*] Setting up the boot environment..."
 
     echo "[*] Updating the kernel cmdline..."
-    KERNEL_CMDLINE="modules=sd-mod,usb-storage,ext4,nvme cryptroot=UUID=$(cryptsetup luksUUID $PART_LUKS) cryptdm=root quiet rootfstype=ext4 root=/dev/$LVM_VG/$LV_ROOT nomodeset"
+    KERNEL_CMDLINE="modules=sd-mod,usb-storage,ext4,nvme cryptroot=UUID=$(cryptsetup luksUUID $PART_LUKS) cryptdm=root quiet rootfstype=ext4 root=/dev/$LVM_VG/$LV_ROOT"
     mkdir -p /mnt/etc/kernel
     echo "$KERNEL_CMDLINE" > /mnt/etc/kernel/cmdline
     echo "$KERNEL_CMDLINE"

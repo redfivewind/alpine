@@ -478,12 +478,12 @@ _03_06_setup_boot_env() {
         tail /mnt/etc/default/grub
         sleep 2
         
-        echo "[*] Installing GRUB2 to disk...\"
+        echo "[*] Installing GRUB2 to disk..."
         chroot /mnt grub-install $DISK
         sleep 3
         
         echo "[*] Generating a GRUB2 configuration file..."
-        chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg"
+        chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
         sleep 3
     elif [ "$UEFI" == 1 ];
     then

@@ -467,7 +467,7 @@ _03_06_setup_boot_env() {
     if [ "$UEFI" == 0 ];
     then
         echo "[*] Installing GRUB2..."
-        chroot /mnt apk add grub
+        chroot /mnt apk add grub grub-bios
     
         echo "[*] Configuring GRUB2 for encrypted boot..."
         sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=/#GRUB_CMDLINE_LINUX_DEFAULT=/' /mnt/etc/default/grub
@@ -479,7 +479,7 @@ _03_06_setup_boot_env() {
         sleep 2
         
         echo "[*] Installing GRUB2 to disk..."
-        chroot /mnt grub-install --target=i386-pc $DISK
+        chroot /mnt grub-install $DISK
         sleep 3
         
         echo "[*] Generating a GRUB2 configuration file..."

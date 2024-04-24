@@ -457,6 +457,9 @@ _03_05_03_00_region_setup_time() {
 _03_06_setup_boot_env() {
     echo "[*] Setting up the boot environment..."
 
+    echo "[*] Installing GRUB2..."
+    chroot /mnt apk add grub
+
     echo "[*] Updating the kernel cmdline..."
     KERNEL_CMDLINE=$(grep '^GRUB_CMDLINE_LINUX_DEFAULT=' /mnt/etc/default/grub | sed 's/GRUB_CMDLINE_LINUX_DEFAULT=//')
     KERNEL_CMDLINE=$(echo "$KERNEL_CMDLINE" | tr -d '"')
@@ -467,10 +470,7 @@ _03_06_setup_boot_env() {
     sleep 10
         
     if [ "$UEFI" == 0 ];
-    then    
-        echo "[*] Installing GRUB2..."
-        chroot /mnt apk add grub
-        
+    then        
         echo "[*] Configuring GRUB2 for encrypted boot..."
         echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
         echo "GRUB_PRELOAD_MODULES=\"cryptodisk luks lvm part_gpt\"" >> /mnt/etc/default/grub

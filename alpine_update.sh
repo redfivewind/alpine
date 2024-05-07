@@ -39,7 +39,7 @@ echo '[global]' | tee $TMP_XEN_CFG
 echo 'default=alpine-linux' | tee -a $TMP_XEN_CFG
 echo '' | tee -a $TMP_XEN_CFG
 echo "[alpine-linux]" | tee -a $TMP_XEN_CFG
-echo "options=com1=115200,8n1 console=com1,vga flask=disabled guest_loglvl=all iommu=debug,force,verbose loglvl=all noreboot vga=current,keep" | tee -a $TMP_XEN_CFG
+echo "options=com1=115200,8n1 console=com1,vga flask=disabled guest_loglvl=all iommu=debug,force,verbose loglvl=all noreboot ucode=scan vga=current,keep" | tee -a $TMP_XEN_CFG
 echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline) console=hvc0 console=tty0 earlyprintk=xen nomodeset" | tee -a $TMP_XEN_CFG
 echo "ramdisk=initramfs-lts" | tee -a $TMP_XEN_CFG
 sleep 3

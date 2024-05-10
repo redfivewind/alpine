@@ -16,10 +16,10 @@ TMP_XEN_EFI="/tmp/xen.efi"
 TMP_XSM_CFG="/tmp/xsm.cfg"
 USER_NAME=$(whoami)
 XEN_EFI="/boot/efi/EFI/xen.efi"
-XEN_SECT_NAME_ARRAY=".pad .config .ramdisk .kernel"
-#.xsm .ucode
-XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/initramfs-lts /boot/vmlinuz-lts"
-#$TMP_XSM_CFG /boot/intel-ucode.img
+XEN_SECT_NAME_ARRAY=".pad .config .ramdisk .kernel .ucode"
+#.xsm
+XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/initramfs-lts /boot/vmlinuz-lts /boot/intel-ucode.img"
+#$TMP_XSM_CFG
 
 # Check user rights
 if [ $(id -u) == "0" ];

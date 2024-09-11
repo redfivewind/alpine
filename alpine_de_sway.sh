@@ -41,13 +41,12 @@ doas apk add greetd greetd-tuigreet
 
 # Configure greetd
 echo "[*] Configuring greetd..."
-echo "[*] Editing the greetd configuration file '$GREETD_CFG'..."
 echo "[terminal]" | doas tee $GREETD_CFG
-echo "vt = 7" | doas tee $GREETD_CFG
-echo "" | doas tee $GREETD_CFG
-echo "[default_session]" | doas tee $GREETD_CFG
-echo "command = "tuigreet --cmd 'exec sway'"" | doas tee $GREETD_CFG
-echo "user = "greetd"" | doas tee $GREETD_CFG
+echo "vt = 7" | doas tee -a $GREETD_CFG
+echo "" | doas tee -a $GREETD_CFG
+echo "[default_session]" | doas tee -a $GREETD_CFG
+echo "command = \"tuigreet --cmd 'exec sway'\"" | doas tee -a $GREETD_CFG
+echo "user = \"greetd\"" | doas tee -a $GREETD_CFG
 
 # Configure networking
 echo "[*] Configuring networking..."

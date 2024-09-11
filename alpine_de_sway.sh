@@ -14,8 +14,7 @@ doas apk add
 #pavucontrol 
 #ristretto 
 #thunar-archive-plugin 
-#xarchiver 
-#xfce-polkit 
+#xarchiver  
 #xfce4-cpugraph-plugin 
 #xfce4-notifyd 
 #xfce4-pulseaudio-plugin 
@@ -43,7 +42,6 @@ echo "wifi.backend=iwd" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 # Configure services
 echo "[*] Configuring services..."
 #doas rc-update add lightdm default
-#doas rc-update add polkit default
 doas rc-update add networkmanager default
 doas rc-update del networking boot
 

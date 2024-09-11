@@ -1,6 +1,18 @@
+# Start message
+echo "[*] This script installs the Sway desktop environment on Alpine Linux."
+
+# Global variables
+echo "[*] Initialising global variables..."
+GREETD_CFG="/etc/greetd/config.toml"
+
 # German keyboard layout
 echo "[*] Loading German keyboard layout..."
 doas setup-keymap de de
+
+# System update
+echo "[*] Updating the system..."
+doas apk update
+doas apk upgrade
 
 # Install Sway
 echo "[*] Installing Sway..."
@@ -8,7 +20,7 @@ doas setup-desktop sway
 
 # Install required packages
 echo "[*] Installing required packages..."
-doas apk add 
+doas apk add greetd greetd-tuigreet
 #adw-gtk3 
 #mousepad 
 #pavucontrol 
@@ -22,6 +34,20 @@ doas apk add
 #xfce4-screenshooter 
 #xfce4-taskmanager 
 #xfce4-whiskermenu-plugin
+
+# Configure greetd
+echo "[*] Configuring greetd..."
+
+echo "[*] Adding the 'greeter' user..."
+doas adduser -D -H greeter
+
+echo "[*] Editing the greetd configuration file '$GREETD_CFG'..."
+echo "[terminal]" | doas tee $GREETD_CFG
+echo "vt = 7" | doas tee $GREETD_CFG
+echo "" | doas tee $GREETD_CFG
+echo "[default_session]" | doas tee $GREETD_CFG
+echo "command = "tuigreet --cmd 'sway'"" | doas tee $GREETD_CFG
+echo "user = "greeter"" | doas tee $GREETD_CFG
 
 # Configure networking
 echo "[*] Configuring networking..."
@@ -41,7 +67,7 @@ echo "wifi.backend=iwd" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 
 # Configure services
 echo "[*] Configuring services..."
-#doas rc-update add lightdm default
+doas rc-update add greetd default
 doas rc-update add networkmanager default
 doas rc-update del networking boot
 

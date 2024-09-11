@@ -408,7 +408,7 @@ _03_01_mount_fs() {
 _03_02_00_net() {
     echo "[*] Enabling networking within the new system..."
     _03_02_01_net_enable_dns_resolution
-    _03_02_02_net_set_name
+    _03_02_02_net_set_hostname
     _03_02_03_net_populate_hostsfile
 }
 

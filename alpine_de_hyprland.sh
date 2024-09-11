@@ -1,6 +1,6 @@
 # Start message
 echo "[*] This script installs Hyprland on Alpine Linux."
-echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
+echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue...x"
 read
 
 # Global variables

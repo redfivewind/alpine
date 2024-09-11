@@ -18,6 +18,10 @@ doas apk upgrade
 echo "[*] Installing Sway..."
 doas setup-desktop sway
 
+# Configure Sway
+echo "[*] Configuring Sway..."
+
+
 # Install required packages
 echo "[*] Installing required packages..."
 doas apk add greetd greetd-tuigreet
@@ -37,17 +41,13 @@ doas apk add greetd greetd-tuigreet
 
 # Configure greetd
 echo "[*] Configuring greetd..."
-
-echo "[*] Adding the 'greeter' user..."
-doas adduser -D -H greeter
-
 echo "[*] Editing the greetd configuration file '$GREETD_CFG'..."
 echo "[terminal]" | doas tee $GREETD_CFG
 echo "vt = 7" | doas tee $GREETD_CFG
 echo "" | doas tee $GREETD_CFG
 echo "[default_session]" | doas tee $GREETD_CFG
 echo "command = "tuigreet --cmd 'exec sway'"" | doas tee $GREETD_CFG
-echo "user = "greeter"" | doas tee $GREETD_CFG
+echo "user = "greetd"" | doas tee $GREETD_CFG
 
 # Configure networking
 echo "[*] Configuring networking..."

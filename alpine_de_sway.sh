@@ -17,6 +17,7 @@ doas apk upgrade
 # Install Sway
 echo "[*] Installing Sway..."
 doas setup-desktop sway
+doas apk add swaybar swaybg
 
 # Configure Sway
 echo "[*] Configuring Sway..."

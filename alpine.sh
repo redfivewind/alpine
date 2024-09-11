@@ -21,7 +21,7 @@ _01_02_init_global_vars() {
     echo "[*] Initialising global variables..."
     DISK=""
     GROUPS="audio netdev plugdev video wheel"
-    HOSTNAME="MacBookAirM1"
+    HOSTNAME="macbookairm1"
     LUKS_LVM="luks_lvm"
     LUKS_PASS=""
     LV_ROOT="lv_root"

@@ -40,14 +40,15 @@ _01_02_init_global_vars() {
 _01_03_00_prompt_user() {
     echo "[*] Querying user input..."
     _01_03_01_prompt_user_platform
-    _01_03_02_prompt_user_disk
-    _01_03_03_prompt_user_pass_luks
-    _01_03_04_prompt_user_pass_user
-    #_01_03_05_prompt_user_audio
-    #_01_03_06_prompt_user_gpu
-    #_01_03_07_prompt_user_keymap
-    #_01_03_08_prompt_user_locale
-    #_01_03_09_prompt_user_timezone
+    _01_03_02_prompt_user_kernel
+    _01_03_03_prompt_user_disk
+    _01_03_04_prompt_user_pass_luks
+    _01_03_05_prompt_user_pass_user
+    #_01_03_06_prompt_user_audio
+    #_01_03_07_prompt_user_gpu
+    #_01_03_08_prompt_user_keymap
+    #_01_03_09_prompt_user_locale
+    #_01_03_10_prompt_user_timezone
 }
 
 _01_03_01_prompt_user_platform() {
@@ -69,7 +70,28 @@ _01_03_01_prompt_user_platform() {
     fi
 }
 
-_01_03_02_prompt_user_disk() {
+_01_03_02_prompt_user_kernel() {
+    echo "[*] Please select the kernel ('lts' or 'virt'): "
+    read kernel
+    kernel=$(echo "$kernel" | tr '[:upper:]' '[:lower:]')
+
+    if [ "$kernel" == "lts" ];
+    then
+        echo "[*] Kernel: '$kernel'..."
+        KERNEL_INITRAMFS="/boot/initramfs-lts"
+        KERNEL_VMLINUZ="/boot/vmlinuz-lts"
+    elif [ "$kernel" == "virt" ];
+    then
+        echo "[*] Kernel: '$kernel'..."
+        KERNEL_INITRAMFS="/boot/initramfs-virt"
+        KERNEL_VMLINUZ="/boot/vmlinuz-virt"
+    else
+        echo "[X] ERROR: Variable 'kernel' is '$kernel' but must be 'lts' or 'virt'. Exiting..."
+        exit 1
+    fi
+}
+
+_01_03_03_prompt_user_disk() {
     echo "[*] Retrieving available disks..."
     echo
     fdisk -l
@@ -152,7 +174,7 @@ _01_03_02_prompt_user_disk() {
     fi
 }
 
-_01_03_03_prompt_user_pass_luks() {
+_01_03_04_prompt_user_pass_luks() {
     echo "[*] Please enter the LUKS password: "
     read -s luks_pass_a
     echo "[*] Please reenter the LUKS password: "
@@ -166,7 +188,7 @@ _01_03_03_prompt_user_pass_luks() {
     fi
 }
 
-_01_03_04_prompt_user_pass_user() {
+_01_03_05_prompt_user_pass_user() {
     echo "[*] Please enter the user password: "
     read -s user_pass_a
     echo "[*] Please reenter the user password: "
@@ -180,27 +202,27 @@ _01_03_04_prompt_user_pass_user() {
     fi
 }
 
-_01_03_05_prompt_user_audio() {
+_01_03_06_prompt_user_audio() {
     #FIXME
     return
 }
 
-_01_03_06_prompt_user_gpu() {
+_01_03_07_prompt_user_gpu() {
     #FIXME
     return
 }
 
-_01_03_07_prompt_user_keymap() {
+_01_03_08_prompt_user_keymap() {
     #FIXME
     return
 }
 
-_01_03_08_prompt_user_locale() {
+_01_03_09_prompt_user_locale() {
     #FIXME
     return
 }
 
-_01_03_09_prompt_user_timezone() {
+_01_03_10_prompt_user_timezone() {
     #FIXME
     return
 }
@@ -503,9 +525,9 @@ _03_06_setup_boot_env() {
             --cmdline /etc/kernel/cmdline \
             --efi-stub /usr/lib/gummiboot/linuxx64.efi.stub \
             --esp /boot/efi \
-            --initramfs /boot/initramfs-lts \
+            --initramfs "$KERNEL_INITRAMFS" \
             --intelucode /boot/intel-ucode.img \
-            --kernel-img /boot/vmlinuz-lts \
+            --kernel-img "$KERNEL_VMLINUZ" \
             --os-release /etc/os-release \
             --save \
             $UEFI_UKI

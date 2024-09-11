@@ -543,6 +543,7 @@ _03_07_install_pkgs() {
         pulseaudio \
         pulseaudio-alsa \
         p7zip \
+        sof-firmware \
         tlp \
         unzip \
         zip

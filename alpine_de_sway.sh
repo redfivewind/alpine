@@ -46,7 +46,7 @@ echo "[terminal]" | doas tee $GREETD_CFG
 echo "vt = 7" | doas tee $GREETD_CFG
 echo "" | doas tee $GREETD_CFG
 echo "[default_session]" | doas tee $GREETD_CFG
-echo "command = "tuigreet --cmd 'sway'"" | doas tee $GREETD_CFG
+echo "command = "tuigreet --cmd 'exec sway'"" | doas tee $GREETD_CFG
 echo "user = "greeter"" | doas tee $GREETD_CFG
 
 # Configure networking

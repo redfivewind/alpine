@@ -54,7 +54,7 @@ echo "[terminal]" | doas tee $GREETD_CFG
 echo "vt = 7" | doas tee -a $GREETD_CFG
 echo "" | doas tee -a $GREETD_CFG
 echo "[default_session]" | doas tee -a $GREETD_CFG
-echo "command = \"tuigreet --cmd Hyprland --time --time-format '%Y-%m-%d %H:%M:%S'\"" | doas tee -a $GREETD_CFG
+echo "command = \"tuigreet --cmd Hyprland --greeting 'Access is restricted to authorised personnel only.' --time --time-format '%Y-%m-%d %H:%M:%S'\"" | doas tee -a $GREETD_CFG
 echo "user = \"greetd\"" | doas tee -a $GREETD_CFG
 
 # Configure networking

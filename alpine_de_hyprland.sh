@@ -50,12 +50,12 @@ doas apk add greetd greetd-tuigreet iwd network-manager-applet networkmanager ne
 
 # Configure greetd
 echo "[*] Configuring greetd..."
-echo "[terminal]" | tee $GREETD_CFG
-echo "vt = 7" | tee -a $GREETD_CFG
-echo "" | tee -a $GREETD_CFG
-echo "[default_session]" | tee -a $GREETD_CFG
-echo "command = \"tuigreet --cmd 'exec Hyprland'\"" | tee -a $GREETD_CFG
-echo "user = \"greetd\"" | tee -a $GREETD_CFG
+echo "[terminal]" | doas tee $GREETD_CFG
+echo "vt = 7" | doas tee -a $GREETD_CFG
+echo "" | doas tee -a $GREETD_CFG
+echo "[default_session]" | doas tee -a $GREETD_CFG
+echo "command = \"tuigreet --cmd 'exec Hyprland'\"" | doas tee -a $GREETD_CFG
+echo "user = \"greetd\"" | doas tee -a $GREETD_CFG
 
 # Configure networking
 echo "[*] Configuring networking..."

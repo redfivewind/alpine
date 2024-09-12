@@ -3,9 +3,6 @@ echo "[*] This script installs GNOME on Alpine Linux."
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read
 
-# Global variables
-echo "[*] Initialising global variables..."
-
 # System update
 echo "[*] Updating the system..."
 doas apk update
@@ -21,10 +18,7 @@ doas apk add gnome-control-center gnome-session gnome-settings-daemon gnome-shel
 
 # Install required packages
 echo "[*] Installing further packages..."
-doas apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor \
-    loupe \
-    spice-vdagent \
-    xf86-video-qxl
+doas apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor loupe spice-vdagent xf86-video-qxl
 
 # Configure networking
 echo "[*] Configuring networking..."

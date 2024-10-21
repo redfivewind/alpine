@@ -13,12 +13,12 @@ echo "[*] Installing Wayland..."
 doas setup-wayland-base
 
 # Install Hyprland
-echo "[*] Installing GNOME..."
-doas apk add gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks mutter
+echo "[*] Installing required GNOME packages..."
+doas apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks mesa mutter spice-vdagent
 
 # Install required packages
 echo "[*] Installing further packages..."
-doas apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor loupe spice-vdagent xf86-video-qxl
+doas apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor loupe
 
 # Configure networking
 echo "[*] Configuring networking..."
@@ -40,7 +40,8 @@ echo "wifi.backend=iwd" | doas tee -a /etc/NetworkManager/NetworkManager.conf
 
 # Configure services
 echo "[*] Configuring services..."
-doas rc-update add gdm default
+doas rc-update add elogind
+doas rc-update add gdm
 
 # Clean up
 echo "[*] Cleaning up..."

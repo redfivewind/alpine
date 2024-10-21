@@ -14,7 +14,7 @@ doas setup-wayland-base
 
 # Install Hyprland
 echo "[*] Installing GNOME..."
-doas apk add gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks mutter
+doas apk add gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks mutter
 
 # Install required packages
 echo "[*] Installing further packages..."

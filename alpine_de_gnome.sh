@@ -14,7 +14,7 @@ doas setup-wayland-base
 
 # Install Hyprland
 echo "[*] Installing required GNOME packages..."
-doas apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks mesa mutter spice-vdagent
+doas apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks libva mesa mutter spice-vdagent
 
 # Install required packages
 echo "[*] Installing further packages..."

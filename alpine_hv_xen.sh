@@ -5,6 +5,7 @@ read
 
 # Global variables
 echo "[*] Initialising global variables..."
+DISK=""
 KERNEL_INITRAMFS=""
 KERNEL_VMLINUZ=""
 TMP_XEN_CFG="/tmp/xen.cfg"
@@ -20,6 +21,35 @@ then
 else
     echo "[X] ERROR: The scripts must be run with elevated rights."
     exit 1
+fi
+
+# Prompt for the system disk
+echo "[*] Please enter the system disk: "
+read disk
+disk=$(echo "$disk" | tr '[:upper:]' '[:lower:]')
+
+if [ -z "$disk" ];
+then
+    echo "[X] ERROR: No disk was selected. Exiting..."
+    exit 1
+else
+    DISK="$disk"
+    
+    if [ -e "$DISK" ]; 
+    then
+        echo "[*] Path '$DISK' exists."
+    
+        if [ -b "$DISK" ];
+        then
+            echo "[*] Path '$DISK' is a valid block device." 
+        else
+            echo "[X] ERROR: '$DISK' is not a valid block device. Exiting..."
+            exit 1
+        fi
+    else
+        echo "[X] ERROR: Path '$DISK' does not exist. Exiting..."
+        exit 1
+    fi
 fi
 
 # Prompt for the Alpine Linux kernel
@@ -150,7 +180,7 @@ sbctl sign $XEN_EFI
 
 # Create a UEFI boot entry
 echo "[*] Creating a UEFI boot entry for Xen..."
-efibootmgr --disk /dev/sda --part 1 --create --label 'xen' --load '\EFI\xen.efi' --unicode
+efibootmgr --disk $DISK --part 1 --create --label 'xen' --load '\EFI\xen.efi' --unicode
 
 # Clean up
 echo "[*] Cleaning up..."

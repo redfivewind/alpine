@@ -1,9 +1,3 @@
-#FIXME: Snapshots
-#FIXME: Update script
-#FIXME: Xen commandline options
-#FIXME: Xen CPU microcode
-#FIXME: XSM FLASK
-
 # Start message
 echo "[*] This script installs the Xen virtualisation infrastructure on Alpine Linux."
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
@@ -11,15 +5,13 @@ read
 
 # Global variables
 echo "[*] Initialising global variables..."
+KERNEL_INITRAMFS=""
+KERNEL_VMLINUZ=""
 TMP_XEN_CFG="/tmp/xen.cfg"
 TMP_XEN_EFI="/tmp/xen.efi"
 TMP_XSM_CFG="/tmp/xsm.cfg"
 USER_NAME=$(whoami)
 XEN_EFI="/boot/efi/EFI/xen.efi"
-XEN_SECT_NAME_ARRAY=".pad .config .ramdisk .kernel .ucode"
-#.xsm
-XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/initramfs-lts /boot/vmlinuz-lts /boot/intel-ucode.img"
-#$TMP_XSM_CFG
 
 # Check user rights
 if [ $(id -u) == "0" ];
@@ -27,6 +19,26 @@ then
     echo "[*] User has elevated rights. Continuing..."
 else
     echo "[X] ERROR: The scripts must be run with elevated rights."
+    exit 1
+fi
+
+# Prompt for the Alpine Linux kernel
+echo "[*] Please select the kernel ('lts' or 'virt'): "
+read kernel
+kernel=$(echo "$kernel" | tr '[:upper:]' '[:lower:]')
+
+if [ "$kernel" == "lts" ];
+then
+    echo "[*] Kernel: '$kernel'..."
+    KERNEL_INITRAMFS="/boot/initramfs-lts"
+    KERNEL_VMLINUZ="/boot/vmlinuz-lts"
+elif [ "$kernel" == "virt" ];
+then
+    echo "[*] Kernel: '$kernel'..."
+    KERNEL_INITRAMFS="/boot/initramfs-virt"
+    KERNEL_VMLINUZ="/boot/vmlinuz-virt"
+else
+    echo "[X] ERROR: Variable 'kernel' is '$kernel' but must be 'lts' or 'virt'. Exiting..."
     exit 1
 fi
 
@@ -97,6 +109,10 @@ sleep 3
 
 # Generate unified Xen kernel image
 echo "[*] Generating the unified Xen kernel image (UKI)..."
+XEN_SECT_NAME_ARRAY=".pad .config .ramdisk .kernel .ucode"
+#.xsm
+XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG $KERNEL_INITRAMFS $KERNEL_VMLINUZ /boot/intel-ucode.img"
+#$TMP_XSM_CFG
 cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 
 while [ -n "$XEN_SECT_PATH_ARRAY" ];

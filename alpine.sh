@@ -607,7 +607,7 @@ _03_09_00_user() {
 
 _03_09_01_user_add() {
     echo "[*] Adding user '$USER_NAME'..."
-    chroot /mnt adduser -h /home/$USER_NAME -s /bin/ash $USER_NAME
+    chroot /mnt adduser -h /home/$USER_NAME -s /bin/ash -D $USER_NAME
     sleep 2
 }
 

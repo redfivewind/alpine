@@ -237,7 +237,9 @@ _01_04_00_prep() {
 
 _01_04_01_prep_cfg_pkg_mgr() {
     echo "[*] Configuring apk & enabling the Alpine community repository..."
-    setup-apkrepos -c -f
+    echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
+    echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+    echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 }
 
 _01_04_02_prep_update_pkg_mgr() {

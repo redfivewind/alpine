@@ -377,18 +377,11 @@ _01_07_mount_partitions() {
 _02_00() {
     echo "[*] --------- STAGE: 02 - MAIN INSTALLATION ---------"
     _02_01_install_sys
-    _02_02_install_pkgs
 }
 
 _02_01_install_sys() {
     echo "[*] Installing Alpine Linux..."
     setup-disk -m sys /mnt/
-}
-
-_02_02_install_pkgs() {
-    echo "[*] Installing required packages..."
-    chroot /mnt apk add sudo
-    sleep 2
 }
 
 _03_00() {
@@ -633,8 +626,11 @@ _03_09_03_user_add_groups() {
 }
 
 _03_09_04_user_set_permissions() {
-    echo "[*] Setting sudo permissions..."
+    echo "[*] Setting user permissions..."
     echo "%wheel ALL=(ALL) ALL" > /mnt/etc/sudoers
+    echo "---FIXME---"
+    echo "---FIXME---"
+    echo "---FIXME---"
 }
 
 _03_09_05_user_init_env() {

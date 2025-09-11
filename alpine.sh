@@ -377,6 +377,7 @@ _01_07_mount_partitions() {
 _02_00() {
     echo "[*] --------- STAGE: 02 - MAIN INSTALLATION ---------"
     _02_01_install_sys
+    _02_02_install_pkgs
 }
 
 _02_01_install_sys() {

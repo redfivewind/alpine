@@ -632,10 +632,8 @@ _03_09_03_user_add_groups() {
 }
 
 _03_09_04_user_set_permissions() {
-    echo "[*] Setting permissions for user '$USER_NAME'..."
-    echo "---------FIXME---------"
-    echo "---------FIXME---------"
-    echo "---------FIXME---------"
+    echo "[*] Setting sudo permissions..."
+    echo "%wheel ALL=(ALL) ALL" > /mnt/etc/sudoers
 }
 
 _03_09_05_user_init_env() {

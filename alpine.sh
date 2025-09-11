@@ -520,7 +520,7 @@ _03_06_setup_boot_env() {
         chroot /mnt sbctl create-keys
 
         echo '[*] Enrolling the signing keys for UEFI Secure Boot...'
-        chroot /mnt sudo sbctl enroll-keys --ignore-immutable --microsoft
+        chroot /mnt sbctl enroll-keys --ignore-immutable --microsoft
         
         echo '[*] Generating a unified kernel image for Alpine Linux...'
         chroot /mnt sbctl bundle --amducode /boot/amd-ucode.img \
@@ -568,6 +568,7 @@ _03_07_install_pkgs() {
         pulseaudio-alsa \
         p7zip \
         sof-firmware \
+        sudo \
         tlp \
         unzip \
         zip

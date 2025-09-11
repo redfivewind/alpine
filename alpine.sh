@@ -612,7 +612,7 @@ _03_09_00_user() {
 
 _03_09_01_user_add() {
     echo "[*] Adding user '$USER_NAME'..."
-    chroot /mnt setup-user -a -f "$USER_NAME" $USER_NAME
+    chroot /mnt adduser -h /home/$USER_NAME -s /bin/ash $USER_NAME
     sleep 2
 }
 
@@ -640,7 +640,7 @@ _03_09_04_user_set_permissions() {
 
 _03_09_05_user_init_env() {
     echo "[*] Initialising the user environment..."
-    mkdir -p /mnt/home/$USER_NAME/Pictures
+    mkdir -p /mnt/home/$USER_NAME/pictures
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
 

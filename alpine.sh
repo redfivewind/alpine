@@ -384,6 +384,12 @@ _02_01_install_sys() {
     setup-disk -m sys /mnt/
 }
 
+_02_02_install_pkgs() {
+    echo "[*] Installing required packages..."
+    chroot /mnt apk add sudo
+    sleep 2
+}
+
 _03_00() {
     echo "[*] --------- STAGE: 03 - POST INSTALLATION ---------"
     _03_01_mount_fs
@@ -520,7 +526,7 @@ _03_06_setup_boot_env() {
         chroot /mnt sbctl create-keys
 
         echo '[*] Enrolling the signing keys for UEFI Secure Boot...'
-        chroot /mnt doas sbctl enroll-keys --ignore-immutable --microsoft
+        chroot /mnt sudo sbctl enroll-keys --ignore-immutable --microsoft
         
         echo '[*] Generating a unified kernel image for Alpine Linux...'
         chroot /mnt sbctl bundle --amducode /boot/amd-ucode.img \
@@ -638,9 +644,9 @@ _03_09_05_user_init_env() {
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
 
-    echo "doas apk update" > /mnt/home/$USER_NAME/tools/update.sh
-    echo "doas apk upgrade" >> /mnt/home/$USER_NAME/tools/update.sh
-    echo "doas sbctl generate-bundles --sign" >> /mnt/home/$USER_NAME/tools/update.sh
+    echo "sudo apk update" > /mnt/home/$USER_NAME/tools/update.sh
+    echo "sudo apk upgrade" >> /mnt/home/$USER_NAME/tools/update.sh
+    echo "sudo sbctl generate-bundles --sign" >> /mnt/home/$USER_NAME/tools/update.sh
 
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/    
 }

@@ -526,7 +526,7 @@ _03_06_setup_boot_env() {
         echo '[*] Generating a unified kernel image for Alpine Linux...'
         chroot /mnt sbctl bundle --amducode /boot/amd-ucode.img \
             --cmdline /etc/kernel/cmdline \
-            --efi-stub /usr/lib/systemd/boot/efi/systemd-bootx64.efi \
+            --efi-stub /usr/lib/systemd/boot/efi/linuxx64.efi.stub \
             --esp /boot/efi \
             --initramfs "$KERNEL_INITRAMFS" \
             --intelucode /boot/intel-ucode.img \

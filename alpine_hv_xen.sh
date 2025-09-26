@@ -60,13 +60,13 @@ kernel=$(echo "$kernel" | tr '[:upper:]' '[:lower:]')
 if [ "$kernel" == "lts" ];
 then
     echo "[*] Kernel: '$kernel'..."
-    KERNEL_INITRAMFS="/boot/initramfs-lts"
-    KERNEL_VMLINUZ="/boot/vmlinuz-lts"
+    KERNEL_INITRAMFS="initramfs-lts"
+    KERNEL_VMLINUZ="vmlinuz-lts"
 elif [ "$kernel" == "virt" ];
 then
     echo "[*] Kernel: '$kernel'..."
-    KERNEL_INITRAMFS="/boot/initramfs-virt"
-    KERNEL_VMLINUZ="/boot/vmlinuz-virt"
+    KERNEL_INITRAMFS="initramfs-virt"
+    KERNEL_VMLINUZ="vmlinuz-virt"
 else
     echo "[X] ERROR: Variable 'kernel' is '$kernel' but must be 'lts' or 'virt'. Exiting..."
     exit 1
@@ -129,8 +129,8 @@ echo '' | tee -a $TMP_XEN_CFG
 echo "[alpine-linux]" | tee -a $TMP_XEN_CFG
 #echo "options=com1=115200,8n1 console=com1,vga flask=disabled guest_loglvl=all iommu=debug,force,verbose loglvl=all noreboot ucode=scan vga=current,keep" | tee -a $TMP_XEN_CFG
 echo "options=console=vga flask=disabled guest_loglvl=all iommu=force,verbose loglvl=all noreboot ucode=scan vga=current,keep" | tee -a $TMP_XEN_CFG
-echo "kernel=vmlinuz-lts $(cat /etc/kernel/cmdline) console=hvc0 console=tty0 earlyprintk=xen nomodeset" | tee -a $TMP_XEN_CFG
-echo "ramdisk=initramfs-lts" | tee -a $TMP_XEN_CFG
+echo "kernel=$KERNEL_VMLINUZ $(cat /etc/kernel/cmdline) console=hvc0 console=tty0 earlyprintk=xen nomodeset" | tee -a $TMP_XEN_CFG
+echo "ramdisk=$KERNEL_INITRAMFS" | tee -a $TMP_XEN_CFG
 sleep 3
 
 # Generate Xen XSM configuration file
@@ -143,7 +143,7 @@ sleep 3
 echo "[*] Generating the unified Xen kernel image (UKI)..."
 XEN_SECT_NAME_ARRAY=".pad .config .ramdisk .kernel .ucode"
 #.xsm
-XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG $KERNEL_INITRAMFS $KERNEL_VMLINUZ /boot/intel-ucode.img"
+XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/$KERNEL_INITRAMFS /boot/$KERNEL_VMLINUZ /boot/intel-ucode.img"
 #$TMP_XSM_CFG
 cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 

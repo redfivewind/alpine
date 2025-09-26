@@ -239,7 +239,7 @@ _01_04_01_prep_cfg_pkg_mgr() {
     echo "[*] Configuring apk & enabling the Alpine community repository..."
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+    #echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 }
 
 _01_04_02_prep_update_pkg_mgr() {
@@ -564,6 +564,7 @@ _03_07_install_pkgs() {
         iptables \
         iwd \
         linux-firmware \
+        mesa-dri-gallium \
         pulseaudio \
         pulseaudio-alsa \
         p7zip \

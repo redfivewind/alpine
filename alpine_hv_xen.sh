@@ -74,7 +74,8 @@ fi
 
 # Install required packages
 echo "[*] Installing required packages..."
-apk add bridge \
+apk add binutils \ 
+    bridge \
     bridge-utils \
     dmidecode \
     ebtables \

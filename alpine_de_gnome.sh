@@ -42,6 +42,7 @@ echo "wifi.backend=iwd" | sudo tee -a /etc/NetworkManager/NetworkManager.conf
 echo "[*] Configuring services..."
 sudo rc-update add elogind
 sudo rc-update add gdm
+sudo rc-update add networkmanager
 
 # Clean up
 echo "[*] Cleaning up..."

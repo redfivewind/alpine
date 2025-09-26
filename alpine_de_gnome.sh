@@ -1,4 +1,4 @@
-# Start message
+# Start messagex
 echo "[*] This script installs GNOME on Alpine Linux."
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read

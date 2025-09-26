@@ -12,12 +12,12 @@ sudo apk upgrade
 echo "[*] Installing Wayland..."
 sudo setup-wayland-base
 
-# Install Hyprland
+# Install required GNOME packages
 echo "[*] Installing required GNOME packages..."
-sudo apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks libva mesa mutter spice-vdagent
+sudo apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks libva mesa mutter networkmanager networkmanager-wifi spice-vdagent
 
-# Install required packages
-echo "[*] Installing further packages..."
+# Install default packages
+echo "[*] Installing default packages..."
 sudo apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor loupe
 
 # Configure networking

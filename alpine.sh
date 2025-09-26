@@ -259,7 +259,8 @@ _01_04_03_prep_install_pkgs() {
         lsblk \
         lvm2 \
         nano \
-        parted
+        parted \
+        sbctl
     sleep 2
 }
 
@@ -514,7 +515,7 @@ _03_06_setup_boot_env() {
     elif [ "$UEFI" == 1 ];
     then
         echo "[*] Installing required packages..."
-        chroot /mnt apk add efibootmgr gummiboot sbctl
+        chroot /mnt apk add efibootmgr sbctl systemd-efistub
 
         echo "[*] Generating signing keys for UEFI Secure Boot..."
         chroot /mnt sbctl create-keys

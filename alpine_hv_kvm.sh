@@ -9,7 +9,7 @@ USER_NAME=$(whoami)
 
 # Install required packages
 echo "[*] Installing required packages..."
-doas apk add bridge \
+sudo apk add bridge \
     bridge-utils \
     dmidecode \
     ebtables \
@@ -27,25 +27,25 @@ sleep 2
 
 # Enable modules
 echo "[*] Enabling required modules..."
-echo "tun" | doas tee -a /etc/modules
+echo "tun" | sudo tee -a /etc/modules
 
 # Add user to the 'libvirt' group
 echo "[*] Adding user '$USER_NAME' to required groups.."
-doas adduser $USER_NAME kvm
-doas adduser $USER_NAME libvirt
-doas adduser $USER_NAME qemu
+sudo adduser $USER_NAME kvm
+sudo adduser $USER_NAME libvirt
+sudo adduser $USER_NAME qemu
 sleep 2
 
 # Configure services
 echo "[*] Configuring required services..."
-doas rc-update add libvirt-guests default
-doas rc-update add libvirtd default
+sudo rc-update add libvirt-guests default
+sudo rc-update add libvirtd default
 sleep 2
 
 # Start services
 echo "[*] Starting required services..."
-doas rc-service libvirt-guests start
-doas rc-service libvirtd start
+sudo rc-service libvirt-guests start
+sudo rc-service libvirtd start
 sleep 2
 
 # Cleanup

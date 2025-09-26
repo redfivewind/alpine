@@ -1,4 +1,4 @@
-# Start messagex
+# Start message
 echo "[*] This script installs the Xen virtualisation infrastructure on Alpine Linux."
 echo "[!] ALERT: This script is potentially destructive. Use it on your own risk. Press any key to continue..."
 read

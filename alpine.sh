@@ -633,6 +633,7 @@ _03_09_04_user_set_permissions() {
 
 _03_09_05_user_init_env() {
     echo "[*] Initialising the user environment..."
+    mkdir -p /mnt/home/$USER_NAME/pictures
     mkdir -p /mnt/home/$USER_NAME/tools
     mkdir -p /mnt/home/$USER_NAME/workspace
 
@@ -640,6 +641,7 @@ _03_09_05_user_init_env() {
     echo "sudo apk upgrade" >> /mnt/home/$USER_NAME/tools/update.sh
     echo "sudo sbctl generate-bundles --sign" >> /mnt/home/$USER_NAME/tools/update.sh
 
+    chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/pictures
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/tools
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/workspace
 }

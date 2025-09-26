@@ -14,7 +14,7 @@ sudo setup-wayland-base
 
 # Install required GNOME packages
 echo "[*] Installing required GNOME packages..."
-sudo apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks libva mesa mutter networkmanager networkmanager-wifi spice-vdagent
+sudo apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemon gnome-shell gnome-terminal gnome-tweaks libva mesa mutter networkmanager networkmanager-wifi spice-vdagent xdg-user-dirs
 
 # Install default packages
 echo "[*] Installing default packages..."

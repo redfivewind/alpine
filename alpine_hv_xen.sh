@@ -94,8 +94,11 @@ sleep 2
 
 # Enable modules
 echo "[*] Enabling modules..."
-echo "xen-blkback" | tee -a /etc/modules
-echo "xen-netback" | tee -a /etc/modules
+echo "xen_blkback" | tee -a /etc/modules
+echo "xen_netback" | tee -a /etc/modules
+echo "xen_pciback" | tee -a /etc/modules
+echo "xen_wdt" | tee -a /etc/modules
+echo "xenfs" | tee -a /etc/modules
 echo "tun" | tee -a /etc/modules
 
 # Enable non-root access to libvirtd

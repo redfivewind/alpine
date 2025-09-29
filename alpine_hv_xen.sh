@@ -188,8 +188,9 @@ efibootmgr --disk $DISK --part 1 --create --label 'xen' --load '\EFI\xen.efi' --
 echo "[*] Cleaning up..."
 
 echo "[*] Removing temporary files..."
-shred -f -z -u $TMP_XEN_CFG
+#shred -f -z -u $TMP_XEN_CFG
 shred -f -z -u $TMP_XEN_EFI
+shred -f -z -u $TMP_XSM_CFG
 
 echo "[*] Should this script be deleted? (yes/no)"
 read delete_script

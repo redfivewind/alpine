@@ -142,12 +142,15 @@ sleep 3
 # Generate unified Xen kernel image
 echo "[*] Generating the unified Xen kernel image (UKI)..."
 
+echo "[*] Creating a temporary xen.efi..."
 cp /usr/lib/efi/xen.efi $TMP_XEN_EFI
 
+echo "[*] Determining the last section in xen.efi..."
 set $(objdump -h $TMP_XEN_EFI | tail -n 2)
+echo "[*] Last section in xen.efi is '$2'."
+
 XEN_SECT_NAME_ARRAY="$2 .config .ramdisk .kernel .ucode"
 #.xsm
-
 XEN_SECT_PATH_ARRAY="$TMP_XEN_CFG /boot/$KERNEL_INITRAMFS /boot/$KERNEL_VMLINUZ /boot/intel-ucode.img"
 #$TMP_XSM_CFG
 

@@ -134,9 +134,9 @@ echo "ramdisk=$KERNEL_INITRAMFS" | tee -a $TMP_XEN_CFG
 sleep 3
 
 # Generate Xen XSM configuration file
-echo "[*] Generating the Xen XSM configuration file '$TMP_XSM_CFG'..."
+#echo "[*] Generating the Xen XSM configuration file '$TMP_XSM_CFG'..."
 
-echo '' | tee $TMP_XSM_CFG #FIXME
+#echo '' | tee $TMP_XSM_CFG #FIXME
 sleep 3
 
 # Generate unified Xen kernel image

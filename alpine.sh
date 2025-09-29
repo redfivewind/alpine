@@ -628,7 +628,8 @@ _03_09_03_user_add_groups() {
 
 _03_09_04_user_set_permissions() {
     echo "[*] Setting user permissions..."
-    echo '%wheel ALL=(ALL) ALL' > /mnt/etc/sudoers.d/wheel
+    echo "%wheel ALL=(ALL) ALL" > /mnt/etc/sudoers.d/wheel
+    echo "%wheel ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown *" >> /mnt/etc/sudoers.d/wheel
 }
 
 _03_09_05_user_init_env() {

@@ -106,6 +106,7 @@ echo "unix_sock_group = \"libvirt\"" | tee -a /etc/libvirt/libvirtd.conf
 echo "unix_sock_rw_perms = \"0770\"" | tee -a /etc/libvirt/libvirtd.conf
 
 echo "[*] Adding user '$USER_NAME' to the 'libvirt' group..."
+addgroup libvirt
 adduser $USER_NAME libvirt
 
 # Configure services

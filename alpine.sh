@@ -639,6 +639,10 @@ _03_09_05_user_init_env() {
     mkdir -p /mnt/home/$USER_NAME/workspace
     chroot /mnt chown -R $USER_NAME:users /home/$USER_NAME/workspace
 
+    echo "export HISTFILE=/dev/null" > /mnt/home/$USER_NAME/.ashrc
+    echo "export HISTSIZE=0l" >> /mnt/home/$USER_NAME/.ashrc
+    echo "export SAVEHIST=0" >> /mnt/home/$USER_NAME/.ashrc
+
     echo "export HISTFILE=/dev/null" > /mnt/home/$USER_NAME/.profile
     echo "export HISTSIZE=0l" >> /mnt/home/$USER_NAME/.profile
     echo "export SAVEHIST=0" >> /mnt/home/$USER_NAME/.profile

@@ -590,7 +590,6 @@ _03_08_02_services_enable() {
     echo "[*] Enabling required services..."
     chroot /mnt rc-update add hwdrivers sysinit
     chroot /mnt rc-update add iwd default
-    chroot /mnt rc-update add openrc-settingsd boot
     chroot /mnt rc-update add tlp default
     chroot /mnt setup-ntp busybox
     sleep 2 

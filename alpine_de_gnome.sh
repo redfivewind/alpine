@@ -18,7 +18,7 @@ sudo apk add elogind gdm gnome-control-center gnome-session gnome-settings-daemo
 
 # Install default packages
 echo "[*] Installing default packages..."
-sudo apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor loupe
+sudo apk add baobab evince gnome-calculator gnome-clocks gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-text-editor loupe nautilus
 
 # Configure networking
 echo "[*] Configuring networking..."
